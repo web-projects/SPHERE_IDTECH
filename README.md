@@ -6,7 +6,7 @@ This an application to Configure IDTech Devices.
 
 * Quick summary
 * Version
-* git remote add origin git@github.com:web-projects/SPHERE_IDTECH.git
+* git remote add origin https://github.com/web-projects/SPHERE_IDTECH.git
 
 ### How do I get set up? ###
 
@@ -26,3 +26,4 @@ This an application to Configure IDTech Devices.
 ### HISTORY ###
 
 * 20190320 - Initial repository.
+* 20190405 - Cleaned up tabs prior to merge.
