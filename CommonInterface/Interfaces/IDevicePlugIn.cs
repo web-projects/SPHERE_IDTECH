@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IPA.CommonInterface.Helpers;
 using IPA.CommonInterface.ConfigIDTech;
+using IPA.CommonInterface.ConfigSphere;
 
 namespace IPA.CommonInterface.Interfaces
 {
@@ -16,7 +17,8 @@ namespace IPA.CommonInterface.Interfaces
     // INITIALIZATION
     string PluginName { get; }
     void DeviceInit();
-    ConfigSerializer GetConfigSerializer();
+    ConfigIDTechSerializer GetConfigIDTechSerializer();
+    ConfigSphereSerializer GetConfigSphereSerializer();
     // GUI UPDATE
     string [] GetConfig();
     // NOTIFICATION
@@ -34,7 +36,18 @@ namespace IPA.CommonInterface.Interfaces
     string DeviceCommand(string command, bool notify);
     // Messaging
     string GetErrorMessage(string data);
-    // Firmware update
+    // QC EMV Mode
+    void DisableQCEmvMode();
+    // Configuration Mode
+    void SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes mode);
+    // TERMINAL DATA
+    void  GetSphereTerminalData();
+    // AID
+    void GetAIDList();
+    // CAPK
+    void GetCapKList();
+    void GetConfigGroup(int group);
+    // Firmware Update
     void FirmwareUpdate(string filename, byte[] bytes);
     // Firmware is Updating
     bool FirmwareIsUpdating();

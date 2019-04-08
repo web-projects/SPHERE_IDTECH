@@ -20,6 +20,7 @@ using IPA.Core.Shared.Helpers;
 using IPA.Core.Shared.Helpers.StatusCode;
 using IPA.CommonInterface;
 using IPA.CommonInterface.ConfigIDTech;
+using IPA.CommonInterface.ConfigSphere;
 
 namespace IPA.DAL.RBADAL.Services
 {
@@ -1809,33 +1810,73 @@ if(empty)
         /********************************************************************************************************/
         #region -- device configuration --
 
-        public virtual void GetTerminalInfo(ref ConfigSerializer serializer)
+        public virtual void GetTerminalInfo(ref ConfigIDTechSerializer serializer)
         {
         }
 
-        public virtual string [] GetTerminalData(ref ConfigSerializer serializer, ref int exponent)
+        #region --- IDTECH SERIALIZER ---
+
+        public virtual string [] GetTerminalData(ref ConfigIDTechSerializer serializer, ref int exponent)
         {
             return null;
         }
-        public virtual void ValidateTerminalData(ref ConfigSerializer serializer)
+        public virtual void ValidateTerminalData(ref ConfigIDTechSerializer serializer)
         {
         }
-        public virtual void GetAidList(ref ConfigSerializer serializer)
+        public virtual string [] GetAidList(ref ConfigIDTechSerializer serializer)
+        {
+            return null;
+        }
+        public virtual void ValidateAidList(ref ConfigIDTechSerializer serializer)
         {
         }
-        public virtual void ValidateAidList(ref ConfigSerializer serializer)
+        public virtual string [] GetCapKList(ref ConfigIDTechSerializer serializer)
+        {
+            return null;
+        }
+        public virtual void ValidateCapKList(ref ConfigIDTechSerializer serializer)
         {
         }
-        public virtual void GetCapKList(ref ConfigSerializer serializer)
+        #endregion
+
+        #region --- SPHERE SERIALIZER ---
+        public virtual string [] GetTerminalData()
+        {
+            return null;
+        }
+        public virtual void ValidateTerminalData(ref ConfigSphereSerializer serializer)
         {
         }
-        public virtual void ValidateCapKList(ref ConfigSerializer serializer)
+        public virtual string [] GetAidList()
+        {
+            return null;
+        }
+        public virtual void ValidateAidList(ref ConfigSphereSerializer serializer)
         {
         }
-        public virtual void GetMSRSettings(ref ConfigSerializer serializer)
+        public virtual string [] GetCapKList()
+        {
+            return null;
+        }
+        public virtual void ValidateCapKList(ref ConfigSphereSerializer serializer)
         {
         }
-        public virtual void GetEncryptionControl(ref ConfigSerializer serializer)
+        public virtual void ValidateConfigGroup(ConfigSphereSerializer serializer, int group)
+        {
+        }
+        #endregion
+
+        public virtual void GetMSRSettings(ref ConfigIDTechSerializer serializer)
+        {
+        }
+        public virtual void GetEncryptionControl(ref ConfigIDTechSerializer serializer)
+        {
+        }
+        public virtual string[] GetConfigGroup(int group)
+        {
+            return null;
+        }
+        public virtual void ValidateConfigGroup(ConfigIDTechSerializer serializer, int group)
         {
         }
         public virtual void CloseDevice()

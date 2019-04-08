@@ -23,6 +23,7 @@ using IPA.Core.Shared.Enums;
 using IPA.DAL.RBADAL.Services;
 using IPA.DAL.RBADAL.Services.Devices.IDTech.Models;
 using IPA.LoggerManager;
+using IPA.CommonInterface.ConfigSphere;
 
 namespace IPA.DAL.RBADAL
 {
@@ -59,12 +60,16 @@ namespace IPA.DAL.RBADAL
     public string PluginName { get { return DevicePluginName; } }
 
     // Configuration handler
-    ConfigSerializer serializer;
+    ConfigIDTechSerializer IDTechSerializer;
+    ConfigSphereSerializer SphereSerializer;
 
     // EMV Transactions
     int exponent;
     byte[] additionalTags;
     string amount;
+
+    // configuration modes
+    IPA.Core.Shared.Enums.ConfigurationModes configurationMode = ConfigurationModes.FROM_CONFIG;
 
     #endregion
 
@@ -179,9 +184,14 @@ namespace IPA.DAL.RBADAL
       }
     }
 
-    public ConfigSerializer GetConfigSerializer()
+    public ConfigIDTechSerializer GetConfigIDTechSerializer()
     {
-        return serializer;
+        return IDTechSerializer;
+    }
+
+    public ConfigSphereSerializer GetConfigSphereSerializer()
+    {
+        return SphereSerializer;
     }
 
     #endregion
@@ -1769,12 +1779,19 @@ namespace IPA.DAL.RBADAL
 
     private void GetDeviceInformation()
     {
-        if(serializer == null)
+        // IDTECH Serializer
+        if(IDTechSerializer == null)
         {
-            serializer = new ConfigSerializer();
+            IDTechSerializer = new ConfigIDTechSerializer();
         }
+        IDTechSerializer.ReadConfig();
 
-        serializer.ReadConfig();
+        // Sphere Serializer
+        if (SphereSerializer == null)
+        {
+            SphereSerializer = new ConfigSphereSerializer();
+        }
+        SphereSerializer.ReadConfig();
 
         // Terminal Configuration
         string configuration = GetTerminalMajorConfiguration();
@@ -1788,27 +1805,27 @@ namespace IPA.DAL.RBADAL
         bool.TryParse(enable_read_terminal_info, out read_terminal_info);
         if(read_terminal_info)
         {
-            serializer.terminalCfg.config_meta.Type = "device";
-            serializer.terminalCfg.hardware.Serial_num = deviceInformation.SerialNumber;
-            serializer.terminalCfg.config_meta.Terminal_type = deviceInformation.ModelName;
+            IDTechSerializer.terminalCfg.config_meta.Type = "device";
+            IDTechSerializer.terminalCfg.hardware.Serial_num = deviceInformation.SerialNumber;
+            IDTechSerializer.terminalCfg.config_meta.Terminal_type = deviceInformation.ModelName;
             Version version = typeof(DeviceCfg).Assembly.GetName().Version;
-            serializer.terminalCfg.config_meta.Version = version.ToString();
+            IDTechSerializer.terminalCfg.config_meta.Version = version.ToString();
 
-            Device.GetTerminalInfo(ref serializer);
+            Device.GetTerminalInfo(ref IDTechSerializer);
         }
  
         // Terminal Information
-        string enable_read_terminal_data = System.Configuration.ConfigurationManager.AppSettings["tc_read_terminal_data"] ?? "true";
-        bool read_terminal_data;
-        bool.TryParse(enable_read_terminal_data, out read_terminal_data);
-        if(read_terminal_data)
-        {
-            serializer.terminalCfg.general_configuration.Contact.terminal_ics_type = GetTerminalType() ?? null;
-            object [] message1 = Device.GetTerminalData(ref serializer, ref exponent);
-
-            // Display Terminal Data to User
-            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA, Message = message1 });
-        }
+        //string enable_read_terminal_data = System.Configuration.ConfigurationManager.AppSettings["tc_read_terminal_data"] ?? "true";
+        //bool read_terminal_data;
+        //bool.TryParse(enable_read_terminal_data, out read_terminal_data);
+        //if(read_terminal_data)
+        //{
+        //    IDTechSerializer.terminalCfg.general_configuration.Contact.terminal_ics_type = GetTerminalType() ?? null;
+        //    object [] message1 = Device.GetTerminalData(ref IDTechSerializer, ref exponent);
+        //
+        //    // Display Terminal Data to User
+        //    NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA, Message = message1 });
+        //}
 
         // Encryption Control
         string enable_read_encryption = System.Configuration.ConfigurationManager.AppSettings["tc_read_encryption"] ?? "true";
@@ -1816,26 +1833,26 @@ namespace IPA.DAL.RBADAL
         bool.TryParse(enable_read_encryption, out read_encryption);
         if(read_encryption)
         {
-            Device.GetEncryptionControl(ref serializer);
+            Device.GetEncryptionControl(ref IDTechSerializer);
         }
 
         // Device Configuration: contact:capk
-        string enable_read_capk_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_capk_settings"] ?? "true";
-        bool read_capk_settings;
-        bool.TryParse(enable_read_capk_settings, out read_capk_settings);
-        if(read_capk_settings)
-        {
-            Device.GetCapKList(ref serializer);
-        }
+        //string enable_read_capk_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_capk_settings"] ?? "true";
+        //bool read_capk_settings;
+        //bool.TryParse(enable_read_capk_settings, out read_capk_settings);
+        //if(read_capk_settings)
+        //{
+        //    Device.GetCapKList(ref IDTechSerializer);
+        //}
 
         // Device Configuration: contact:aid
-        string enable_read_aid_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_aid_settings"] ?? "true";
-        bool read_aid_settings;
-        bool.TryParse(enable_read_aid_settings, out read_aid_settings);
-        if(read_aid_settings)
-        {
-            Device.GetAidList(ref serializer);
-        }
+        //string enable_read_aid_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_aid_settings"] ?? "true";
+        //bool read_aid_settings;
+        //bool.TryParse(enable_read_aid_settings, out read_aid_settings);
+        //if(read_aid_settings)
+        //{
+        //    Device.GetAidList(ref IDTechSerializer);
+        //}
 
         // MSR Settings
         string enable_read_msr_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_msr_settings"] ?? "true";
@@ -1843,14 +1860,14 @@ namespace IPA.DAL.RBADAL
         bool.TryParse(enable_read_msr_settings, out read_msr_settings);
         if(read_msr_settings)
         {
-            Device.GetMSRSettings(ref serializer);
+            Device.GetMSRSettings(ref IDTechSerializer);
         }
 
         // Update configuration file
-        serializer.WriteConfig();
+        IDTechSerializer.WriteConfig();
 
         // Display JSON Config to User
-        object [] message = { serializer.GetFileName() };
+        object [] message = { IDTechSerializer.GetFileName() };
         NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_JSON_CONFIG, Message = message });
     }
 
@@ -1858,7 +1875,7 @@ namespace IPA.DAL.RBADAL
     {
         try
         {
-            serializer.terminalCfg.config_meta.Customer.Company = "TrustCommerce";
+            IDTechSerializer.terminalCfg.config_meta.Customer.Company = "TrustCommerce";
         }
         catch(Exception exp)
         {
@@ -2434,6 +2451,11 @@ namespace IPA.DAL.RBADAL
         }
     }
 
+    public void SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes mode)
+    {
+        configurationMode = mode;
+    }
+
     private bool GetEMVQCMode()
     {
         bool isEMVQCEnabled = false;
@@ -2528,6 +2550,37 @@ namespace IPA.DAL.RBADAL
 
         return result;
     }
+
+    public void DisableQCEmvMode()
+    {
+        try
+        {
+            // Disable QC Mode
+            string command = USDK_CONFIGURATION_COMMANDS.SET_QUICK_CHIP_MODE_DISABLED;
+            DeviceCommand(command, true);
+            // Disable ICC
+            RETURN_CODE rt = IDT_Augusta.SharedController.icc_disable();
+            // Remove EMV settings
+            rt = IDT_Augusta.SharedController.emv_removeTerminalData();
+            // Remove All AID
+            rt = IDT_Augusta.SharedController.emv_removeAllApplicationData();
+            // Remove All CAPK
+            rt = IDT_Augusta.SharedController.emv_removeAllCAPK();
+            // Set Device to HID MODE
+            rt = IDT_Augusta.SharedController.msr_switchUSBInterfaceMode(true);
+            Debug.WriteLine("DeviceCfg::DisableQCEmvMode() - status={0}", rt);
+
+            //string [] message = { "Enable" };
+            //NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_EMV_MODE_BUTTON, Message = message });
+
+            // Restart device discovery
+            DeviceRemovedHandler();
+        }
+        catch(Exception exp)
+        {
+           Logger.error("DeviceCfg::DisableQCEmvMode(): - exception={0}", (object)exp.Message);
+        }
+    }    
 
     private string GetTerminalType()
     {
@@ -2631,6 +2684,13 @@ namespace IPA.DAL.RBADAL
         return response;
     }
 
+    #region --- IDTECH SERIALIZER ---
+
+    #endregion
+
+
+    #region --- SPHERE SERIALIZER ---
+
     private void SetTerminalData(string configuration)
     {
         string response = SetTerminalMajorConfiguration(configuration);
@@ -2641,7 +2701,7 @@ namespace IPA.DAL.RBADAL
         if(data != null)
         {
             // Save this to a backup file prior to any other operation
-            serializer.WriteTerminalDataConfig();
+            IDTechSerializer.WriteTerminalDataConfig();
 
             byte [] tags = data.Skip(3).Take(data.Length - 3).ToArray();
 
@@ -2657,12 +2717,87 @@ namespace IPA.DAL.RBADAL
             }
         }
     }
+
+    public void GetSphereTerminalData()
+    {
+        string [] message = { "" };
+        if(configurationMode == ConfigurationModes.FROM_DEVICE)
+        {
+            message = Device.GetTerminalData();
+        }
+        else
+        {
+            if(SphereSerializer.DeviceFirmwareMatches(deviceInformation.ModelNumber, deviceInformation.FirmwareVersion))
+            {
+                Logger.info("DEVICE INFO: MODEL={0}, FIRMWARE={1}", deviceInformation.ModelNumber, SphereSerializer.GetDeviceFirmware(deviceInformation.ModelNumber));
+                Device.ValidateTerminalData(ref SphereSerializer);
+                message = SphereSerializer.GetTerminalDataString(deviceInformation.SerialNumber, deviceInformation.EMVKernelVersion);
+            }
+            else
+            {
+                Logger.error("DEVICE INFO: MODEL={0} - NO VERSION MATCHING [{1}]", deviceInformation.ModelNumber, deviceInformation.FirmwareVersion);
+                message[0] = "NO FIRMWARE VERSION MATCH";
+            }
+        }
+
+        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA, Message = message });
+    }
+
+    public void GetAIDList()
+    {
+        string [] message = null;
+        if(configurationMode == ConfigurationModes.FROM_DEVICE)
+        {
+            message = Device.GetAidList();
+        }
+        else
+        {
+            Device.ValidateAidList(ref SphereSerializer);
+            message = SphereSerializer.GetAIDCollection();
+        }
+
+        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_AID_LIST, Message = message });
+    }
+
+    public void GetCapKList()
+    {
+        string [] message = null;
+        if(configurationMode == ConfigurationModes.FROM_DEVICE)
+        {
+            message = Device.GetCapKList();
+        }
+        else
+        {
+            Device.ValidateCapKList(ref SphereSerializer);
+            message = SphereSerializer.GetCapKCollection();
+        }
+
+        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_CAPK_LIST, Message = message });
+    }
+
+    public void GetConfigGroup(int group)
+    {
+        string [] message = null;
+        if(configurationMode == ConfigurationModes.FROM_DEVICE)
+        {
+           message = Device.GetConfigGroup(group);
+        }
+        else
+        {
+            Device.ValidateConfigGroup(SphereSerializer, group);
+            message = SphereSerializer.GetConfigGroupCollection(group);
+        }
+
+        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_CONFIG_GROUP, Message = message });
+    }
+    #endregion
+
     #endregion
 
     /********************************************************************************************************/
-    // DEVICE ACTIONS
+    // SETTINGS ACTIONS
     /********************************************************************************************************/
-    #region -- device actions --
+    #region -- settings actions --
     public string DeviceCommand(string command, bool notify)
     {
         string [] message = { "" };
@@ -2839,6 +2974,7 @@ namespace IPA.DAL.RBADAL
      {
         internal string SerialNumber;
         internal string FirmwareVersion;
+        internal string EMVKernelVersion;
         internal string ModelName;
         internal string ModelNumber;
         internal string Port;
@@ -2872,7 +3008,7 @@ namespace IPA.DAL.RBADAL
         internal const string SET_QUICK_CHIP_MODE_DISABLED = "72 53 01 29 01 30";
         internal const string SET_KYB_QC_MODE_DISABLED     = "02 06 00 72 53 01 29 01 30 38 20 03";
         internal const string SET_QUICK_CHIP_MODE_ENABLED  = "72 53 01 29 01 31";
-     }
+    }
 
     internal class DeviceFirmwareSignature
     {

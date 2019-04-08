@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Threading.Tasks;
 using IPA.CommonInterface.Interfaces;
 using IPA.CommonInterface.ConfigIDTech;
+using IPA.CommonInterface.ConfigSphere;
 
 namespace IPA.DAL.RBADAL.Services
 {
@@ -296,41 +297,68 @@ if (deviceID.ToLower().Contains("usb\\") && ((deviceID.Contains($"VID_{IDTECH}")
         /********************************************************************************************************/
         #region -- device configuration --
 
-        public void GetTerminalInfo(ref ConfigSerializer serializer)
+        public void GetTerminalInfo(ref ConfigIDTechSerializer serializer)
         {
         }
 
-        public string [] GetTerminalData(ref ConfigSerializer serializer, ref int exponent)
+        #region --- IDTECH SERIALIZER ---
+        public string [] GetTerminalData(ref ConfigIDTechSerializer serializer, ref int exponent)
         {
             return deviceInterface?.GetTerminalData(ref serializer, ref exponent);
         }
-        public void ValidateTerminalData(ref ConfigSerializer serializer)
+        public string [] GetAidList(ref ConfigIDTechSerializer serializer)
+        {
+            return deviceInterface?.GetAidList(ref serializer);
+        }
+        public string [] GetCapKList(ref ConfigIDTechSerializer serializer)
+        {
+            return deviceInterface?.GetCapKList(ref serializer);
+        }
+        #endregion
+
+        #region --- SPHERE SERIALIZER ---
+        public string [] GetTerminalData()
+        {
+            return deviceInterface?.GetTerminalData();
+        }
+
+        public void ValidateTerminalData(ref ConfigSphereSerializer serializer)
         {
             deviceInterface?.ValidateTerminalData(ref serializer);
         }
-        public void GetAidList(ref ConfigSerializer serializer)
+        public string [] GetAidList()
         {
-            deviceInterface?.GetAidList(ref serializer);
+            return deviceInterface?.GetAidList();
         }
-        public void ValidateAidList(ref ConfigSerializer serializer)
+        public void ValidateAidList(ref ConfigSphereSerializer serializer)
         {
             deviceInterface?.ValidateAidList(ref serializer);
         }
-        public void GetCapKList(ref ConfigSerializer serializer)
+        public string [] GetCapKList()
         {
-            deviceInterface?.GetCapKList(ref serializer);
+            return deviceInterface?.GetCapKList();
         }
-        public void ValidateCapKList(ref ConfigSerializer serializer)
+        public void ValidateCapKList(ref ConfigSphereSerializer serializer)
         {
             deviceInterface?.ValidateCapKList(ref serializer);
         }
-        public void GetMSRSettings(ref ConfigSerializer serializer)
+        #endregion
+
+        public void GetMSRSettings(ref ConfigIDTechSerializer serializer)
         {
             deviceInterface?.GetMSRSettings(ref serializer);
         }
-        public void GetEncryptionControl(ref ConfigSerializer serializer)
+        public void GetEncryptionControl(ref ConfigIDTechSerializer serializer)
         {
             deviceInterface?.GetEncryptionControl(ref serializer);
+        }
+        public string[] GetConfigGroup(int group)
+        {
+            return deviceInterface?.GetConfigGroup(group);
+        }
+        public void ValidateConfigGroup(ConfigSphereSerializer serializer, int group)
+        {
+            deviceInterface?.ValidateConfigGroup(serializer, group);
         }
         public void CloseDevice()
         {

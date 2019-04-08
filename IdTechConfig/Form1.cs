@@ -27,6 +27,8 @@ using IPA.Core.Shared.Enums;
 using IPA.DAL.RBADAL.Services;
 using System.Configuration;
 using System.Reflection;
+using IPA.CommonInterface.ConfigSphere;
+using IPA.DAL.RBADAL;
 
 namespace IPA.MainApp
 {
@@ -48,6 +50,8 @@ namespace IPA.MainApp
         // ATTRIBUTES SECTION
         /********************************************************************************************************/
         #region -- attributes section --
+
+        const int CONFIG_PANEL_WIDTH = 50;
 
         public Panel appPnl;
 
@@ -90,6 +94,9 @@ namespace IPA.MainApp
             InitializeComponent();
 
             this.Text = "IDTECH Device Discovery Application";
+
+            // Initial CONFIG Tab Size
+            this.tabControlConfiguration.Width += CONFIG_PANEL_WIDTH;
 
             // Settings Tab
             string show_settings_tab = System.Configuration.ConfigurationManager.AppSettings["tc_show_settings_tab"] ?? "false";
@@ -232,76 +239,6 @@ namespace IPA.MainApp
         /********************************************************************************************************/
         #region -- delegates section --
 
-        private void InitalizeDeviceUI(object sender, DeviceNotificationEventArgs e)
-        {
-            InitalizeDevice(true);
-        }
-
-        private void ProcessCardDataUI(object sender, DeviceNotificationEventArgs e)
-        {
-            ProcessCardData(e.Message);
-        }
-
-        private void ProcessCardDataErrorUI(object sender, DeviceNotificationEventArgs e)
-        {
-            ProcessCardDataError(e.Message[0]);
-        }
-
-        private void UnloadDeviceConfigurationDomain(object sender, DeviceNotificationEventArgs e)
-        {
-            new Thread(() =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-
-                // Terminate Transaction Timer if running
-                TransactionTimer?.Stop();
-
-                ClearUI();
-
-                // Unload The Plugin
-                appDomainCfg.UnloadPlugin(appDomainDevice);
-
-                // wait for a new device to connect
-                WaitForDeviceToConnect();
-
-            }).Start();
-        }
-
-        private void GetDeviceConfigurationUI(object sender, DeviceNotificationEventArgs e)
-        {
-            GetDeviceConfiguration(e.Message);
-        }
-
-        private void SetDeviceConfigurationUI(object sender, DeviceNotificationEventArgs e)
-        {
-            SetDeviceConfiguration(e.Message);
-        }
-
-        private void SetDeviceModeUI(object sender, DeviceNotificationEventArgs e)
-        {
-            SetDeviceMode(e.Message);
-        }
-
-        private void SetExecuteResultUI(object sender, DeviceNotificationEventArgs e)
-        {
-            SetExecuteResult(e.Message);
-        }
-
-        private void ShowJsonConfigUI(object sender, DeviceNotificationEventArgs e)
-        {
-            ShowJsonConfig(e.Message);
-        }
-
-        private void ShowTerminalDataUI(object sender, DeviceNotificationEventArgs e)
-        {
-            ShowTerminalData(e.Message);
-        }
-
-        private void SetModeButtonEnabledUI(object sender, DeviceNotificationEventArgs e)
-        {
-            SetModeButtonEnabled(e.Message);
-        }
-
         protected void OnDeviceNotificationUI(object sender, DeviceNotificationEventArgs args)
         {
             Logger.debug("main: notification type={0}", args.NotificationType);
@@ -373,11 +310,36 @@ namespace IPA.MainApp
                     break;
                 }
 
+                case NOTIFICATION_TYPE.NT_SHOW_AID_LIST:
+                {
+                    ShowAidListUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_SHOW_CAPK_LIST:
+                {
+                    ShowCapKListUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_SHOW_CONFIG_GROUP:
+                {
+                    ShowConfigGroupUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_UI_ENABLE_BUTTONS:
+                {
+                    EnableButtonsUI(sender, args);
+                    break;
+                }
+
                 case NOTIFICATION_TYPE.NT_ENABLE_MODE_BUTTON:
                 {
                     SetModeButtonEnabledUI(sender, args);
                     break;
                 }
+
                 case NOTIFICATION_TYPE.NT_SET_EMV_MODE_BUTTON:
                 {
                     SetEmvButtonUI(sender, args);
@@ -407,7 +369,6 @@ namespace IPA.MainApp
                     EnableMainFormUI(sender, args);
                     break;
                 }
-
             }
         }
 
@@ -436,6 +397,7 @@ namespace IPA.MainApp
 
                 // Disable Tab(s)
                 this.ApplicationtabPage.Enabled = false;
+                this.ConfigurationtabPage.Enabled = false;
                 this.SettingstabPage.Enabled = false;
                 this.RawModetabPage.Enabled = false;
                 this.TerminalDatatabPage.Enabled = false;
@@ -461,6 +423,96 @@ namespace IPA.MainApp
             {
                 SetConfiguration();
             }
+        }
+
+        private void InitalizeDeviceUI(object sender, DeviceNotificationEventArgs e)
+        {
+            InitalizeDevice(true);
+        }
+
+        private void ProcessCardDataUI(object sender, DeviceNotificationEventArgs e)
+        {
+            ProcessCardData(e.Message);
+        }
+
+        private void ProcessCardDataErrorUI(object sender, DeviceNotificationEventArgs e)
+        {
+            ProcessCardDataError(e.Message[0]);
+        }
+
+        private void UnloadDeviceConfigurationDomain(object sender, DeviceNotificationEventArgs e)
+        {
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+
+                // Terminate Transaction Timer if running
+                TransactionTimer?.Stop();
+
+                ClearUI();
+
+                // Unload The Plugin
+                appDomainCfg.UnloadPlugin(appDomainDevice);
+
+                // wait for a new device to connect
+                WaitForDeviceToConnect();
+
+            }).Start();
+        }
+
+        private void GetDeviceConfigurationUI(object sender, DeviceNotificationEventArgs e)
+        {
+            GetDeviceConfiguration(e.Message);
+        }
+
+        private void SetDeviceConfigurationUI(object sender, DeviceNotificationEventArgs e)
+        {
+            SetDeviceConfiguration(e.Message);
+        }
+
+        private void SetDeviceModeUI(object sender, DeviceNotificationEventArgs e)
+        {
+            SetDeviceMode(e.Message);
+        }
+
+        private void SetExecuteResultUI(object sender, DeviceNotificationEventArgs e)
+        {
+            SetExecuteResult(e.Message);
+        }
+
+        private void ShowJsonConfigUI(object sender, DeviceNotificationEventArgs e)
+        {
+            ShowJsonConfig(e.Message);
+        }
+
+        private void ShowTerminalDataUI(object sender, DeviceNotificationEventArgs e)
+        {
+            ShowTerminalData(e.Message);
+        }
+
+        private void ShowAidListUI(object sender, DeviceNotificationEventArgs e)
+        {
+            ShowAidList(e.Message);
+        }
+
+        private void ShowCapKListUI(object sender, DeviceNotificationEventArgs e)
+        {
+            ShowCapKList(e.Message);
+        }
+
+        private void ShowConfigGroupUI(object sender, DeviceNotificationEventArgs e)
+        {
+            ShowConfigGroup(e.Message);
+        }
+
+        private void EnableButtonsUI(object sender, DeviceNotificationEventArgs e)
+        {
+            EnableButtons();
+        }
+
+        private void SetModeButtonEnabledUI(object sender, DeviceNotificationEventArgs e)
+        {
+            SetModeButtonEnabled(e.Message);
         }
 
         private void SetEmvButtonUI(object sender, DeviceNotificationEventArgs e)
@@ -578,6 +630,7 @@ namespace IPA.MainApp
 
                 // Enable Tab(s)
                 this.ApplicationtabPage.Enabled = true;
+                this.ConfigurationtabPage.Enabled = true;
                 this.SettingstabPage.Enabled = tc_show_settings_tab;
                 this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                 this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
@@ -715,6 +768,7 @@ namespace IPA.MainApp
             {
                 // Disable Tab(s)
                 this.ApplicationtabPage.Enabled = false;
+                this.ConfigurationtabPage.Enabled = false;
                 this.SettingstabPage.Enabled = false;
                 this.RawModetabPage.Enabled = false;
                 this.TerminalDatatabPage.Enabled = false;
@@ -923,6 +977,7 @@ namespace IPA.MainApp
 
                         // Enable Tab(s)
                         this.ApplicationtabPage.Enabled = true;
+                        this.ConfigurationtabPage.Enabled = true;
                         this.SettingstabPage.Enabled = tc_show_settings_tab;
                         this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                         this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
@@ -961,6 +1016,7 @@ namespace IPA.MainApp
 
                 // Enable Tab(s)
                 this.ApplicationtabPage.Enabled = true;
+                this.ConfigurationtabPage.Enabled = true;
                 this.SettingstabPage.Enabled = tc_show_settings_tab;
                 this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                 this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
@@ -996,6 +1052,7 @@ namespace IPA.MainApp
 
                     // Enable Tabs
                     this.ApplicationtabPage.Enabled = true;
+                    this.ConfigurationtabPage.Enabled = true;
                     this.SettingstabPage.Enabled = tc_show_settings_tab;
                     this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                     this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
@@ -1107,6 +1164,7 @@ namespace IPA.MainApp
 
                     // Enable Tabs
                     this.ApplicationtabPage.Enabled = true;
+                    this.ConfigurationtabPage.Enabled = true;
                     this.SettingstabPage.Enabled = tc_show_settings_tab;
                     this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                     this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
@@ -1143,6 +1201,11 @@ namespace IPA.MainApp
                     this.ApplicationbtnMode.Text = data[0];
                     this.ApplicationbtnMode.Visible = true;
                     this.ApplicationbtnMode.Enabled = true;
+
+                    this.ConfigurationPanel1btnDeviceMode.Enabled = true;
+                    this.ConfigurationPanel1btnDeviceMode.Text = data[0];
+                    this.ConfigurationPanel1btnEMVMode.Enabled = (this.ConfigurationPanel1btnDeviceMode.Text.Equals(USK_DEVICE_MODE.USB_HID)) ? false : true;
+
                     isNonAugusta = false;
                     if (data[0].Contains("OLDIDTECH"))
                     {
@@ -1297,15 +1360,75 @@ namespace IPA.MainApp
                 {
                     try
                     {
-                        if(tc_show_terminal_data_tab)
+                        string [] data = ((IEnumerable) payload)?.Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray() ?? null;
+
+                        // Remove previous entries
+                        if(ConfigurationTerminalDatalistView.Items.Count > 0)
                         {
-                            string [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
-                            this.TerminalDatatextBox1.Text = data[0];
+                            ConfigurationTerminalDatalistView.Items.Clear();
                         }
+
+                        if(data != null && data.Length > 0)
+                        { 
+                            // Check for ERRORS
+                            if(!data[0].Equals("NO FIRMWARE VERSION MATCH"))
+                            {
+                                foreach(string val in data)
+                                {
+                                    string [] tlv = val.Split(':');
+                                    ListViewItem item1 = new ListViewItem(tlv[0], 0);
+                                    item1.SubItems.Add(tlv[1]);
+                                    ConfigurationTerminalDatalistView.Items.Add(item1);
+                                }
+
+                                // TAB 0
+                                if(!tabControlConfiguration.Contains(ConfigurationTerminalDatatabPage))
+                                {
+                                    tabControlConfiguration.TabPages.Add(ConfigurationTerminalDatatabPage);
+                                }
+                                this.ConfigurationTerminalDatatabPage.Enabled = true;
+                                tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                                // TAB 1
+                                if(!tabControlConfiguration.Contains(ConfigurationAIDStabPage))
+                                {
+                                    tabControlConfiguration.TabPages.Add(ConfigurationAIDStabPage);
+                                }
+                                this.ConfigurationAIDStabPage.Enabled = true;
+                                // TAB 2
+                                if(!tabControlConfiguration.Contains(ConfigurationCAPKStabPage))
+                                {
+                                    tabControlConfiguration.TabPages.Add(ConfigurationCAPKStabPage);
+                                }
+                                this.ConfigurationCAPKStabPage.Enabled = true;
+                                // TAB 3
+                                if(!tabControlConfiguration.Contains(ConfigurationGROUPStabPage))
+                                {
+                                    tabControlConfiguration.TabPages.Add(ConfigurationGROUPStabPage);
+                                }
+                                this.ConfigurationGROUPStabPage.Enabled = true;
+                            }
+                            else
+                            {
+                                ListViewItem item1 = new ListViewItem("ERROR", 0);
+                                item1.SubItems.Add(data[0]);
+                                ConfigurationTerminalDatalistView.Items.Add(item1);
+                            }
+                        }
+                        else
+                        {
+                            ListViewItem item1 = new ListViewItem("ERROR", 0);
+                            item1.SubItems.Add("*** NO DATA ***");
+                            ConfigurationTerminalDatalistView.Items.Add(item1);
+                        }
+
+                        ConfigurationTerminalDatalistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                        ConfigurationTerminalDatalistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                        this.ConfigurationTerminalDatapicBoxWait.Enabled = false;
+                        this.ConfigurationTerminalDatapicBoxWait.Visible  = false;
                     }
                     catch (Exception exp)
                     {
-                        Debug.WriteLine("main: ShowTerminalData() - exception={0}", (object) exp.Message);
+                        Logger.error("main: ShowTerminalData() - exception={0}", (object) exp.Message);
                     }
                 };
 
@@ -1317,6 +1440,274 @@ namespace IPA.MainApp
                 {
                     Invoke(mi);
                 }
+            }
+        }
+
+        private void ShowAidList(object payload)
+        {
+            // Invoker with Parameter(s)
+            MethodInvoker mi = () =>
+            {
+                try
+                {
+                    string [] data = ((IEnumerable) payload)?.Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray() ?? null;
+
+                    // Remove previous entries
+                    if(ConfigurationAIDSlistView.Items.Count > 0)
+                    {
+                        ConfigurationAIDSlistView.Items.Clear();
+                    }
+
+                    if(data != null && data.Length > 0)
+                    { 
+                        foreach(string item in data)
+                        {
+                            string [] components = item.Split('#');
+                            if(components.Length == 2)
+                            {
+                                ListViewItem item1 = new ListViewItem(components[0], 0);
+                                item1.SubItems.Add(components[1]);
+                                ConfigurationAIDSlistView.Items.Add(item1);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ListViewItem item1 = new ListViewItem("ERROR", 0);
+                        item1.SubItems.Add("*** NO DATA ***");
+                        ConfigurationAIDSlistView.Items.Add(item1);
+                    }
+
+                    ConfigurationAIDSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    ConfigurationAIDSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+                    if(!tabControlConfiguration.Contains(ConfigurationAIDStabPage))
+                    {
+                        tabControlConfiguration.TabPages.Add(ConfigurationAIDStabPage);
+                    }
+                    this.ConfigurationAIDStabPage.Enabled = true;
+                    tabControlConfiguration.SelectedTab = this.ConfigurationAIDStabPage;
+                }
+                catch (Exception exp)
+                {
+                    Logger.error("main: ShowAIDData() - exception={0}", (object) exp.Message);
+                }
+                finally
+                {
+                    this.ConfigurationAIDSpicBoxWait.Enabled = false;
+                    this.ConfigurationAIDSpicBoxWait.Visible  = false;
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
+        private void ShowCapKList(object payload)
+        {
+            // Invoker with Parameter(s)
+            MethodInvoker mi = () =>
+            {
+                try
+                {
+                    string [] data = ((IEnumerable) payload)?.Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray() ?? null;
+
+                    // Remove previous entries
+                    if(ConfigurationCAPKSlistView.Items.Count > 0)
+                    {
+                        ConfigurationCAPKSlistView.Items.Clear();
+                    }
+
+                    if(data != null && data.Length > 0)
+                    { 
+                        foreach(string item in data)
+                        {
+                            string [] components = item.Split('#');
+                            if(components.Length == 2)
+                            {
+                                ListViewItem item1 = new ListViewItem(components[0], 0);
+                                string [] keyvalue = components[1].Split(' ');
+                                if(keyvalue.Length > 2)
+                                {
+                                    // RID
+                                    //string [] ridvalue = keyvalue[0].Split(':');
+                                    //if(ridvalue.Length == 2)
+                                    //{
+                                    //    item1.SubItems.Add(ridvalue[1]);
+                                    //}
+                                    // INDEX
+                                    //string [] indexvalue = keyvalue[1].Split(':');
+                                    //if(indexvalue.Length == 2)
+                                    //{
+                                    //    item1.SubItems.Add(indexvalue[1]);
+                                    //}
+                                    // MODULUS
+                                    string [] modvalues = keyvalue[2].Split(':');
+                                    if(modvalues.Length == 2)
+                                    {
+                                        item1.SubItems.Add(modvalues[1]);
+                                    }
+                                    // EXPONENT: FILE ONLY
+                                    //string [] expvalues = keyvalue[3].Split(':');
+                                    //if(expvalues.Length == 2)
+                                    //{
+                                    //    item1.SubItems.Add(expvalues[1]);
+                                    //}
+                                    // CHECKSUM: FILE ONLY
+                                    //string [] checksumvalues = keyvalue[4].Split(':');
+                                    //if(checksumvalues.Length == 2)
+                                    //{
+                                    //    item1.SubItems.Add(checksumvalues[1]);
+                                    //}
+                                    ConfigurationCAPKSlistView.Items.Add(item1);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ListViewItem item1 = new ListViewItem("N/A", 0);
+                        item1.SubItems.Add("*** NO DATA ****");
+                        ConfigurationCAPKSlistView.Items.Add(item1);
+                    }
+
+                    ConfigurationCAPKSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    ConfigurationCAPKSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+                    if(!tabControlConfiguration.Contains(ConfigurationCAPKStabPage))
+                    {
+                        tabControlConfiguration.TabPages.Add(ConfigurationCAPKStabPage);
+                    }
+                    this.ConfigurationCAPKStabPage.Enabled = true;
+                    tabControlConfiguration.SelectedTab = this.ConfigurationCAPKStabPage;
+                }
+                catch (Exception exp)
+                {
+                    Logger.error("main: ShowCapKList() - exception={0}", (object) exp.Message);
+                }
+                finally
+                {
+                    this.ConfigurationCAPKSpicBoxWait.Enabled = false;
+                    this.ConfigurationCAPKSpicBoxWait.Visible  = false;
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
+        private void ShowConfigGroup(object payload)
+        {
+            // Invoker with Parameter(s)
+            MethodInvoker mi = () =>
+            {
+                try
+                {
+                    // Remove previous entries
+                    if(ConfigurationGROUPSlistView.Items.Count > 0)
+                    {
+                        ConfigurationGROUPSlistView.Items.Clear();
+                    }
+
+                    if(payload != null)
+                    {
+                        string [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
+
+                        foreach(string item in data)
+                        {
+                            string [] components = item.Split(':');
+                            if(components.Length == 3)
+                            {
+                                ListViewItem item1 = new ListViewItem(components[0], 0);
+                                string keytag = components[1];
+                                if(keytag.Length > 0)
+                                {
+                                    // TAG
+                                    item1.SubItems.Add(keytag);
+
+                                    // VALUE
+                                    string keyvalue = components[2];
+                                    if(keyvalue.Length > 0)
+                                    {
+                                        // TAG
+                                        item1.SubItems.Add(keyvalue);
+                                        ConfigurationGROUPSlistView.Items.Add(item1);
+                                    }
+                                }
+                            }
+                        }
+
+                        if(!tabControlConfiguration.Contains(ConfigurationGROUPStabPage))
+                        {
+                            tabControlConfiguration.TabPages.Add(ConfigurationGROUPStabPage);
+                        }
+                        this.ConfigurationGROUPStabPage.Enabled = true;
+                        tabControlConfiguration.SelectedTab = this.ConfigurationGROUPStabPage;
+                    }
+                    else
+                    {
+                        ListViewItem item1 = new ListViewItem("INFO", 0);
+                        item1.SubItems.Add("UNDEFINED");
+                        item1.SubItems.Add(String.Format("NO DEFINITIONS FOR GROUP {0} IN CONFIG", ConfigurationGROUPStabPagecomboBox1.SelectedItem));
+                        ConfigurationGROUPSlistView.Items.Add(item1);
+                    }
+                    ConfigurationGROUPSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    ConfigurationGROUPSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                    this.ConfigurationGROUPSpicBoxWait.Enabled = false;
+                    this.ConfigurationGROUPSpicBoxWait.Visible  = false;
+                }
+                catch (Exception exp)
+                {
+                    Logger.error("main: ShowConfigGroup() - exception={0}", (object) exp.Message);
+                    this.ConfigurationGROUPSpicBoxWait.Enabled = false;
+                    this.ConfigurationGROUPSpicBoxWait.Visible  = false;
+                }
+                finally
+                {
+                    this.ConfigurationGROUPSpicBoxWait.Enabled = false;
+                    this.ConfigurationGROUPSpicBoxWait.Visible  = false;
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
+        private void EnableButtons()
+        {
+            MethodInvoker mi = () =>
+            {
+                this.ConfigurationPanel1btnDeviceMode.Enabled = true;
+                this.ConfigurationPanel1btnEMVMode.Enabled = true;
+                this.ConfigurationPanel1pictureBox1.Enabled = false;
+                this.ConfigurationPanel1pictureBox1.Visible = false;
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
             }
         }
 
@@ -1390,11 +1781,11 @@ namespace IPA.MainApp
             MethodInvoker mi = () =>
             {
                 string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
-//JBWIP:
-//                this.ConfigurationPanel1btnDeviceMode.Text = data[0];
-//                this.ConfigurationPanel1btnDeviceMode.Enabled = true;
-//                this.ApplicationpicBoxWait.Enabled = false;
-//                this.ApplicationpicBoxWait.Visible = false;
+
+                this.ConfigurationPanel1btnDeviceMode.Text = data[0];
+                this.ConfigurationPanel1btnDeviceMode.Enabled = true;
+                this.ConfigurationPanel1pictureBox1.Enabled = false;
+                this.ConfigurationPanel1pictureBox1.Visible = false;
             };
 
             if (InvokeRequired)
@@ -1498,6 +1889,238 @@ namespace IPA.MainApp
         /**************************************************************************/
         #region -- configuration tab --
 
+        private void OnCollapseConfigurationView(object sender, EventArgs e)
+        {
+            this.ConfigurationPanel1.Visible = false;
+            this.ConfigurationExpandButton.Visible = true;
+            this.tabControlConfiguration.Width -= CONFIG_PANEL_WIDTH;
+            this.tabControlConfiguration.Width *= 2;
+        }
+
+        private void OnExpandConfigurationView(object sender, EventArgs e)
+        {
+            this.ConfigurationPanel1.Visible = true;
+            this.ConfigurationExpandButton.Visible = false;
+            this.tabControlConfiguration.Width /= 2;
+            this.tabControlConfiguration.Width += CONFIG_PANEL_WIDTH;
+        }
+
+        private void OnConfigurationListItemSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControlConfiguration.SelectedTab?.Name.Equals("ConfigurationTerminalDatatabPage") ?? false)
+            {
+                // Configuration Mode
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    this.ConfigurationTerminalDatapicBoxWait.Visible = true;
+                    this.ConfigurationTerminalDatapicBoxWait.Enabled = true;
+                    System.Windows.Forms.Application.DoEvents();
+                    new Thread(() => { Thread.CurrentThread.IsBackground = true; devicePlugin. GetSphereTerminalData(); }).Start();
+                }));
+
+                ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
+            }
+            else if (tabControlConfiguration.SelectedTab?.Name.Equals("ConfigurationAIDStabPage") ?? false)
+            {
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    this.ConfigurationAIDSpicBoxWait.Visible = true;
+                    this.ConfigurationAIDSpicBoxWait.Enabled = true;
+                    System.Windows.Forms.Application.DoEvents();
+                    new Thread(() => { Thread.CurrentThread.IsBackground = true; devicePlugin.GetAIDList(); }).Start();
+                }));
+
+                ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
+            }
+            else if (tabControlConfiguration.SelectedTab?.Name.Equals("ConfigurationCAPKStabPage") ?? false)
+            {
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    this.ConfigurationCAPKSpicBoxWait.Visible = true;
+                    this.ConfigurationCAPKSpicBoxWait.Enabled = true;
+                    System.Windows.Forms.Application.DoEvents();
+                    new Thread(() => { Thread.CurrentThread.IsBackground = true; devicePlugin.GetCapKList(); }).Start();
+                }));
+
+                ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
+            }
+            else if (tabControlConfiguration.SelectedTab?.Name.Equals("ConfigurationGROUPStabPage") ?? false)
+            {
+                ConfigurationGROUPStabPagecomboBox1.SelectedIndex = 0;
+            }
+        }
+
+        private void OnConfigurationTabControlVisibilityChanged(object sender, EventArgs e)
+        {
+            if (this.ConfigurationTerminalDatatabPage.Visible == true)
+            {
+                this.tabControlConfiguration.SelectedIndex = -1;
+                this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                this.tabControlConfiguration.SelectedIndex = 0;
+            }
+        }
+
+        private void OnConfigGroupSelectionChanged(object sender, EventArgs e)
+        {
+            if (ConfigurationGROUPStabPagecomboBox1.SelectedItem != null)
+            {
+                this.ConfigurationGROUPSpicBoxWait.Visible = true;
+                this.ConfigurationGROUPSpicBoxWait.Enabled = true;
+                int group = Convert.ToInt16(ConfigurationGROUPStabPagecomboBox1.SelectedItem.ToString());
+                new Thread(() =>
+                {
+                    try
+                    {
+                        Thread.CurrentThread.IsBackground = true;
+                        devicePlugin.GetConfigGroup(group);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.error("main: exception={0}", (object)ex.Message);
+                    }
+
+                }).Start();
+            }
+        }
+
+        private void ConfigurationResetLoadFromButtons()
+        {
+            foreach (RadioButton radio in ConfigurationGroupBox1.Controls.OfType<RadioButton>().ToList())
+            {
+                if (radio.Checked == true)
+                {
+                    radio.Checked = false;
+                    break;
+                }
+            }
+        }
+
+        private void OnLoadFactory(object sender, EventArgs e)
+        {
+            this.Invoke(new MethodInvoker(() =>
+            {
+                this.ConfigurationPanel1btnDeviceMode.Enabled = false;
+                this.ConfigurationPanel1btnEMVMode.Enabled = false;
+                if (this.ConfigurationCollapseButton.Visible)
+                {
+                    this.ConfigurationCollapseButton.Visible = false;
+                    this.ConfigurationPanel2.Visible = false;
+                }
+                ConfigurationResetLoadFromButtons();
+                this.ConfigurationPanel1pictureBox1.Enabled = true;
+                this.ConfigurationPanel1pictureBox1.Visible = true;
+                System.Windows.Forms.Application.DoEvents();
+            }));
+
+            // Reset Configuration to Factory defaults AND load from device
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                devicePlugin.FactoryReset();
+                // Load Configuration from DEVICE
+                devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_DEVICE);
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    radioLoadFromDevice.Checked = true;
+                }));
+            }).Start();
+        }
+
+        private void OnSetDeviceMode(object sender, EventArgs e)
+        {
+            string mode = this.ConfigurationPanel1btnDeviceMode.Text;
+            new Thread(() =>
+            {
+                try
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    devicePlugin.SetDeviceMode(mode);
+                }
+                catch (Exception ex)
+                {
+                    Logger.error("main: exception={0}", (object)ex.Message);
+                }
+
+            }).Start();
+
+            // Disable Buttons
+            this.ConfigurationPanel1btnEMVMode.Enabled = false;
+            this.btnFirmwareUpdate.Enabled = false;
+        }
+
+        private void OnEMVModeDisable(object sender, EventArgs e)
+        {
+            new Thread(() =>
+            {
+                try
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    devicePlugin.DisableQCEmvMode();
+                }
+                catch (Exception ex)
+                {
+                    Logger.error("main: exception={0}", (object)ex.Message);
+                }
+
+            }).Start();
+
+            // Disable Button
+            this.ConfigurationPanel1btnEMVMode.Enabled = false;
+        }
+
+        private void OnLoadFromFile(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                // Load Configuration from FILE
+                new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_CONFIG)).Start();
+
+                if (this.ConfigurationCollapseButton.Visible == false)
+                {
+                    this.ConfigurationCollapseButton.Visible = true;
+                    this.ConfigurationPanel2.Visible = true;
+                    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                }
+
+                if (this.tabControlConfiguration.SelectedIndex == 0)
+                {
+                    this.tabControlConfiguration.SelectedIndex = -1;
+                    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                    this.tabControlConfiguration.SelectedIndex = 0;
+                }
+            }
+        }
+
+        private void OnLoadFromDevice(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                // Load Configuration from DEVICE
+                new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_DEVICE)).Start();
+
+                if (this.ConfigurationCollapseButton.Visible == false)
+                {
+                    this.ConfigurationCollapseButton.Visible = true;
+                    this.ConfigurationPanel2.Visible = true;
+                    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                }
+
+                if (this.tabControlConfiguration.SelectedIndex == 0)
+                {
+                    this.tabControlConfiguration.SelectedIndex = -1;
+                    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                    this.tabControlConfiguration.SelectedIndex = 0;
+                }
+            }
+        }
+
+        #endregion
+
+        /**************************************************************************/
+        // SETTINGS TAB
+        /**************************************************************************/
+        #region -- settings tab --
+
         public List<MsrConfigItem> configExpirationMask;
         public List<MsrConfigItem> configPanDigits;
         public List<MsrConfigItem> configSwipeForceEncryption;
@@ -1516,9 +2139,9 @@ namespace IPA.MainApp
             }
         }
 
-        private void OnConfigurationControlActive(object sender, EventArgs e)
+        private void OnSettingsControlActive(object sender, EventArgs e)
         {
-            ConfigSerializer serializer = devicePlugin.GetConfigSerializer();
+            ConfigIDTechSerializer serializer = devicePlugin.GetConfigIDTechSerializer();
 
             // Update settings
             if(serializer != null)
@@ -1552,7 +2175,7 @@ namespace IPA.MainApp
         {
             try
             {
-                ConfigSerializer serializer = devicePlugin.GetConfigSerializer();
+                ConfigIDTechSerializer serializer = devicePlugin.GetConfigIDTechSerializer();
 
                 // Update Configuration File
                 if(serializer != null)
@@ -1620,14 +2243,35 @@ namespace IPA.MainApp
 
         private void OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (MaintabControl.SelectedTab.Name.Equals("SettingstabPage"))
+            if (MaintabControl.SelectedTab?.Name.Equals("ConfigurationtabPage") ?? false)
+            {
+                ConfigurationResetLoadFromButtons();
+
+                if(this.ConfigurationCollapseButton.Visible)
+                {
+                    this.ConfigurationCollapseButton.Visible = false;
+                    this.ConfigurationPanel2.Visible = false;
+                }
+            }
+            else if (MaintabControl.SelectedTab.Name.Equals("SettingstabPage"))
+            {
+                if(this.SettingstabPage.Enabled)
+                { 
+                    // Configuration Mode
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        this.SettingstabPage.Enabled = true;
+                        this.SettingspicBoxWait.Enabled = true;
+                        this.SettingspicBoxWait.Visible = true;
+                    }));
+                }
+            }
+            else if (MaintabControl.SelectedTab?.Name.Equals("FirmwaretabPage") ?? false)
             {
                 // Configuration Mode
                 this.Invoke(new MethodInvoker(() =>
                 {
-                    this.SettingstabPage.Enabled = true;
-                    this.SettingspicBoxWait.Enabled = true;
-                    this.SettingspicBoxWait.Visible = true;
+                    ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
                 }));
             }
             else if (MaintabControl.SelectedTab.Name.Equals("RawModetabPage"))
@@ -1640,6 +2284,25 @@ namespace IPA.MainApp
             }
         }
 
+        private void OnDeselectingMainTabPage(object sender, TabControlCancelEventArgs e)
+        {
+            if(this.JsonpicBoxWait.Visible)
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void OnDeselectingConfigurationTabPage(object sender, TabControlCancelEventArgs e)
+        {
+            if(this.ConfigurationTerminalDatapicBoxWait.Visible ||
+               this.ConfigurationAIDSpicBoxWait.Visible         ||
+               this.ConfigurationCAPKSpicBoxWait.Visible        ||
+               this.ConfigurationGROUPSpicBoxWait.Visible)
+            {
+                e.Cancel = true;
+            }
+        }
+
         #endregion
         /**************************************************************************/
         // ACTIONS TAB
@@ -1649,6 +2312,7 @@ namespace IPA.MainApp
         {
             // Disable Tab(s)
             this.ApplicationtabPage.Enabled = false;
+            this.ConfigurationtabPage.Enabled = false;
             this.SettingstabPage.Enabled = false;
             this.RawModetabPage.Enabled = false;
             this.TerminalDatatabPage.Enabled = false;
@@ -1795,7 +2459,6 @@ namespace IPA.MainApp
                 this.ApplicationlistView1.Visible = true;
             }
         }
-
 
         private void OnFirmwareUpdate(object sender, EventArgs e)
         {

@@ -15,7 +15,7 @@ using IPA.CommonInterface.ConfigIDTech.Configuration;
 namespace IPA.CommonInterface.ConfigIDTech
 {
     [Serializable]
-    public class ConfigSerializer
+    public class ConfigIDTechSerializer
     {
         /********************************************************************************************************/
         // ATTRIBUTES

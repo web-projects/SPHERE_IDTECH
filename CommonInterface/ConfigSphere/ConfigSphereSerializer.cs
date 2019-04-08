@@ -16,7 +16,7 @@ using IPA.CommonInterface.ConfigSphere.Configuration;
 namespace IPA.CommonInterface.ConfigSphere
 {
     [Serializable]
-    public class ConfigSerializer
+    public class ConfigSphereSerializer
     {
         /********************************************************************************************************/
         // ATTRIBUTES

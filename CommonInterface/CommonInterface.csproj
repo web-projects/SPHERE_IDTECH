@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigIDTech\Configuration\TerminalConfiguration.cs" />
-    <Compile Include="ConfigSphere\ConfigSerializer.cs" />
+    <Compile Include="ConfigSphere\ConfigSphereSerializer.cs" />
     <Compile Include="ConfigSphere\Configuration\Aid.cs" />
     <Compile Include="ConfigSphere\Configuration\Capk.cs" />
     <Compile Include="ConfigSphere\Configuration\Msr.cs" />
@@ -78,7 +78,7 @@
     <Compile Include="ConfigIDTech\Configuration\TerminalInfo.cs" />
     <Compile Include="ConfigIDTech\Configuration\Capk.cs" />
     <Compile Include="Interfaces\IDevicePlugIn.cs" />
-    <Compile Include="ConfigIDTech\ConfigSerializer.cs" />
+    <Compile Include="ConfigIDTech\ConfigIDTechSerializer.cs" />
     <Compile Include="ConfigIDTech\Configuration\MsrConfigItem.cs" />
     <Compile Include="Payment\PaymentXO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

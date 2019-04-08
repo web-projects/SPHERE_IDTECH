@@ -23,8 +23,8 @@ DAL/bin/
 DAL/obj/
 DeviceConfiguration/bin/
 DeviceConfiguration/obj/
-IdTechCfg/bin/
-IdTechCfg/obj/
+IdTechConfig/bin/
+IdTechConfig/obj/
 LoggerManager/bin/
 LoggerManager/obj/
 

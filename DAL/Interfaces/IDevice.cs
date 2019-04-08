@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using IPA.DAL.RBADAL.Services;
 using IPA.CommonInterface;
 using IPA.CommonInterface.ConfigIDTech;
+using IPA.CommonInterface.ConfigSphere;
 
 namespace IPA.DAL.RBADAL.Interfaces
 {
@@ -63,15 +64,26 @@ namespace IPA.DAL.RBADAL.Interfaces
         /********************************************************************************************************/
         #region -- device configuration --
 
-        void GetTerminalInfo(ref ConfigSerializer serializer);
-        string [] GetTerminalData(ref ConfigSerializer serializer, ref int exponent);
-        void ValidateTerminalData(ref ConfigSerializer serializer);
-        void GetAidList(ref ConfigSerializer serializer);
-        void ValidateAidList(ref ConfigSerializer serializer);
-        void GetCapKList(ref ConfigSerializer serializer);
-        void ValidateCapKList(ref ConfigSerializer serializer);
-        void GetMSRSettings(ref ConfigSerializer serializer);
-        void GetEncryptionControl(ref ConfigSerializer serializer);
+        #region --- IDTECH SERIALIZER ---
+        void GetTerminalInfo(ref ConfigIDTechSerializer serializer);
+        string [] GetTerminalData(ref ConfigIDTechSerializer serializer, ref int exponent);
+        string [] GetAidList(ref ConfigIDTechSerializer serializer);
+        string [] GetCapKList(ref ConfigIDTechSerializer serializer);
+        #endregion
+
+        #region --- SPHERE SERIALIZER ---
+        string[] GetTerminalData();
+        void ValidateTerminalData(ref ConfigSphereSerializer serializer);
+        string [] GetAidList();
+        void ValidateAidList(ref ConfigSphereSerializer serializer);
+        string [] GetCapKList();
+        void ValidateCapKList(ref ConfigSphereSerializer serializer);
+        #endregion
+
+        void GetMSRSettings(ref ConfigIDTechSerializer serializer);
+        void GetEncryptionControl(ref ConfigIDTechSerializer serializer);
+        string[] GetConfigGroup(int group);
+        void ValidateConfigGroup(ConfigSphereSerializer serializer, int group);
         void CloseDevice();
         void FactoryReset();
         #endregion
