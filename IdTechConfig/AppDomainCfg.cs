@@ -61,21 +61,21 @@ namespace IPA.MainApp
 
             try
             {
-            AppDomain.Unload(appdomain);
-            unloaded = true;
+                AppDomain.Unload(appdomain);
+                unloaded = true;
             }
             catch (CannotUnloadAppDomainException)
             {
-            unloaded = true;
+                unloaded = true;
             }
             catch (Exception ex)
             {
-            Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             if (!unloaded)
             {
-            Debug.WriteLine("main: appdomain could not be unloaded.");
+                Debug.WriteLine("main: appdomain could not be unloaded.");
             }
         }
 
@@ -85,14 +85,14 @@ namespace IPA.MainApp
 
             try
             {
-            Debug.WriteLine(plugin.PluginName);
+                Debug.WriteLine(plugin.PluginName);
             }
             catch (AppDomainUnloadedException)
             {
             }
             catch (Exception ex)
             {
-            Debug.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             if (!unloaded)

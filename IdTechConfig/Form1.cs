@@ -378,6 +378,36 @@ namespace IPA.MainApp
                     SetModeButtonEnabledUI(sender, args);
                     break;
                 }
+                case NOTIFICATION_TYPE.NT_SET_EMV_MODE_BUTTON:
+                {
+                    SetEmvButtonUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STEP:
+                {
+                    FirmwareUpdateProgressUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STATUS:
+                {
+                    FirmwareUpdateStatusUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_FAILED:
+                {
+                    FirmwareUpdateFailedUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_COMPLETE:
+                {
+                    EnableMainFormUI(sender, args);
+                    break;
+                }
+
             }
         }
 
@@ -433,6 +463,27 @@ namespace IPA.MainApp
             }
         }
 
+        private void SetEmvButtonUI(object sender, DeviceNotificationEventArgs e)
+        {
+            SetEmvButton(e.Message);
+        }
+        private void FirmwareUpdateProgressUI(object sender, DeviceNotificationEventArgs e)
+        {
+            FirmwareUpdateProgress(e.Message);
+        }
+        private void FirmwareUpdateStatusUI(object sender, DeviceNotificationEventArgs e)
+        {
+            FirmwareUpdateStatus(e.Message);
+        }
+        private void FirmwareUpdateFailedUI(object sender, DeviceNotificationEventArgs e)
+        {
+            FirmwareUpdateFailed(e.Message);
+        }
+        private void EnableMainFormUI(object sender, DeviceNotificationEventArgs e)
+        {
+            EnableMainForm(e.Message);
+        }
+
         #endregion
 
         /********************************************************************************************************/
@@ -480,6 +531,11 @@ namespace IPA.MainApp
                     this.ApplicationlblFirmwareVersion.Text = config[1];
                     this.ApplicationlblModelName.Text = config[2];
                     this.ApplicationlblModelNumber.Text = config[3];
+
+                    this.lblFirmwareVersion.Text = config[1];
+                    this.btnFirmwareUpdate.Enabled = true;
+                    this.btnFirmwareUpdate.Visible = true;
+                    this.FirmwareprogressBar1.Visible = false;
 
                     // value expected: either dashed or space separated
                     string [] worker = null;
@@ -671,22 +727,25 @@ namespace IPA.MainApp
                     // Setup DeviceCfg Event Handlers
                     devicePlugin.OnDeviceNotification += new EventHandler<DeviceNotificationEventArgs>(this.OnDeviceNotificationUI);
 
-                    if(tc_show_json_tab && dev_usb_mode == DEV_USB_MODE.USB_HID_MODE)
-                    {
-                        try
+                    if(!devicePlugin.FirmwareIsUpdating())
+                    { 
+                        if(tc_show_json_tab && dev_usb_mode == DEV_USB_MODE.USB_HID_MODE)
                         {
-                            this.Invoke(new MethodInvoker(() =>
+                            try
                             {
-                                if(MaintabControl.Contains(JsontabPage))
+                                this.Invoke(new MethodInvoker(() =>
                                 {
-                                    this.JsonpicBoxWait.Visible = true;
-                                    this.MaintabControl.SelectedTab = this.JsontabPage;
-                                }
-                            }));
-                        }
-                        catch(Exception ex)
-                        {
-                            Logger.error("main: InitalizeDevice() exception={0}", (object)ex.Message);
+                                    if(MaintabControl.Contains(JsontabPage))
+                                    {
+                                        this.JsonpicBoxWait.Visible = true;
+                                        this.MaintabControl.SelectedTab = this.JsontabPage;
+                                    }
+                                }));
+                            }
+                            catch(Exception ex)
+                            {
+                                Logger.error("main: InitalizeDevice() exception={0}", (object)ex.Message);
+                            }
                         }
                     }
 
@@ -703,6 +762,14 @@ namespace IPA.MainApp
                         {
                             WaitForDeviceToConnect();
                         }
+                        else if (ex.Message.Equals("MultipleDevice"))
+                        {
+                            this.Invoke(new MethodInvoker(() =>
+                            {
+                                MessageBoxEx.Show(this, "Multiple Devices Detected\r\nDisconnect One of them !!!", "ERROR: MULTIPLE DEVICES DETECTED", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                WaitForDeviceToConnect();
+                            }));
+                        }
                     }
                 }).Start();
             }
@@ -712,26 +779,32 @@ namespace IPA.MainApp
         {
             if(dev_usb_mode == DEV_USB_MODE.USB_HID_MODE)
             {
-                this.Invoke(new MethodInvoker(() =>
+                if (!devicePlugin.FirmwareIsUpdating())
                 {
-                    MaintabControl.SelectedTab = this.ApplicationtabPage;
-                    if(MaintabControl.Contains(SettingstabPage))
+                    this.Invoke(new MethodInvoker(() =>
                     {
-                        MaintabControl.TabPages.Remove(SettingstabPage);
-                    }
-                    if(MaintabControl.Contains(RawModetabPage))
-                    {
-                        MaintabControl.TabPages.Remove(RawModetabPage);
-                    }
-                    if(MaintabControl.Contains(TerminalDatatabPage))
-                    {
-                        MaintabControl.TabPages.Remove(TerminalDatatabPage);
-                    }
-                    if(MaintabControl.Contains(JsontabPage))
-                    {
-                        MaintabControl.TabPages.Remove(JsontabPage);
-                    }
-                }));
+                        this.btnFirmwareUpdate.Enabled = false;
+                        this.lblFirmwareVersion.Text = "UNKNOWN";
+
+                        MaintabControl.SelectedTab = this.ApplicationtabPage;
+                        if(MaintabControl.Contains(SettingstabPage))
+                        {
+                            MaintabControl.TabPages.Remove(SettingstabPage);
+                        }
+                        if(MaintabControl.Contains(RawModetabPage))
+                        {
+                            MaintabControl.TabPages.Remove(RawModetabPage);
+                        }
+                        if(MaintabControl.Contains(TerminalDatatabPage))
+                        {
+                            MaintabControl.TabPages.Remove(TerminalDatatabPage);
+                        }
+                        if(MaintabControl.Contains(JsontabPage))
+                        {
+                            MaintabControl.TabPages.Remove(JsontabPage);
+                        }
+                    }));
+                }
             }
 
             // Wait for a new device to connect
@@ -1312,6 +1385,112 @@ namespace IPA.MainApp
             }
         }
 
+        private void SetEmvButton(object payload)
+        {
+            MethodInvoker mi = () =>
+            {
+                string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
+//JBWIP:
+//                this.ConfigurationPanel1btnDeviceMode.Text = data[0];
+//                this.ConfigurationPanel1btnDeviceMode.Enabled = true;
+//                this.ApplicationpicBoxWait.Enabled = false;
+//                this.ApplicationpicBoxWait.Visible = false;
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
+        private void FirmwareUpdateProgress(object payload)
+        {
+            MethodInvoker mi = () =>
+            {
+                string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
+                this.FirmwareprogressBar1.PerformStep();
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
+        private void FirmwareUpdateStatus(object payload)
+        {
+            MethodInvoker mi = () =>
+            {
+                string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
+                this.lblFirmwareVersion.Text = data[0];
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
+        private void FirmwareUpdateFailed(object payload)
+        {
+            MethodInvoker mi = () =>
+            {
+                string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
+                this.lblFirmwareVersion.Text = data[0];
+                Thread.Sleep(3000);
+                this.btnFirmwareUpdate.Visible = true;
+                this.btnFirmwareUpdate.Enabled = true;
+                this.FirmwarepicBoxWait.Enabled = false;
+                this.FirmwarepicBoxWait.Visible = false;
+                this.FirmwareprogressBar1.Visible = false;
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
+        private void EnableMainForm(object payload)
+        {
+            MethodInvoker mi = () =>
+            {
+                string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
+
+                this.lblFirmwareVersion.Text = data[0];
+                this.btnFirmwareUpdate.Visible = true;
+                this.btnFirmwareUpdate.Enabled = false;
+                this.FirmwarepicBoxWait.Enabled = false;
+                this.FirmwarepicBoxWait.Visible = false;
+                this.FirmwareprogressBar1.Visible = false;
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
         #endregion
 
         /**************************************************************************/
@@ -1614,6 +1793,51 @@ namespace IPA.MainApp
             {
                 this.ApplicationbtnShowTags.Text = "CLOSE";
                 this.ApplicationlistView1.Visible = true;
+            }
+        }
+
+
+        private void OnFirmwareUpdate(object sender, EventArgs e)
+        {
+            FirmwareopenFileDialog1.Title = "FIRMWARE UPDATE";
+            FirmwareopenFileDialog1.Filter = "NGA FW Files|*.fm";
+            FirmwareopenFileDialog1.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Assets";
+
+            if (FirmwareopenFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                byte[] bytes = System.IO.File.ReadAllBytes(FirmwareopenFileDialog1.FileName);
+                if (bytes.Length > 0)
+                {
+                    // Set the initial value of the ProgressBar.
+                    this.FirmwareprogressBar1.Value = 0;
+                    this.FirmwareprogressBar1.Maximum = bytes.Length / 1024;
+                    this.FirmwareprogressBar1.Step = 1;
+
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        this.FirmwarepicBoxWait.Enabled = true;
+                        this.FirmwarepicBoxWait.Visible = true;
+                        this.lblFirmwareVersion.Text = "UPDATING FIRMWARE (PLEASE DON'T INTERRUPT)...";
+                        this.btnFirmwareUpdate.Visible = false;
+                        this.FirmwareprogressBar1.Visible = true;
+                        System.Windows.Forms.Application.DoEvents();
+                    }));
+
+                    // Firmware Update
+                    new Thread(() =>
+                    {
+                        try
+                        {
+                            Thread.CurrentThread.IsBackground = true;
+                            devicePlugin.FirmwareUpdate(FirmwareopenFileDialog1.FileName, bytes);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.error("main: exception={0}", (object)ex.Message);
+                        }
+
+                    }).Start();
+                }
             }
         }
 

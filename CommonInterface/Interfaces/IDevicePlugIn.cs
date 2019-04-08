@@ -34,5 +34,11 @@ namespace IPA.CommonInterface.Interfaces
     string DeviceCommand(string command, bool notify);
     // Messaging
     string GetErrorMessage(string data);
+    // Firmware update
+    void FirmwareUpdate(string filename, byte[] bytes);
+    // Firmware is Updating
+    bool FirmwareIsUpdating();
+    // Factory Reset
+    void FactoryReset();
   }
 }

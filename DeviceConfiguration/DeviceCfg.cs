@@ -148,8 +148,7 @@ namespace IPA.DAL.RBADAL
                 Debug.WriteLine("device INFO[Port]            : {0}", (object) deviceInformation.Port);
 
                 // Update Device Configuration
-                string [] message = { "COMPLETED" };
-                NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_DEVICE_UPDATE_CONFIG, Message = message });
+                NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_DEVICE_UPDATE_CONFIG, Message = new object[] { "COMPLETED" } });
             }
 
             // DEVICES with USDK Support
@@ -160,15 +159,13 @@ namespace IPA.DAL.RBADAL
                 IDT_Device.startUSBMonitoring();
                 Logger.debug("DeviceCfg::DeviceInit(): - device TYPE={0}", IDT_Device.getDeviceType());
 
-                string [] message = { "COMPLETED" };
-                NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = message });
+                NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
             }
             else if(deviceInformation.deviceMode == IDTECH_DEVICE_PID.VP3000_KYB)
             {
                 deviceType = IDT_DEVICE_Types.IDT_DEVICE_VP3300;
                 SetDeviceConfig();
-                string [] message = { "COMPLETED" };
-                NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = message });
+                NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
             }
           }
           else
@@ -444,7 +441,10 @@ namespace IPA.DAL.RBADAL
           }
 
           // Unload Device Domain
-          NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_UNLOAD_DEVICE_CONFIGDOMAIN });
+          if(!firmwareUpdate)
+          { 
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_UNLOAD_DEVICE_CONFIGDOMAIN });
+          }
       }
     }
 
@@ -486,8 +486,7 @@ namespace IPA.DAL.RBADAL
            }
 
            // Update Device Configuration
-           object [] message = { "COMPLETED" };
-           NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_DEVICE_UPDATE_CONFIG, Message = message });
+           NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_DEVICE_UPDATE_CONFIG, Message = new object[] { "COMPLETED" } });
       }
     }
 
@@ -764,8 +763,7 @@ namespace IPA.DAL.RBADAL
 
           // Allow for GUI Recovery
           string [] message = { "" };
-          message[0] = "***** TRANSACTION FAILED: " + text + " *****";
-          NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = message });
+          NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = new object[] { "***** TRANSACTION FAILED: " + text + " *****" } });
           break;
         }
 
@@ -775,12 +773,17 @@ namespace IPA.DAL.RBADAL
             {
                 case RETURN_CODE.RETURN_CODE_FW_STARTING_UPDATE:
                 {
-                    Logger.debug("device: starting Firmware Update");
+                    string [] message = { "STARTING FIRMWARE UPDATE...." };
+                    Logger.debug("device: {0}", (object) message[0]);
+                    NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STATUS, Message = message });
                     break;
                 }
                 case RETURN_CODE.RETURN_CODE_DO_SUCCESS:
                 {
-                    Logger.debug("device: firmware Update Successful");
+                    string [] message = { "FIRMWARE UPDATE SUCCESSFUL" };
+                    Logger.debug("device: {0}", (object) message[0]);
+                    NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STATUS, Message = message });
+
                     new Thread(() =>
                     {
                         Thread.CurrentThread.IsBackground = false;
@@ -795,7 +798,9 @@ namespace IPA.DAL.RBADAL
                 }
                 case RETURN_CODE.RETURN_CODE_APPLYING_FIRMWARE_UPDATE:
                 {
-                    Logger.debug("device: applying Firmware Update....");
+                    string [] message = { "APPLYING FIRMWARE UPDATE...." };
+                    Logger.debug("device: {0}", (object) message[0]);
+                    NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STATUS, Message = message });
                     break;
                 }
                 case RETURN_CODE.RETURN_CODE_ENTERING_BOOTLOADER_MODE:
@@ -813,6 +818,8 @@ namespace IPA.DAL.RBADAL
                         end = data[2] * 0x100 + data[3];
                     }
                     Logger.debug("device: sent block {0} of {1}", start.ToString(), end.ToString());
+                    string [] message = { start.ToString() };
+                    NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STEP, Message = message });
                     break;
                 }
                 default:
@@ -2719,48 +2726,170 @@ namespace IPA.DAL.RBADAL
 
         return message;
     }
-    #endregion
-  }
 
-  #region -- main interface --
- internal class DeviceInformation
- {
-    internal string SerialNumber;
-    internal string FirmwareVersion;
-    internal string ModelName;
-    internal string ModelNumber;
-    internal string Port;
-    internal IDTECH_DEVICE_PID deviceMode;
-    internal bool emvConfigSupported;
- }
- public static class USK_DEVICE_MODE
- {
-    public const string USB_HID = "USB-HID";
-    public const string USB_KYB = "USB-KB";
-    public const string UNKNOWN = "UNKNOWN";
-    public const string OLDIDTECHHID = "OLDIDTECHHID";
-    public const string OLDIDTECHKYB = "OLDIDTECHKB";
+        public void FirmwareUpdate(string fullPathfilename, byte[] bytes)
+        {
+            try
+            {
+                if (bytes.Length > 0)
+                {
+                    /*TODO: GUI UNIT TEST
+                    new Thread(() =>
+                    {
+                        Thread.CurrentThread.IsBackground = false;
+
+                        for(int i = 1; i <= bytes.Length / 1024; i++)
+                        {
+                            Debug.WriteLine("device: sent block {0} of {1}", i.ToString(), (bytes.Length / 1024).ToString());
+                            string [] message = { i.ToString() };
+                            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STEP, Message = message });
+                            Thread.Sleep(10);
+                        }
+                        Thread.Sleep(1000);
+                        SetDeviceFirmwareVersion();
+                    }).Start();
+
+                    return;*/
+
+                    // Validate FW Signature
+                    byte[] FirmwareSignature = new byte[64];
+                    Array.Copy(bytes, 64, FirmwareSignature, 0, 32);
+                    DeviceFirmwareSignature Signature = new DeviceFirmwareSignature();
+                    Dictionary<string, string> Values = Common.processTLVUnencrypted(FirmwareSignature);
+
+                    foreach (var Item in Values)
+                    {
+                        switch (Int32.Parse(Item.Key))
+                        {
+                            case (int)DeviceFirmwareSignature.SignatureIndex.SIG_VERSION:
+                            {
+                                Signature.Version = Common.hexStringToString(Item.Value);
+                                break;
+                            }
+
+                            case (int)DeviceFirmwareSignature.SignatureIndex.SIG_MODELNAME:
+                            {
+                                Signature.ModelName = Common.hexStringToString(Item.Value);
+                                break;
+                            }
+
+                            case (int)DeviceFirmwareSignature.SignatureIndex.SIG_TYPE:
+                            {
+                                Signature.Type = Item.Value;
+                                break;
+                            }
+                        }
+                    }
+
+                    foreach (var ModelName in Signature.Devices.Where(x => x.Key.Equals(deviceInformation.ModelName, StringComparison.CurrentCultureIgnoreCase)).Select(y => y.Value))
+                    {
+                        if (ModelName.Equals(Signature.ModelName, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            RETURN_CODE rt = IDT_Device.SharedController.device_updateDeviceFirmware(bytes);
+                            if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+                            {
+                                string filename = System.IO.Path.GetFileName(fullPathfilename);
+                                Logger.debug("device: firmware update started for: {0}", filename);
+                                firmwareUpdate = true;
+                            }
+                            else
+                            {
+                                Logger.error("device: firmware Update Failed Error Code: 0x{0:X}", (ushort)rt);
+                            }
+                        }
+                        else
+                        {
+                            string[] message = { string.Format("UPDATE FAILED: [{0}] FIRMWARE DOESN'T MATCH DEVICE MODEL {1}", Signature.ModelName, deviceInformation.ModelName) };
+                            Logger.error("device: {0}", message[0]);
+                            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_FAILED, Message = message });
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception exp)
+            {
+                Logger.error("device: FirmwareUpdate() - exception={0}", (object)exp.Message);
+            }
+        }
+        public bool FirmwareIsUpdating()
+        {
+            return firmwareUpdate;
+        }
+        public void FactoryReset()
+        {
+            try
+            {
+                Device.FactoryReset();
+            }
+            catch (Exception exp)
+            {
+                Logger.error("device: FactoryReset() - exception={0}", (object)exp.Message);
+            }
+            finally
+            {
+                NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_UI_ENABLE_BUTTONS });
+            }
+        }
+        #endregion
     }
 
- internal static class TerminalMajorConfiguration
- {
-    internal const string CONFIG_2C = "2C";
-    internal const string CONFIG_5C = "5C";
-    internal const string TERMCFG_2 = "32";
-    internal const string TERMCFG_5 = "35";
- }
+     #region -- main interface --
+     internal class DeviceInformation
+     {
+        internal string SerialNumber;
+        internal string FirmwareVersion;
+        internal string ModelName;
+        internal string ModelNumber;
+        internal string Port;
+        internal IDTECH_DEVICE_PID deviceMode;
+        internal bool emvConfigSupported;
+     }
+     public static class USK_DEVICE_MODE
+     {
+        public const string USB_HID = "USB-HID";
+        public const string USB_KYB = "USB-KB";
+        public const string UNKNOWN = "UNKNOWN";
+        public const string OLDIDTECHHID = "OLDIDTECHHID";
+        public const string OLDIDTECHKYB = "OLDIDTECHKB";
+        }
 
- internal static class USDK_CONFIGURATION_COMMANDS
- {
-    internal const string GET_MAJOR_TERMINAL_CFG       = "72 52 01 28";
-    internal const string SET_TERMINAL_MAJOR_2C        = "72 53 01 28 01 32";
-    internal const string SET_TERMINAL_MAJOR_5C        = "72 53 01 28 01 35";
-    internal const string GET_EMV_TERMINAL_DATA        = "72 46 02 01";
-    internal const string GET_QUICK_CHIP_MODE_STATE    = "72 52 01 29";
-    internal const string SET_QUICK_CHIP_MODE_DISABLED = "72 53 01 29 01 30";
-    internal const string SET_KYB_QC_MODE_DISABLED     = "02 06 00 72 53 01 29 01 30 38 20 03";
-    internal const string SET_QUICK_CHIP_MODE_ENABLED  = "72 53 01 29 01 31";
- }
+     internal static class TerminalMajorConfiguration
+     {
+        internal const string CONFIG_2C = "2C";
+        internal const string CONFIG_5C = "5C";
+        internal const string TERMCFG_2 = "32";
+        internal const string TERMCFG_5 = "35";
+     }
 
- #endregion
+     internal static class USDK_CONFIGURATION_COMMANDS
+     {
+        internal const string GET_MAJOR_TERMINAL_CFG       = "72 52 01 28";
+        internal const string SET_TERMINAL_MAJOR_2C        = "72 53 01 28 01 32";
+        internal const string SET_TERMINAL_MAJOR_5C        = "72 53 01 28 01 35";
+        internal const string GET_EMV_TERMINAL_DATA        = "72 46 02 01";
+        internal const string GET_QUICK_CHIP_MODE_STATE    = "72 52 01 29";
+        internal const string SET_QUICK_CHIP_MODE_DISABLED = "72 53 01 29 01 30";
+        internal const string SET_KYB_QC_MODE_DISABLED     = "02 06 00 72 53 01 29 01 30 38 20 03";
+        internal const string SET_QUICK_CHIP_MODE_ENABLED  = "72 53 01 29 01 31";
+     }
+
+    internal class DeviceFirmwareSignature
+    {
+        public enum SignatureIndex
+        {
+            SIG_VERSION = 1,
+            SIG_MODELNAME = 2,
+            SIG_TYPE = 3
+        }
+        internal Dictionary<string, string> Devices = new Dictionary<string, string> {
+        { "Augusta (USB HID)"           , "Augusta"   },
+        { "Augusta SRED (USB HID)"      , "Augusta S" },
+        { "VP5300 / SpectrumPro 2 (USB)", "NEO_II"    }
+    };
+        internal string ModelName { get; set; }
+        internal string Version { get; set; }
+        internal string Type { get; set; }
+    }
+    #endregion
 }
