@@ -29,4 +29,5 @@ This an application to Configure IDTech Devices.
 * 20190405 - Cleaned up tabs prior to merge.
 * 20190408 - Implemented FIRMWARE update.
            - First pass at merging projects.
+* 29190409 - Implemented Augusta Configuration reader.
            

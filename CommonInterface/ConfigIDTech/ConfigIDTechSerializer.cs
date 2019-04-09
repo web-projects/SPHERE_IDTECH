@@ -21,7 +21,7 @@ namespace IPA.CommonInterface.ConfigIDTech
         // ATTRIBUTES
         /********************************************************************************************************/
         #region -- attributes --
-        private const string JSON_CONFIG = "configuration.json";
+        private const string JSON_CONFIG = "IDTechConfiguration.json";
         private const string TERMINAL_CONFIG = "TerminalData";
 
         public TerminalConfiguration terminalCfg;

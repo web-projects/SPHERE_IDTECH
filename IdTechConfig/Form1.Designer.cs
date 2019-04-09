@@ -29,7 +29,7 @@
     private void InitializeComponent()
     {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Application));
-            this.ApplicationpicBoxWait = new System.Windows.Forms.PictureBox();
+            this.ApplicationpicBoxMain = new System.Windows.Forms.PictureBox();
             this.JsontabPage = new System.Windows.Forms.TabPage();
             this.JsonpicBoxWait = new System.Windows.Forms.PictureBox();
             this.JsonbuttonClose = new System.Windows.Forms.Button();
@@ -60,6 +60,7 @@
             this.SettingscBxTrack1 = new System.Windows.Forms.CheckBox();
             this.Settingslabel3 = new System.Windows.Forms.Label();
             this.ApplicationtabPage = new System.Windows.Forms.TabPage();
+            this.ApplicationpictureBoxWait = new System.Windows.Forms.PictureBox();
             this.ApplicationlistView1 = new System.Windows.Forms.ListView();
             this.ApplicationcolumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ApplicationcolumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -84,29 +85,30 @@
             this.ConfigurationExpandButton = new System.Windows.Forms.Button();
             this.tabControlConfiguration = new System.Windows.Forms.TabControl();
             this.ConfigurationTerminalDatatabPage = new System.Windows.Forms.TabPage();
+            this.ConfigurationTerminalDatapicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationTerminalDatalistView = new System.Windows.Forms.ListView();
             this.ConfigurationTerminalDatacolumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationTerminalDatacolumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ConfigurationTerminalDatapicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationAIDStabPage = new System.Windows.Forms.TabPage();
+            this.ConfigurationAIDSpicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationAIDSlistView = new System.Windows.Forms.ListView();
             this.ConfigurationAIDStabPageColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationAIDStabPageColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ConfigurationAIDSpicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationCAPKStabPage = new System.Windows.Forms.TabPage();
+            this.ConfigurationCAPKSpicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationCAPKSlistView = new System.Windows.Forms.ListView();
             this.ConfigurationCAPKStabPageColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationCAPKStabPageColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ConfigurationCAPKSpicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationGROUPStabPage = new System.Windows.Forms.TabPage();
+            this.ConfigurationGROUPSpicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationGROUPSConfigurationPanel1label1 = new System.Windows.Forms.Label();
             this.ConfigurationGROUPStabPagecomboBox1 = new System.Windows.Forms.ComboBox();
             this.ConfigurationGROUPSlistView = new System.Windows.Forms.ListView();
             this.ConfigurationGROUPStabPageColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationGROUPStabPageColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationGROUPStabPageColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ConfigurationGROUPSpicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationPanel1 = new System.Windows.Forms.Panel();
+            this.ConfigurationPanel1pictureBox1 = new System.Windows.Forms.PictureBox();
             this.ConfigurationPanel1label2 = new System.Windows.Forms.Label();
             this.ConfigurationPanel1btnDeviceMode = new System.Windows.Forms.Button();
             this.ConfigurationPanel1btnEMVMode = new System.Windows.Forms.Button();
@@ -117,7 +119,6 @@
             this.ConfigurationGroupBox1 = new System.Windows.Forms.GroupBox();
             this.radioLoadFromDevice = new System.Windows.Forms.RadioButton();
             this.radioLoadFromFile = new System.Windows.Forms.RadioButton();
-            this.ConfigurationPanel1pictureBox1 = new System.Windows.Forms.PictureBox();
             this.FirmwaretabPage = new System.Windows.Forms.TabPage();
             this.FirmwarepicBoxWait = new System.Windows.Forms.PictureBox();
             this.lblFirmwareVersion = new System.Windows.Forms.Label();
@@ -125,7 +126,8 @@
             this.FirmwareConfigurationPanel1label1 = new System.Windows.Forms.Label();
             this.FirmwareprogressBar1 = new System.Windows.Forms.ProgressBar();
             this.FirmwareopenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.ApplicationpicBoxWait)).BeginInit();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            ((System.ComponentModel.ISupportInitialize)(this.ApplicationpicBoxMain)).BeginInit();
             this.JsontabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.JsonpicBoxWait)).BeginInit();
             this.TerminalDatatabPage.SuspendLayout();
@@ -135,6 +137,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.SettingspicBoxWait)).BeginInit();
             this.Settingspanel1.SuspendLayout();
             this.ApplicationtabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ApplicationpictureBoxWait)).BeginInit();
             this.Applicationpanel1.SuspendLayout();
             this.MaintabControl.SuspendLayout();
             this.ConfigurationtabPage.SuspendLayout();
@@ -149,20 +152,20 @@
             this.ConfigurationGROUPStabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationGROUPSpicBoxWait)).BeginInit();
             this.ConfigurationPanel1.SuspendLayout();
-            this.ConfigurationGroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).BeginInit();
+            this.ConfigurationGroupBox1.SuspendLayout();
             this.FirmwaretabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirmwarepicBoxWait)).BeginInit();
             this.SuspendLayout();
             // 
-            // ApplicationpicBoxWait
+            // ApplicationpicBoxMain
             // 
-            this.ApplicationpicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ApplicationpicBoxWait.Image")));
-            this.ApplicationpicBoxWait.Location = new System.Drawing.Point(12, 3);
-            this.ApplicationpicBoxWait.Name = "ApplicationpicBoxWait";
-            this.ApplicationpicBoxWait.Size = new System.Drawing.Size(696, 46);
-            this.ApplicationpicBoxWait.TabIndex = 15;
-            this.ApplicationpicBoxWait.TabStop = false;
+            this.ApplicationpicBoxMain.Image = ((System.Drawing.Image)(resources.GetObject("ApplicationpicBoxMain.Image")));
+            this.ApplicationpicBoxMain.Location = new System.Drawing.Point(12, 3);
+            this.ApplicationpicBoxMain.Name = "ApplicationpicBoxMain";
+            this.ApplicationpicBoxMain.Size = new System.Drawing.Size(696, 46);
+            this.ApplicationpicBoxMain.TabIndex = 15;
+            this.ApplicationpicBoxMain.TabStop = false;
             // 
             // JsontabPage
             // 
@@ -477,6 +480,7 @@
             // 
             // ApplicationtabPage
             // 
+            this.ApplicationtabPage.Controls.Add(this.ApplicationpictureBoxWait);
             this.ApplicationtabPage.Controls.Add(this.ApplicationlistView1);
             this.ApplicationtabPage.Controls.Add(this.ApplicationbtnShowTags);
             this.ApplicationtabPage.Controls.Add(this.ApplicationbtnMode);
@@ -499,6 +503,18 @@
             this.ApplicationtabPage.TabIndex = 0;
             this.ApplicationtabPage.Text = "Application";
             this.ApplicationtabPage.UseVisualStyleBackColor = true;
+            // 
+            // ApplicationpictureBoxWait
+            // 
+            this.ApplicationpictureBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ApplicationpictureBoxWait.Image")));
+            this.ApplicationpictureBoxWait.Location = new System.Drawing.Point(0, 0);
+            this.ApplicationpictureBoxWait.Name = "ApplicationpictureBoxWait";
+            this.ApplicationpictureBoxWait.Size = new System.Drawing.Size(699, 517);
+            this.ApplicationpictureBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.ApplicationpictureBoxWait.TabIndex = 17;
+            this.ApplicationpictureBoxWait.TabStop = false;
+            this.ApplicationpictureBoxWait.Visible = false;
+            this.ApplicationpictureBoxWait.WaitOnLoad = true;
             // 
             // ApplicationlistView1
             // 
@@ -707,6 +723,7 @@
             this.ConfigurationPanel2.Size = new System.Drawing.Size(441, 514);
             this.ConfigurationPanel2.TabIndex = 1;
             this.ConfigurationPanel2.Visible = false;
+            this.ConfigurationPanel2.VisibleChanged += new System.EventHandler(this.OnConfigurationPanel2VisibilityChanged);
             // 
             // ConfigurationExpandButton
             // 
@@ -749,6 +766,23 @@
             this.ConfigurationTerminalDatatabPage.Text = "Terminal Data";
             this.ConfigurationTerminalDatatabPage.UseVisualStyleBackColor = true;
             // 
+            // ConfigurationTerminalDatapicBoxWait
+            // 
+            this.ConfigurationTerminalDatapicBoxWait.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ConfigurationTerminalDatapicBoxWait.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ConfigurationTerminalDatapicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationTerminalDatapicBoxWait.Image")));
+            this.ConfigurationTerminalDatapicBoxWait.Location = new System.Drawing.Point(2, 2);
+            this.ConfigurationTerminalDatapicBoxWait.Margin = new System.Windows.Forms.Padding(2);
+            this.ConfigurationTerminalDatapicBoxWait.Name = "ConfigurationTerminalDatapicBoxWait";
+            this.ConfigurationTerminalDatapicBoxWait.Size = new System.Drawing.Size(384, 469);
+            this.ConfigurationTerminalDatapicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.ConfigurationTerminalDatapicBoxWait.TabIndex = 4;
+            this.ConfigurationTerminalDatapicBoxWait.TabStop = false;
+            this.ConfigurationTerminalDatapicBoxWait.Visible = false;
+            this.ConfigurationTerminalDatapicBoxWait.WaitOnLoad = true;
+            // 
             // ConfigurationTerminalDatalistView
             // 
             this.ConfigurationTerminalDatalistView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -773,23 +807,6 @@
             // 
             this.ConfigurationTerminalDatacolumnHeader2.Text = "VALUE";
             // 
-            // ConfigurationTerminalDatapicBoxWait
-            // 
-            this.ConfigurationTerminalDatapicBoxWait.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ConfigurationTerminalDatapicBoxWait.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ConfigurationTerminalDatapicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationTerminalDatapicBoxWait.Image")));
-            this.ConfigurationTerminalDatapicBoxWait.Location = new System.Drawing.Point(2, 2);
-            this.ConfigurationTerminalDatapicBoxWait.Margin = new System.Windows.Forms.Padding(2);
-            this.ConfigurationTerminalDatapicBoxWait.Name = "ConfigurationTerminalDatapicBoxWait";
-            this.ConfigurationTerminalDatapicBoxWait.Size = new System.Drawing.Size(384, 469);
-            this.ConfigurationTerminalDatapicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.ConfigurationTerminalDatapicBoxWait.TabIndex = 4;
-            this.ConfigurationTerminalDatapicBoxWait.TabStop = false;
-            this.ConfigurationTerminalDatapicBoxWait.Visible = false;
-            this.ConfigurationTerminalDatapicBoxWait.WaitOnLoad = true;
-            // 
             // ConfigurationAIDStabPage
             // 
             this.ConfigurationAIDStabPage.Controls.Add(this.ConfigurationAIDSpicBoxWait);
@@ -801,6 +818,23 @@
             this.ConfigurationAIDStabPage.TabIndex = 0;
             this.ConfigurationAIDStabPage.Text = "AIDS";
             this.ConfigurationAIDStabPage.UseVisualStyleBackColor = true;
+            // 
+            // ConfigurationAIDSpicBoxWait
+            // 
+            this.ConfigurationAIDSpicBoxWait.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ConfigurationAIDSpicBoxWait.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ConfigurationAIDSpicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationAIDSpicBoxWait.Image")));
+            this.ConfigurationAIDSpicBoxWait.Location = new System.Drawing.Point(2, 2);
+            this.ConfigurationAIDSpicBoxWait.Margin = new System.Windows.Forms.Padding(2);
+            this.ConfigurationAIDSpicBoxWait.Name = "ConfigurationAIDSpicBoxWait";
+            this.ConfigurationAIDSpicBoxWait.Size = new System.Drawing.Size(382, 467);
+            this.ConfigurationAIDSpicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.ConfigurationAIDSpicBoxWait.TabIndex = 4;
+            this.ConfigurationAIDSpicBoxWait.TabStop = false;
+            this.ConfigurationAIDSpicBoxWait.Visible = false;
+            this.ConfigurationAIDSpicBoxWait.WaitOnLoad = true;
             // 
             // ConfigurationAIDSlistView
             // 
@@ -825,23 +859,6 @@
             // 
             this.ConfigurationAIDStabPageColumnHeader2.Text = "VALUE";
             // 
-            // ConfigurationAIDSpicBoxWait
-            // 
-            this.ConfigurationAIDSpicBoxWait.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ConfigurationAIDSpicBoxWait.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ConfigurationAIDSpicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationAIDSpicBoxWait.Image")));
-            this.ConfigurationAIDSpicBoxWait.Location = new System.Drawing.Point(2, 2);
-            this.ConfigurationAIDSpicBoxWait.Margin = new System.Windows.Forms.Padding(2);
-            this.ConfigurationAIDSpicBoxWait.Name = "ConfigurationAIDSpicBoxWait";
-            this.ConfigurationAIDSpicBoxWait.Size = new System.Drawing.Size(382, 467);
-            this.ConfigurationAIDSpicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.ConfigurationAIDSpicBoxWait.TabIndex = 4;
-            this.ConfigurationAIDSpicBoxWait.TabStop = false;
-            this.ConfigurationAIDSpicBoxWait.Visible = false;
-            this.ConfigurationAIDSpicBoxWait.WaitOnLoad = true;
-            // 
             // ConfigurationCAPKStabPage
             // 
             this.ConfigurationCAPKStabPage.Controls.Add(this.ConfigurationCAPKSpicBoxWait);
@@ -854,6 +871,23 @@
             this.ConfigurationCAPKStabPage.TabIndex = 1;
             this.ConfigurationCAPKStabPage.Text = "CAPKS";
             this.ConfigurationCAPKStabPage.UseVisualStyleBackColor = true;
+            // 
+            // ConfigurationCAPKSpicBoxWait
+            // 
+            this.ConfigurationCAPKSpicBoxWait.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ConfigurationCAPKSpicBoxWait.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ConfigurationCAPKSpicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationCAPKSpicBoxWait.Image")));
+            this.ConfigurationCAPKSpicBoxWait.Location = new System.Drawing.Point(4, 4);
+            this.ConfigurationCAPKSpicBoxWait.Margin = new System.Windows.Forms.Padding(2);
+            this.ConfigurationCAPKSpicBoxWait.Name = "ConfigurationCAPKSpicBoxWait";
+            this.ConfigurationCAPKSpicBoxWait.Size = new System.Drawing.Size(386, 467);
+            this.ConfigurationCAPKSpicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.ConfigurationCAPKSpicBoxWait.TabIndex = 4;
+            this.ConfigurationCAPKSpicBoxWait.TabStop = false;
+            this.ConfigurationCAPKSpicBoxWait.Visible = false;
+            this.ConfigurationCAPKSpicBoxWait.WaitOnLoad = true;
             // 
             // ConfigurationCAPKSlistView
             // 
@@ -878,23 +912,6 @@
             // 
             this.ConfigurationCAPKStabPageColumnHeader2.Text = "VALUE";
             // 
-            // ConfigurationCAPKSpicBoxWait
-            // 
-            this.ConfigurationCAPKSpicBoxWait.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ConfigurationCAPKSpicBoxWait.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ConfigurationCAPKSpicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationCAPKSpicBoxWait.Image")));
-            this.ConfigurationCAPKSpicBoxWait.Location = new System.Drawing.Point(4, 4);
-            this.ConfigurationCAPKSpicBoxWait.Margin = new System.Windows.Forms.Padding(2);
-            this.ConfigurationCAPKSpicBoxWait.Name = "ConfigurationCAPKSpicBoxWait";
-            this.ConfigurationCAPKSpicBoxWait.Size = new System.Drawing.Size(386, 467);
-            this.ConfigurationCAPKSpicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.ConfigurationCAPKSpicBoxWait.TabIndex = 4;
-            this.ConfigurationCAPKSpicBoxWait.TabStop = false;
-            this.ConfigurationCAPKSpicBoxWait.Visible = false;
-            this.ConfigurationCAPKSpicBoxWait.WaitOnLoad = true;
-            // 
             // ConfigurationGROUPStabPage
             // 
             this.ConfigurationGROUPStabPage.Controls.Add(this.ConfigurationGROUPSpicBoxWait);
@@ -908,6 +925,23 @@
             this.ConfigurationGROUPStabPage.TabIndex = 2;
             this.ConfigurationGROUPStabPage.Text = "GROUPS";
             this.ConfigurationGROUPStabPage.UseVisualStyleBackColor = true;
+            // 
+            // ConfigurationGROUPSpicBoxWait
+            // 
+            this.ConfigurationGROUPSpicBoxWait.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.ConfigurationGROUPSpicBoxWait.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ConfigurationGROUPSpicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationGROUPSpicBoxWait.Image")));
+            this.ConfigurationGROUPSpicBoxWait.Location = new System.Drawing.Point(0, 2);
+            this.ConfigurationGROUPSpicBoxWait.Margin = new System.Windows.Forms.Padding(2);
+            this.ConfigurationGROUPSpicBoxWait.Name = "ConfigurationGROUPSpicBoxWait";
+            this.ConfigurationGROUPSpicBoxWait.Size = new System.Drawing.Size(387, 473);
+            this.ConfigurationGROUPSpicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.ConfigurationGROUPSpicBoxWait.TabIndex = 4;
+            this.ConfigurationGROUPSpicBoxWait.TabStop = false;
+            this.ConfigurationGROUPSpicBoxWait.Visible = false;
+            this.ConfigurationGROUPSpicBoxWait.WaitOnLoad = true;
             // 
             // ConfigurationGROUPSConfigurationPanel1label1
             // 
@@ -962,23 +996,6 @@
             // 
             this.ConfigurationGROUPStabPageColumnHeader3.Text = "VALUE";
             // 
-            // ConfigurationGROUPSpicBoxWait
-            // 
-            this.ConfigurationGROUPSpicBoxWait.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ConfigurationGROUPSpicBoxWait.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ConfigurationGROUPSpicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationGROUPSpicBoxWait.Image")));
-            this.ConfigurationGROUPSpicBoxWait.Location = new System.Drawing.Point(0, 2);
-            this.ConfigurationGROUPSpicBoxWait.Margin = new System.Windows.Forms.Padding(2);
-            this.ConfigurationGROUPSpicBoxWait.Name = "ConfigurationGROUPSpicBoxWait";
-            this.ConfigurationGROUPSpicBoxWait.Size = new System.Drawing.Size(387, 473);
-            this.ConfigurationGROUPSpicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.ConfigurationGROUPSpicBoxWait.TabIndex = 4;
-            this.ConfigurationGROUPSpicBoxWait.TabStop = false;
-            this.ConfigurationGROUPSpicBoxWait.Visible = false;
-            this.ConfigurationGROUPSpicBoxWait.WaitOnLoad = true;
-            // 
             // ConfigurationPanel1
             // 
             this.ConfigurationPanel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -997,6 +1014,18 @@
             this.ConfigurationPanel1.Name = "ConfigurationPanel1";
             this.ConfigurationPanel1.Size = new System.Drawing.Size(247, 514);
             this.ConfigurationPanel1.TabIndex = 0;
+            // 
+            // ConfigurationPanel1pictureBox1
+            // 
+            this.ConfigurationPanel1pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ConfigurationPanel1pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationPanel1pictureBox1.Image")));
+            this.ConfigurationPanel1pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.ConfigurationPanel1pictureBox1.Name = "ConfigurationPanel1pictureBox1";
+            this.ConfigurationPanel1pictureBox1.Size = new System.Drawing.Size(245, 510);
+            this.ConfigurationPanel1pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.ConfigurationPanel1pictureBox1.TabIndex = 19;
+            this.ConfigurationPanel1pictureBox1.TabStop = false;
+            this.ConfigurationPanel1pictureBox1.Visible = false;
             // 
             // ConfigurationPanel1label2
             // 
@@ -1104,18 +1133,6 @@
             this.radioLoadFromFile.UseVisualStyleBackColor = true;
             this.radioLoadFromFile.CheckedChanged += new System.EventHandler(this.OnLoadFromFile);
             // 
-            // ConfigurationPanel1pictureBox1
-            // 
-            this.ConfigurationPanel1pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ConfigurationPanel1pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationPanel1pictureBox1.Image")));
-            this.ConfigurationPanel1pictureBox1.Location = new System.Drawing.Point(0, 3);
-            this.ConfigurationPanel1pictureBox1.Name = "ConfigurationPanel1pictureBox1";
-            this.ConfigurationPanel1pictureBox1.Size = new System.Drawing.Size(245, 510);
-            this.ConfigurationPanel1pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.ConfigurationPanel1pictureBox1.TabIndex = 19;
-            this.ConfigurationPanel1pictureBox1.TabStop = false;
-            this.ConfigurationPanel1pictureBox1.Visible = false;
-            // 
             // FirmwaretabPage
             // 
             this.FirmwaretabPage.Controls.Add(this.FirmwarepicBoxWait);
@@ -1192,7 +1209,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(721, 609);
-            this.Controls.Add(this.ApplicationpicBoxWait);
+            this.Controls.Add(this.ApplicationpicBoxMain);
             this.Controls.Add(this.MaintabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1200,7 +1217,7 @@
             this.Text = "Application";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.OnFormLoad);
-            ((System.ComponentModel.ISupportInitialize)(this.ApplicationpicBoxWait)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ApplicationpicBoxMain)).EndInit();
             this.JsontabPage.ResumeLayout(false);
             this.JsontabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.JsonpicBoxWait)).EndInit();
@@ -1215,6 +1232,7 @@
             this.Settingspanel1.PerformLayout();
             this.ApplicationtabPage.ResumeLayout(false);
             this.ApplicationtabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ApplicationpictureBoxWait)).EndInit();
             this.Applicationpanel1.ResumeLayout(false);
             this.Applicationpanel1.PerformLayout();
             this.MaintabControl.ResumeLayout(false);
@@ -1231,9 +1249,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationGROUPSpicBoxWait)).EndInit();
             this.ConfigurationPanel1.ResumeLayout(false);
             this.ConfigurationPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).EndInit();
             this.ConfigurationGroupBox1.ResumeLayout(false);
             this.ConfigurationGroupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).EndInit();
             this.FirmwaretabPage.ResumeLayout(false);
             this.FirmwaretabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirmwarepicBoxWait)).EndInit();
@@ -1265,7 +1283,8 @@
     private System.Windows.Forms.Button ApplicationbtnShowTags;
     private System.Windows.Forms.Button ApplicationbtnCardRead;
     private System.Windows.Forms.Button ApplicationbtnMode;
-    private System.Windows.Forms.PictureBox ApplicationpicBoxWait;
+    private System.Windows.Forms.PictureBox ApplicationpicBoxMain;
+    private System.Windows.Forms.PictureBox ApplicationpictureBoxWait;
     // TAB: CONFIGURATION
     private System.Windows.Forms.TabControl tabControlConfiguration;
     private System.Windows.Forms.TabPage ConfigurationtabPage;
@@ -1351,6 +1370,7 @@
     private System.Windows.Forms.OpenFileDialog FirmwareopenFileDialog1;
     private System.Windows.Forms.ProgressBar FirmwareprogressBar1;
     private System.Windows.Forms.PictureBox FirmwarepicBoxWait;
+    private System.ComponentModel.BackgroundWorker backgroundWorker1;
   }
 }
 

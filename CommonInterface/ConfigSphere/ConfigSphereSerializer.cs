@@ -22,7 +22,7 @@ namespace IPA.CommonInterface.ConfigSphere
         // ATTRIBUTES
         /********************************************************************************************************/
         #region -- attributes --
-        private const string JSON_CONFIG = "configuration.json";
+        private const string JSON_CONFIG = "SphereConfiguration.json";
         private const string TERMINAL_CONFIG = "TerminalData";
 
         public TerminalConfiguration terminalCfg;

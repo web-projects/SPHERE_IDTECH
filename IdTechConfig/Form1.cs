@@ -154,9 +154,6 @@ namespace IPA.MainApp
 
             // Setup Logging
             SetupLogging();
-
-            // Initialize Device
-            InitalizeDevice();
         }
 
         /********************************************************************************************************/
@@ -174,6 +171,9 @@ namespace IPA.MainApp
             {
                 SetWindowPos(this.Handle, HWND_TOPMOST, 0, 0, 0, 0, TOPMOST_FLAGS);
             }
+
+            // Initialize Device
+            InitalizeDevice();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -451,11 +451,13 @@ namespace IPA.MainApp
 
                 ClearUI();
 
+                bool firmwareIsUpdating = devicePlugin.FirmwareIsUpdating();
+
                 // Unload The Plugin
                 appDomainCfg.UnloadPlugin(appDomainDevice);
 
                 // wait for a new device to connect
-                WaitForDeviceToConnect();
+                WaitForDeviceToConnect(firmwareIsUpdating);
 
             }).Start();
         }
@@ -572,6 +574,8 @@ namespace IPA.MainApp
             this.ApplicationlblModelNumber.Text = "";
             this.ApplicationlblPort.Text = "";
             this.ApplicationtxtCardData.Text = "";
+            this.ApplicationpictureBoxWait.Enabled = false;
+            this.ApplicationpictureBoxWait.Visible = false;
 
             try
             {
@@ -767,11 +771,46 @@ namespace IPA.MainApp
             if (devicePlugin != null)
             {
                 // Disable Tab(s)
-                this.ApplicationtabPage.Enabled = false;
-                this.ConfigurationtabPage.Enabled = false;
-                this.SettingstabPage.Enabled = false;
-                this.RawModetabPage.Enabled = false;
-                this.TerminalDatatabPage.Enabled = false;
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    this.ApplicationtabPage.Enabled = false;
+                    this.ConfigurationtabPage.Enabled = false;
+                    this.SettingstabPage.Enabled = false;
+                    this.RawModetabPage.Enabled = false;
+                    this.TerminalDatatabPage.Enabled = false;
+                }));
+
+                if(!devicePlugin.FirmwareIsUpdating())
+                { 
+                    try
+                    {
+                        if(tc_show_json_tab && dev_usb_mode == DEV_USB_MODE.USB_HID_MODE)
+                        {
+                                this.Invoke(new MethodInvoker(() =>
+                                {
+                                    if(MaintabControl.Contains(JsontabPage))
+                                    {
+                                        this.JsonpicBoxWait.Visible = true;
+                                        this.MaintabControl.SelectedTab = this.JsontabPage;
+                                    }
+                                }));
+                        }
+                        else if(!tc_show_json_tab)
+                        {
+                            this.Invoke(new MethodInvoker(() =>
+                            {
+                                this.ApplicationtabPage.Enabled = true;
+                                this.ApplicationpictureBoxWait.Enabled = true;
+                                this.ApplicationpictureBoxWait.Visible = true;
+                                this.MaintabControl.SelectedTab = this.ApplicationtabPage;
+                            }));
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.error("main: InitalizeDevice() exception={0}", (object)ex.Message);
+                    }
+                }
 
                 new Thread(() =>
                 {
@@ -781,27 +820,7 @@ namespace IPA.MainApp
                     // Setup DeviceCfg Event Handlers
                     devicePlugin.OnDeviceNotification += new EventHandler<DeviceNotificationEventArgs>(this.OnDeviceNotificationUI);
 
-                    if(!devicePlugin.FirmwareIsUpdating())
-                    { 
-                        if(tc_show_json_tab && dev_usb_mode == DEV_USB_MODE.USB_HID_MODE)
-                        {
-                            try
-                            {
-                                this.Invoke(new MethodInvoker(() =>
-                                {
-                                    if(MaintabControl.Contains(JsontabPage))
-                                    {
-                                        this.JsonpicBoxWait.Visible = true;
-                                        this.MaintabControl.SelectedTab = this.JsontabPage;
-                                    }
-                                }));
-                            }
-                            catch(Exception ex)
-                            {
-                                Logger.error("main: InitalizeDevice() exception={0}", (object)ex.Message);
-                            }
-                        }
-                    }
+                    System.Windows.Forms.Application.DoEvents();
 
                     try
                     {
@@ -814,14 +833,14 @@ namespace IPA.MainApp
                         Debug.WriteLine("main: InitalizeDevice() exception={0}", (object)ex.Message);
                         if(ex.Message.Equals("NoDevice"))
                         {
-                            WaitForDeviceToConnect();
+                            WaitForDeviceToConnect(false);
                         }
                         else if (ex.Message.Equals("MultipleDevice"))
                         {
                             this.Invoke(new MethodInvoker(() =>
                             {
                                 MessageBoxEx.Show(this, "Multiple Devices Detected\r\nDisconnect One of them !!!", "ERROR: MULTIPLE DEVICES DETECTED", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                WaitForDeviceToConnect();
+                                WaitForDeviceToConnect(false);
                             }));
                         }
                     }
@@ -829,11 +848,11 @@ namespace IPA.MainApp
             }
         }
 
-        private void WaitForDeviceToConnect()
+        private void WaitForDeviceToConnect(bool firmwareIsUpdating)
         {
             if(dev_usb_mode == DEV_USB_MODE.USB_HID_MODE)
             {
-                if (!devicePlugin.FirmwareIsUpdating())
+                if (!firmwareIsUpdating)
                 {
                     this.Invoke(new MethodInvoker(() =>
                     {
@@ -841,10 +860,7 @@ namespace IPA.MainApp
                         this.lblFirmwareVersion.Text = "UNKNOWN";
 
                         MaintabControl.SelectedTab = this.ApplicationtabPage;
-                        if(MaintabControl.Contains(SettingstabPage))
-                        {
-                            MaintabControl.TabPages.Remove(SettingstabPage);
-                        }
+
                         if(MaintabControl.Contains(RawModetabPage))
                         {
                             MaintabControl.TabPages.Remove(RawModetabPage);
@@ -859,6 +875,17 @@ namespace IPA.MainApp
                         }
                     }));
                 }
+            }
+
+            if(!tc_show_json_tab)
+            {
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    this.ApplicationtabPage.Enabled = true;
+                    this.ApplicationpictureBoxWait.Enabled = true;
+                    this.ApplicationpictureBoxWait.Visible = true;
+                    this.MaintabControl.SelectedTab = this.ApplicationtabPage;
+                }));
             }
 
             // Wait for a new device to connect
@@ -1225,10 +1252,6 @@ namespace IPA.MainApp
                         this.ApplicationbtnCardRead.Enabled = (split[1].Contains("HID")); 
                         dev_usb_mode = (data[0].Contains("HID")) ? DEV_USB_MODE.USB_KYB_MODE : DEV_USB_MODE.USB_HID_MODE;
 
-                        if (MaintabControl.Contains(SettingstabPage))
-                        {
-                            MaintabControl.TabPages.Remove(SettingstabPage);
-                        }
                         if (MaintabControl.Contains(RawModetabPage))
                         {
                             MaintabControl.TabPages.Remove(RawModetabPage);
@@ -1263,10 +1286,6 @@ namespace IPA.MainApp
 
                         this.ApplicationbtnCardRead.Enabled = false;
 
-                        if(MaintabControl.Contains(SettingstabPage))
-                        {
-                            MaintabControl.TabPages.Remove(SettingstabPage);
-                        }
                         if(MaintabControl.Contains(RawModetabPage))
                         {
                             MaintabControl.TabPages.Remove(RawModetabPage);
@@ -1401,11 +1420,22 @@ namespace IPA.MainApp
                                 }
                                 this.ConfigurationCAPKStabPage.Enabled = true;
                                 // TAB 3
-                                if(!tabControlConfiguration.Contains(ConfigurationGROUPStabPage))
-                                {
-                                    tabControlConfiguration.TabPages.Add(ConfigurationGROUPStabPage);
+                                if(this.ApplicationlblModelName.Text.Contains("VP5300"))
+                                { 
+                                    if(!tabControlConfiguration.Contains(ConfigurationGROUPStabPage))
+                                    {
+                                        tabControlConfiguration.TabPages.Add(ConfigurationGROUPStabPage);
+                                    }
+                                    this.ConfigurationGROUPStabPage.Enabled = true;
                                 }
-                                this.ConfigurationGROUPStabPage.Enabled = true;
+                                else
+                                {
+                                    if(tabControlConfiguration.Contains(ConfigurationGROUPStabPage))
+                                    {
+                                        tabControlConfiguration.TabPages.Remove(ConfigurationGROUPStabPage);
+                                    }
+                                    this.ConfigurationGROUPStabPage.Enabled = false;
+                                }
                             }
                             else
                             {
@@ -1425,6 +1455,9 @@ namespace IPA.MainApp
                         ConfigurationTerminalDatalistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                         this.ConfigurationTerminalDatapicBoxWait.Enabled = false;
                         this.ConfigurationTerminalDatapicBoxWait.Visible  = false;
+
+                        this.ConfigurationPanel1pictureBox1.Enabled = false;
+                        this.ConfigurationPanel1pictureBox1.Visible = false;
                     }
                     catch (Exception exp)
                     {
@@ -1905,6 +1938,26 @@ namespace IPA.MainApp
             this.tabControlConfiguration.Width += CONFIG_PANEL_WIDTH;
         }
 
+        private void OnConfigurationPanel2VisibilityChanged(object sender, EventArgs e)
+        {
+            if(((System.Windows.Forms.Panel)sender).Visible)
+            {
+                if(this.ApplicationlblModelName.Text.Contains("VP5300"))
+                {
+                    if(!tabControlConfiguration.Contains(ConfigurationGROUPStabPage))
+                    {
+                        tabControlConfiguration.TabPages.Add(ConfigurationGROUPStabPage);
+                    }
+                    this.ConfigurationGROUPStabPage.Enabled = true;
+                }
+                else if(tabControlConfiguration.Contains(ConfigurationGROUPStabPage))
+                {
+                    tabControlConfiguration.TabPages.Remove(ConfigurationGROUPStabPage);
+                    this.ConfigurationGROUPStabPage.Enabled = false;
+                }
+            }
+        }
+
         private void OnConfigurationListItemSelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabControlConfiguration.SelectedTab?.Name.Equals("ConfigurationTerminalDatatabPage") ?? false)
@@ -2072,6 +2125,9 @@ namespace IPA.MainApp
         {
             if (((RadioButton)sender).Checked)
             {
+                this.ConfigurationPanel1pictureBox1.Enabled = true;
+                this.ConfigurationPanel1pictureBox1.Visible = true;
+
                 // Load Configuration from FILE
                 new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_CONFIG)).Start();
 
@@ -2095,6 +2151,9 @@ namespace IPA.MainApp
         {
             if (((RadioButton)sender).Checked)
             {
+                this.ConfigurationPanel1pictureBox1.Enabled = true;
+                this.ConfigurationPanel1pictureBox1.Visible = true;
+
                 // Load Configuration from DEVICE
                 new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_DEVICE)).Start();
 
@@ -2266,14 +2325,6 @@ namespace IPA.MainApp
                     }));
                 }
             }
-            else if (MaintabControl.SelectedTab?.Name.Equals("FirmwaretabPage") ?? false)
-            {
-                // Configuration Mode
-                this.Invoke(new MethodInvoker(() =>
-                {
-                    ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
-                }));
-            }
             else if (MaintabControl.SelectedTab.Name.Equals("RawModetabPage"))
             {
                 // Raw Mode TabPage: set focus to command field
@@ -2282,11 +2333,20 @@ namespace IPA.MainApp
                     this.RawModetxtCommand.Focus();
                 }));
             }
+            else if (MaintabControl.SelectedTab?.Name.Equals("FirmwaretabPage") ?? false)
+            {
+                // Configuration Mode
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
+                }));
+            }
         }
 
         private void OnDeselectingMainTabPage(object sender, TabControlCancelEventArgs e)
         {
-            if(this.JsonpicBoxWait.Visible)
+            if(this.ApplicationpictureBoxWait.Visible   || this.JsonpicBoxWait.Visible ||
+               this.ConfigurationPanel1pictureBox1.Visible)
             {
                 e.Cancel = true;
             }
