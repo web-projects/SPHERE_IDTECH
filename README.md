@@ -29,5 +29,7 @@ This an application to Configure IDTech Devices.
 * 20190405 - Cleaned up tabs prior to merge.
 * 20190408 - Implemented FIRMWARE update.
            - First pass at merging projects.
-* 29190409 - Implemented Augusta Configuration reader.
+* 20190409 - Implemented Augusta Configuration reader.
+* 20190410 - Corrected packages warning.
+* 20190415 - Implemented serial number tag 9F1E in compressed form.
            

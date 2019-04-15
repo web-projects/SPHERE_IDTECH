@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO.Compression;
+using System.IO;
+using IDTechSDK;
 
 namespace IPA.CommonInterface.Helpers
 {
@@ -38,6 +41,58 @@ namespace IPA.CommonInterface.Helpers
         {
             DateTime value = DateTime.Now;
             return value.ToString("yyyyMMdd-HH:mm:ss.fff");
+        }
+
+        public static byte[] SystemCompress(byte[] data)
+        {
+            using(MemoryStream output = new MemoryStream())
+            { 
+                using (DeflateStream dstream = new DeflateStream(output, CompressionLevel.Optimal))
+                {
+                    dstream.Write(data, 0, data.Length);
+                }
+                return output.ToArray();
+            }
+            /*using (MemoryStream memory = new MemoryStream())
+            {
+                using (GZipStream gzip = new GZipStream(memory, CompressionMode.Compress, true))
+                {
+                    gzip.Write(data, 0, data.Length);
+                }
+                return memory.ToArray();
+            }*/
+        }
+
+        public static byte[] SystemDecompress(byte[] data)
+        {
+            MemoryStream input = new MemoryStream(data);
+            MemoryStream output = new MemoryStream();
+            using (DeflateStream dstream = new DeflateStream(input, CompressionMode.Decompress))
+            {
+                dstream.CopyTo(output);
+            }
+            return output.ToArray();
+        }
+
+        public static string Compress(string data)
+        {
+            // Use Code Page 437
+            byte[] encode = EncoderDecoder.Encode(data);
+            string compressed =  Encoding.GetEncoding(437).GetString(encode, 0, encode.Length);
+            byte [] _decode = Encoding.GetEncoding(437).GetBytes(compressed);
+            string _decompress = EncoderDecoder.Decode(_decode);
+            return compressed;
+        }
+
+        public static byte[] Decompress(byte [] data)
+        {
+            return Decompress(data);
+        }
+
+        public static string Decompress(string data)
+        {
+            byte [] decode = Encoding.GetEncoding(437).GetBytes(data);
+            return  EncoderDecoder.Decode(decode);
         }
     }
 

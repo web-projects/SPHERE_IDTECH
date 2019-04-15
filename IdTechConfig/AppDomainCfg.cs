@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using IPA.CommonInterface;
 using IPA.CommonInterface.Interfaces;
 
 namespace IPA.MainApp
@@ -29,7 +23,7 @@ namespace IPA.MainApp
             AppDomain appDomain = AppDomain.CreateDomain(setup.ApplicationName,
                                                         AppDomain.CurrentDomain.Evidence,
                                                         setup);
-
+            
             // Share App.Config file with all assemblies
             string configFile = System.Reflection.Assembly.GetExecutingAssembly().Location + ".config";
             appDomain.SetData("APP_CONFIG_FILE", configFile);
@@ -100,6 +94,7 @@ namespace IPA.MainApp
                 Debug.WriteLine("It does not appear that the app domain successfully unloaded.");
             }
         }
+
         #endregion
     }
 }

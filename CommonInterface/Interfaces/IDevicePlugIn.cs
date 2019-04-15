@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using IPA.CommonInterface.Helpers;
 using IPA.CommonInterface.ConfigIDTech;
 using IPA.CommonInterface.ConfigSphere;

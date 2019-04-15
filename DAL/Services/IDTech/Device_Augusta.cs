@@ -1,12 +1,9 @@
 ﻿using IDTechSDK;
-using IPA.CommonInterface;
 using IPA.CommonInterface.Helpers;
 using IPA.CommonInterface.ConfigIDTech;
-using IPA.CommonInterface.ConfigIDTech.Configuration;
 using IPA.CommonInterface.ConfigIDTech.Factory;
 using IPA.LoggerManager;
 using IPA.Core.Shared.Enums;
-using IPA.DAL.RBADAL.Interfaces;
 using IPA.DAL.RBADAL.Services.Devices.IDTech;
 using System;
 using System.Collections.Generic;
@@ -14,7 +11,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using IPA.CommonInterface.ConfigSphere;
 using IPA.CommonInterface.ConfigSphere.Configuration;
 
@@ -391,7 +387,24 @@ namespace IPA.DAL.RBADAL.Services
                     {
                         foreach(var devTag in devCollection)
                         {
-                            collection.Add(string.Format("{0}:{1}", devTag.Key, devTag.Value).ToUpper());
+                            // TAG 9F1E: compression support (default: "Terminal")
+                            if(devTag.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase) && !devTag.Value.Equals("5465726D696E616C", StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                string [] tagValue = new string[devTag.Value.Length / 2];
+                                
+                                for(int i = 0, j = 0; i < devTag.Value.Length; i +=2)
+                                { 
+                                    tagValue[j++] = devTag.Value.Substring(i, 2);
+                                }
+                                byte [] bytes = tagValue.Select(value => Convert.ToByte(value, 16)).ToArray();
+                                string compressed =  Encoding.GetEncoding(437).GetString(bytes, 0, bytes.Length);
+                                string decompressed = Utils.Decompress(compressed);
+                                collection.Add(string.Format("{0}:{1}", devTag.Key, decompressed));
+                            }
+                            else
+                            { 
+                                collection.Add(string.Format("{0}:{1}", devTag.Key, devTag.Value).ToUpper());
+                            }
                         }
                     }
                     data = collection.ToArray();
@@ -504,6 +517,13 @@ namespace IPA.DAL.RBADAL.Services
                                                 List<byte> byteArray = new List<byte>();
                                                 byteArray.AddRange(Device_IDTech.HexStringToByteArray(item.Key));
                                                 byte [] item1 = Encoding.ASCII.GetBytes(item.Value);
+                                                // TAG 9F1E: compression support
+                                                if(item.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase))
+                                                {
+                                                    //item1 = Encoding.GetEncoding(437).GetBytes(item.Value);
+                                                    string compressed = Utils.Compress(item.Value ?? "");
+                                                    item1 = Encoding.GetEncoding(437).GetBytes(compressed);
+                                                }
                                                 byte itemLen = Convert.ToByte(item1.Length);
                                                 byte [] item2 = new byte[]{ itemLen };
                                                 byteArray.AddRange(item2);
@@ -1062,9 +1082,10 @@ namespace IPA.DAL.RBADAL.Services
             try
             {
                 // TERMINAL DATA
+                RETURN_CODE rt = IDT_Augusta.SharedController.emv_removeTerminalData();
                 TerminalDataFactory tf = new TerminalDataFactory();
                 byte[] term = tf.GetFactoryTerminalData5C();
-                RETURN_CODE rt = IDT_Augusta.SharedController.emv_setTerminalData(term);
+                rt = IDT_Augusta.SharedController.emv_setTerminalData(term);
                 if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
                 {
                     Debug.WriteLine("TERMINAL DATA [DEFAULT] ----------------------------------------------------------------------");
@@ -1075,6 +1096,7 @@ namespace IPA.DAL.RBADAL.Services
                 }
 
                 // AID
+                rt = IDT_Augusta.SharedController.emv_removeAllApplicationData();
                 AidFactory factoryAids = new AidFactory();
                 Dictionary<byte [], byte []> aid = factoryAids.GetFactoryAids();
                 Debug.WriteLine("AID LIST [DEFAULT] ----------------------------------------------------------------------");
@@ -1095,6 +1117,7 @@ namespace IPA.DAL.RBADAL.Services
                 }
 
                 // CAPK
+                rt = IDT_Augusta.SharedController.emv_removeAllCAPK();
                 CapKFactory factoryCapk = new CapKFactory();
                 Dictionary<byte [], byte []> capk = factoryCapk.GetFactoryCapK();
                 Debug.WriteLine("CAPK LIST [DEFAULT] ----------------------------------------------------------------------");
@@ -1113,6 +1136,8 @@ namespace IPA.DAL.RBADAL.Services
                         Debug.WriteLine("CAPK: {0} failed Error Code: 0x{1:X}", (ushort) rt);
                     }
                 }
+                // ICC
+                //rt = IDT_Augusta.SharedController.emv_removeAllCRL();
             }
             catch(Exception exp)
             {

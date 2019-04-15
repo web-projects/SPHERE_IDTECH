@@ -11,6 +11,7 @@
     <AssemblyName>CommonInterface</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +41,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
@@ -64,6 +68,9 @@
     <Compile Include="ConfigSphere\Factory\AidFactory.cs" />
     <Compile Include="ConfigSphere\Factory\CapKFactory.cs" />
     <Compile Include="ConfigSphere\Factory\TerminalDataFactory.cs" />
+    <Compile Include="Helpers\EncoderDecoder.cs" />
+    <Compile Include="Helpers\Encoder\BitStream.cs" />
+    <Compile Include="Helpers\Encoder\EncodingExtensions.cs" />
     <Compile Include="Payment\CreditCard.cs" />
     <Compile Include="ConfigIDTech\Factory\AidFactory.cs" />
     <Compile Include="ConfigIDTech\Factory\CapKFactory.cs" />
@@ -84,6 +91,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\StatusCodeEnum.cs" />
     <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="Properties\Version.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\configuration.json" />

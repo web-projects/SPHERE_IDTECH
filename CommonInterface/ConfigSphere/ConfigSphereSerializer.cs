@@ -3,14 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using static System.Net.Mime.MediaTypeNames;
 using IPA.CommonInterface.Helpers;
-using IPA.CommonInterface.Interfaces;
 using IPA.CommonInterface.ConfigSphere.Configuration;
 
 namespace IPA.CommonInterface.ConfigSphere
@@ -101,7 +95,9 @@ namespace IPA.CommonInterface.ConfigSphere
         private SortedDictionary<string, string> GetAllTerminalData(string serialNumber, string EMVKernelVer)
         {
             SortedDictionary<string, string> allTerminalTags = termSettings.TerminalData;
-            allTerminalTags["9F1E"] = serialNumber?.Substring(Math.Max(0, serialNumber.Length - 8)) ?? "";
+            // enforce tag max length of 10 bytes
+            allTerminalTags["9F1E"] = serialNumber?.Substring(Math.Max(0, serialNumber.Length - 10)) ?? "";
+            // enforce tag max length of 8 bytes
             allTerminalTags["9F1C"] = EMVKernelVer?.Substring(Math.Max(0, EMVKernelVer.Length - 8)) ?? "";
             string [] tagsRequested = termSettings.TransactionTagsRequested;
             allTerminalTags["DFEF5A"] = string.Join("", tagsRequested);
@@ -120,7 +116,15 @@ namespace IPA.CommonInterface.ConfigSphere
             List<string> collection = new List<string>();
             foreach(var item in allTerminalTags)
             {
-                collection.Add(string.Format("{0}:{1}", item.Key, item.Value).ToUpper());
+                // TAG 9F1E: compression support
+                if(item.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    collection.Add(string.Format("{0}:{1}", item.Key, item.Value));
+                }
+                else
+                { 
+                    collection.Add(string.Format("{0}:{1}", item.Key, item.Value).ToUpper());
+                }
             }
             collection.Sort();
             string [] data = collection.ToArray();
@@ -281,7 +285,7 @@ namespace IPA.CommonInterface.ConfigSphere
             {
                 JsonSerializer serializer = new JsonSerializer();
                 string path = System.IO.Directory.GetCurrentDirectory(); 
-                fileName = path + "\\" + JSON_CONFIG;
+                fileName = path + "\\Assets\\" + JSON_CONFIG;
                 string FILE_CFG = File.ReadAllText(fileName);
 
                 //string s = @"{ ""ModelFirmware"": { ""VP5300"": [ ""VP5300 FW v1.00.028.0192.S"", ""VP5300 FW v1.00.028.0192.S Test"" ] } }";

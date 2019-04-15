@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using HidLibrary;
 
 // Include DeviceConfiguration.dll in the References list
-using IPA.CommonInterface;
 using IPA.CommonInterface.Interfaces;
 using IPA.CommonInterface.Helpers;
 using IPA.CommonInterface.ConfigIDTech;
@@ -20,14 +17,12 @@ using IPA.CommonInterface.ConfigIDTech.Configuration;
 using System.Collections;
 using IPA.LoggerManager;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using IPA.Core.Client.Dal.Models;
 using IPA.Core.Shared.Enums;
 using IPA.DAL.RBADAL.Services;
 using System.Configuration;
 using System.Reflection;
-using IPA.CommonInterface.ConfigSphere;
 using IPA.DAL.RBADAL;
 
 namespace IPA.MainApp
@@ -70,16 +65,22 @@ namespace IPA.MainApp
         bool tc_show_raw_mode_tab;
         bool tc_show_terminal_data_tab;
         bool tc_show_json_tab;
+        bool tc_show_advanced_tab;
         bool tc_always_on_top;
         int  tc_transaction_timeout;
+        int  tc_configloader_timeout;
         int  tc_transaction_collection_timeout;
         int  tc_minimum_transaction_length;
         bool isNonAugusta;
 
         DEV_USB_MODE dev_usb_mode;
 
+        // Timers
         Stopwatch stopWatch;
+
         internal static System.Timers.Timer TransactionTimer { get; set; }
+        internal static System.Timers.Timer ConfigLoaderTimer { get; set; }
+
         Color TEXTBOX_FORE_COLOR;
 
         // Always on TOP
@@ -130,6 +131,14 @@ namespace IPA.MainApp
                 MaintabControl.TabPages.Remove(JsontabPage);
             }
 
+            // Advanced Tab
+            string show_advanced_tab = System.Configuration.ConfigurationManager.AppSettings["tc_show_advanced_tab"] ?? "false";
+            bool.TryParse(show_advanced_tab, out tc_show_advanced_tab);
+            if(!tc_show_advanced_tab)
+            {
+                MaintabControl.TabPages.Remove(AdvancedtabPage);
+            }
+
             // Application Always on Top
             string always_on_top = System.Configuration.ConfigurationManager.AppSettings["tc_always_on_top"] ?? "true";
             bool.TryParse(always_on_top, out tc_always_on_top);
@@ -148,6 +157,11 @@ namespace IPA.MainApp
             tc_minimum_transaction_length = 1000;
             string minimum_transaction_length = System.Configuration.ConfigurationManager.AppSettings["tc_minimum_transaction_length"] ?? "1000";
             int.TryParse(minimum_transaction_length, out tc_minimum_transaction_length);
+
+            // Configuration Load Timer
+            tc_configloader_timeout = 15000;
+            string configloader_timeout = System.Configuration.ConfigurationManager.AppSettings["tc_configloader_timeout"] ?? "5000";
+            int.TryParse(configloader_timeout, out tc_configloader_timeout);
 
             // Original Forecolor
             TEXTBOX_FORE_COLOR = ApplicationtxtCardData.ForeColor;
@@ -215,15 +229,7 @@ namespace IPA.MainApp
                     }
 
                     Logger.SetFileLoggerConfiguration(filepath, levels);
-
-                    Logger.info( "LOGGING INITIALIZED.");
-
-                    //Logger.info( "LOG ARG1:", "1111");
-                    //Logger.info( "LOG ARG1:{0}, ARG2:{1}", "1111", "2222");
-                    Logger.debug("THIS IS A DEBUG STRING");
-                    Logger.warning("THIS IS A WARNING");
-                    Logger.error("THIS IS AN ERROR");
-                    Logger.fatal("THIS IS FATAL");
+                    Logger.info( "{0} VERSION {1}.", System.IO.Path.GetFileNameWithoutExtension(fullName).ToUpper(), Assembly.GetEntryAssembly().GetName().Version);
                 }
             }
             catch(Exception e)
@@ -639,6 +645,7 @@ namespace IPA.MainApp
                 this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                 this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
                 this.JsontabPage.Enabled = tc_show_json_tab;
+                this.AdvancedtabPage.Enabled = tc_show_advanced_tab;
                 this.SettingspicBoxWait.Enabled = false;
                 this.SettingspicBoxWait.Visible = false;
 
@@ -673,79 +680,6 @@ namespace IPA.MainApp
             {
                 Logger.error("main: SetConfiguration() exception={0}", (object)ex.Message);
             }
-        }
-
-        private void SetTransactionTimer()
-        {
-            TransactionTimer = new System.Timers.Timer(tc_transaction_timeout);
-            TransactionTimer.AutoReset = false;
-            TransactionTimer.Elapsed += (sender, e) => RaiseTimerExpired(new TimerEventArgs { Timer = TimerType.Transaction });
-            TransactionTimer.Start();
-        }
-
-        private void RaiseTimerExpired(TimerEventArgs e)
-        {
-            TransactionTimer?.Stop();
-
-            // Check for valid collection and completion of collection
-            if(stopWatch.ElapsedMilliseconds > tc_transaction_collection_timeout)
-            {
-                int minTransactionLen = tc_minimum_transaction_length;
-                if (isNonAugusta)
-                { 
-                    minTransactionLen = 120;
-                }
-                if(this.ApplicationtxtCardData.Text.Length > minTransactionLen)
-                {
-                    this.Invoke(new MethodInvoker(() =>
-                    {
-                        string data = ApplicationtxtCardData.Text;
-                        if (isNonAugusta)
-                        {
-                            ApplicationtxtCardData.Text = "*** TRANSACTION DATA CAPTURED : MSR ***";
-                        }
-                        else
-                        {
-                            ApplicationtxtCardData.Text = "*** TRANSACTION DATA CAPTURED : EMV ***";
-                        }
-                        this.ApplicationtxtCardData.ForeColor = TEXTBOX_FORE_COLOR;
-                        // Set TAGS to display
-                        SetTagData(data, false);
-                    }));
-                }
-                else
-                {
-                    // This could be an MSR fallback transaction
-                    this.Invoke(new MethodInvoker(() =>
-                    {
-                        string data = ApplicationtxtCardData.Text;
-                        if(data.Length > 0)
-                        {
-                            string message = devicePlugin.GetErrorMessage(data);
-                            ApplicationtxtCardData.Text = message;
-                            this.ApplicationtxtCardData.ForeColor = TEXTBOX_FORE_COLOR;
-                            Debug.WriteLine("main: card data=[{0}]", (object) data);
-                        }
-                        else
-                        {
-                            SetTransactionTimer();
-                        }
-                    }));
-                }
-            }
-            else
-            {
-                SetTransactionTimer();
-            }
-
-            Debug.WriteLine("main: transaction timer raised ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            this.Invoke(new MethodInvoker(() =>
-            {
-                if(!string.IsNullOrEmpty(this.ApplicationtxtCardData.Text))
-                {
-                    Debug.WriteLine("main: card data length=[0}", this.ApplicationtxtCardData.Text.Length);
-                }
-            }));
         }
 
         private void InitalizeDevice(bool unload = false)
@@ -940,6 +874,7 @@ namespace IPA.MainApp
                 {
                     ApplicationlistView1.Items.Clear();
                 }
+                StringBuilder sb = new StringBuilder();
                 string cardnumber = "";
                 foreach(string val in parsed)
                 {
@@ -964,8 +899,11 @@ namespace IPA.MainApp
                             ApplicationtxtCardData.Text += "\r\nCARD NUMBER: " + cardnumber;
                         }
                     }
+                    sb.Append(tlv[0]);
+                    sb.Append(tlv[1]);
                 }
 
+                Logger.debug( "TAG DATA=[{0}]", sb);
                 ApplicationlistView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                 ApplicationlistView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                 this.ApplicationbtnShowTags.Enabled = true;
@@ -1084,6 +1022,7 @@ namespace IPA.MainApp
                     this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                     this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
                     this.JsontabPage.Enabled = tc_show_json_tab;
+                    this.AdvancedtabPage.Enabled = tc_show_advanced_tab;
                     this.SettingspicBoxWait.Enabled = false;
                     this.SettingspicBoxWait.Visible = false;
                     this.JsonpicBoxWait.Visible = false;
@@ -1196,6 +1135,7 @@ namespace IPA.MainApp
                     this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                     this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
                     this.JsontabPage.Enabled = tc_show_json_tab;
+                    this.AdvancedtabPage.Enabled = tc_show_advanced_tab;
 
                     this.SettingspicBoxWait.Visible  = false;
                     this.SettingspicBoxWait.Enabled = false;
@@ -1317,6 +1257,10 @@ namespace IPA.MainApp
                         if(!MaintabControl.Contains(TerminalDatatabPage) && tc_show_terminal_data_tab)
                         {
                             MaintabControl.TabPages.Add(TerminalDatatabPage);
+                        }
+                        if(!MaintabControl.Contains(AdvancedtabPage) && tc_show_advanced_tab)
+                        {
+                            MaintabControl.TabPages.Add(AdvancedtabPage);
                         }
                         if(!MaintabControl.Contains(JsontabPage) && tc_show_json_tab)
                         {
@@ -1453,15 +1397,19 @@ namespace IPA.MainApp
 
                         ConfigurationTerminalDatalistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                         ConfigurationTerminalDatalistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-                        this.ConfigurationTerminalDatapicBoxWait.Enabled = false;
-                        this.ConfigurationTerminalDatapicBoxWait.Visible  = false;
-
-                        this.ConfigurationPanel1pictureBox1.Enabled = false;
-                        this.ConfigurationPanel1pictureBox1.Visible = false;
                     }
                     catch (Exception exp)
                     {
                         Logger.error("main: ShowTerminalData() - exception={0}", (object) exp.Message);
+                    }
+                    finally
+                    {
+                        StopConfigLoaderTimer();
+                        this.ConfigurationTerminalDatapicBoxWait.Enabled = false;
+                        this.ConfigurationTerminalDatapicBoxWait.Visible  = false;
+                        this.ConfigurationPanel1pictureBox1.Enabled = false;
+                        this.ConfigurationPanel1pictureBox1.Visible = false;
+                        this.ConfigurationPanel1.Enabled = true;
                     }
                 };
 
@@ -1529,6 +1477,9 @@ namespace IPA.MainApp
                 {
                     this.ConfigurationAIDSpicBoxWait.Enabled = false;
                     this.ConfigurationAIDSpicBoxWait.Visible  = false;
+                    this.ConfigurationPanel1pictureBox1.Enabled = false;
+                    this.ConfigurationPanel1pictureBox1.Visible = false;
+                    this.ConfigurationPanel1.Enabled = true;
                 }
             };
 
@@ -1628,6 +1579,9 @@ namespace IPA.MainApp
                 {
                     this.ConfigurationCAPKSpicBoxWait.Enabled = false;
                     this.ConfigurationCAPKSpicBoxWait.Visible  = false;
+                    this.ConfigurationPanel1pictureBox1.Enabled = false;
+                    this.ConfigurationPanel1pictureBox1.Visible = false;
+                    this.ConfigurationPanel1.Enabled = true;
                 }
             };
 
@@ -1698,19 +1652,18 @@ namespace IPA.MainApp
                     }
                     ConfigurationGROUPSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                     ConfigurationGROUPSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-                    this.ConfigurationGROUPSpicBoxWait.Enabled = false;
-                    this.ConfigurationGROUPSpicBoxWait.Visible  = false;
                 }
                 catch (Exception exp)
                 {
                     Logger.error("main: ShowConfigGroup() - exception={0}", (object) exp.Message);
-                    this.ConfigurationGROUPSpicBoxWait.Enabled = false;
-                    this.ConfigurationGROUPSpicBoxWait.Visible  = false;
                 }
                 finally
                 {
                     this.ConfigurationGROUPSpicBoxWait.Enabled = false;
                     this.ConfigurationGROUPSpicBoxWait.Visible  = false;
+                    this.ConfigurationPanel1pictureBox1.Enabled = false;
+                    this.ConfigurationPanel1pictureBox1.Visible = false;
+                    this.ConfigurationPanel1.Enabled = true;
                 }
             };
 
@@ -1917,6 +1870,107 @@ namespace IPA.MainApp
 
         #endregion
 
+        /********************************************************************************************************/
+        // TIMERS
+        /********************************************************************************************************/
+        #region -- device timers --
+        private void SetConfigLoaderTimer()
+        {
+            ConfigLoaderTimer = new System.Timers.Timer(tc_configloader_timeout);
+            ConfigLoaderTimer.AutoReset = false;
+            ConfigLoaderTimer.Elapsed += (sender, e) => ConfigLoaderRaiseTimerExpired(new TimerEventArgs { Timer = TimerType.Transaction });
+            ConfigLoaderTimer.Start();
+        }
+        private void StopConfigLoaderTimer()
+        {
+            ConfigLoaderTimer?.Stop();
+        }
+
+        private void SetTransactionTimer()
+        {
+            TransactionTimer = new System.Timers.Timer(tc_transaction_timeout);
+            TransactionTimer.AutoReset = false;
+            TransactionTimer.Elapsed += (sender, e) => TransactionRaiseTimerExpired(new TimerEventArgs { Timer = TimerType.Transaction });
+            TransactionTimer.Start();
+        }
+
+        private void TransactionRaiseTimerExpired(TimerEventArgs e)
+        {
+            TransactionTimer?.Stop();
+
+            // Check for valid collection and completion of collection
+            if(stopWatch.ElapsedMilliseconds > tc_transaction_collection_timeout)
+            {
+                int minTransactionLen = tc_minimum_transaction_length;
+                if (isNonAugusta)
+                { 
+                    minTransactionLen = 120;
+                }
+                if(this.ApplicationtxtCardData.Text.Length > minTransactionLen)
+                {
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        string data = ApplicationtxtCardData.Text;
+                        if (isNonAugusta)
+                        {
+                            ApplicationtxtCardData.Text = "*** TRANSACTION DATA CAPTURED : MSR ***";
+                        }
+                        else
+                        {
+                            ApplicationtxtCardData.Text = "*** TRANSACTION DATA CAPTURED : EMV ***";
+                        }
+                        this.ApplicationtxtCardData.ForeColor = TEXTBOX_FORE_COLOR;
+                        // Set TAGS to display
+                        SetTagData(data, false);
+                    }));
+                }
+                else
+                {
+                    // This could be an MSR fallback transaction
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        string data = ApplicationtxtCardData.Text;
+                        if(data.Length > 0)
+                        {
+                            string message = devicePlugin.GetErrorMessage(data);
+                            ApplicationtxtCardData.Text = message;
+                            this.ApplicationtxtCardData.ForeColor = TEXTBOX_FORE_COLOR;
+                            Debug.WriteLine("main: card data=[{0}]", (object) data);
+                        }
+                        else
+                        {
+                            SetTransactionTimer();
+                        }
+                    }));
+                }
+            }
+            else
+            {
+                SetTransactionTimer();
+            }
+
+            Debug.WriteLine("main: transaction timer raised ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            this.Invoke(new MethodInvoker(() =>
+            {
+                if(!string.IsNullOrEmpty(this.ApplicationtxtCardData.Text))
+                {
+                    Debug.WriteLine("main: card data length=[0}", this.ApplicationtxtCardData.Text.Length);
+                }
+            }));
+        }
+
+        private void ConfigLoaderRaiseTimerExpired(TimerEventArgs e)
+        {
+            ConfigLoaderTimer?.Stop();
+
+            this.Invoke(new MethodInvoker(() =>
+            {
+                ShowTerminalData(null);
+            }));
+        }
+
+        #endregion
+
         /**************************************************************************/
         // CONFIGURATION TAB
         /**************************************************************************/
@@ -1965,6 +2019,7 @@ namespace IPA.MainApp
                 // Configuration Mode
                 this.Invoke(new MethodInvoker(() =>
                 {
+                    this.ConfigurationPanel1.Enabled = false;
                     this.ConfigurationTerminalDatapicBoxWait.Visible = true;
                     this.ConfigurationTerminalDatapicBoxWait.Enabled = true;
                     System.Windows.Forms.Application.DoEvents();
@@ -1977,6 +2032,7 @@ namespace IPA.MainApp
             {
                 this.Invoke(new MethodInvoker(() =>
                 {
+                    this.ConfigurationPanel1.Enabled = false;
                     this.ConfigurationAIDSpicBoxWait.Visible = true;
                     this.ConfigurationAIDSpicBoxWait.Enabled = true;
                     System.Windows.Forms.Application.DoEvents();
@@ -1989,6 +2045,7 @@ namespace IPA.MainApp
             {
                 this.Invoke(new MethodInvoker(() =>
                 {
+                    this.ConfigurationPanel1.Enabled = false;
                     this.ConfigurationCAPKSpicBoxWait.Visible = true;
                     this.ConfigurationCAPKSpicBoxWait.Enabled = true;
                     System.Windows.Forms.Application.DoEvents();
@@ -2005,18 +2062,21 @@ namespace IPA.MainApp
 
         private void OnConfigurationTabControlVisibilityChanged(object sender, EventArgs e)
         {
-            if (this.ConfigurationTerminalDatatabPage.Visible == true)
-            {
-                this.tabControlConfiguration.SelectedIndex = -1;
-                this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
-                this.tabControlConfiguration.SelectedIndex = 0;
-            }
+            // Load Terminal Configuration
+            //if (this.ConfigurationTerminalDatatabPage.Visible == true)
+            //{
+            //    this.tabControlConfiguration.SelectedIndex = -1;
+            //    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+            //    this.tabControlConfiguration.SelectedIndex = 0;
+            //}
         }
 
         private void OnConfigGroupSelectionChanged(object sender, EventArgs e)
         {
             if (ConfigurationGROUPStabPagecomboBox1.SelectedItem != null)
             {
+                this.ConfigurationPanel1pictureBox1.Enabled = true;
+                this.ConfigurationPanel1pictureBox1.Visible = true;
                 this.ConfigurationGROUPSpicBoxWait.Visible = true;
                 this.ConfigurationGROUPSpicBoxWait.Enabled = true;
                 int group = Convert.ToInt16(ConfigurationGROUPStabPagecomboBox1.SelectedItem.ToString());
@@ -2125,11 +2185,12 @@ namespace IPA.MainApp
         {
             if (((RadioButton)sender).Checked)
             {
-                this.ConfigurationPanel1pictureBox1.Enabled = true;
-                this.ConfigurationPanel1pictureBox1.Visible = true;
+                this.ConfigurationPanel1.Enabled = false;
 
                 // Load Configuration from FILE
                 new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_CONFIG)).Start();
+
+                SetConfigLoaderTimer();
 
                 if (this.ConfigurationCollapseButton.Visible == false)
                 {
@@ -2151,11 +2212,12 @@ namespace IPA.MainApp
         {
             if (((RadioButton)sender).Checked)
             {
-                this.ConfigurationPanel1pictureBox1.Enabled = true;
-                this.ConfigurationPanel1pictureBox1.Visible = true;
+                this.ConfigurationPanel1.Enabled = false;
 
                 // Load Configuration from DEVICE
                 new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_DEVICE)).Start();
+
+                SetConfigLoaderTimer();
 
                 if (this.ConfigurationCollapseButton.Visible == false)
                 {
@@ -2302,15 +2364,15 @@ namespace IPA.MainApp
 
         private void OnSelectedIndexChanged(object sender, EventArgs e)
         {
+            //ConfigurationResetLoadFromButtons();
+
             if (MaintabControl.SelectedTab?.Name.Equals("ConfigurationtabPage") ?? false)
             {
-                ConfigurationResetLoadFromButtons();
-
-                if(this.ConfigurationCollapseButton.Visible)
-                {
-                    this.ConfigurationCollapseButton.Visible = false;
-                    this.ConfigurationPanel2.Visible = false;
-                }
+                //if(this.ConfigurationCollapseButton.Visible)
+                //{
+                //    this.ConfigurationCollapseButton.Visible = false;
+                //    this.ConfigurationPanel2.Visible = false;
+                //}
             }
             else if (MaintabControl.SelectedTab.Name.Equals("SettingstabPage"))
             {
@@ -2345,8 +2407,9 @@ namespace IPA.MainApp
 
         private void OnDeselectingMainTabPage(object sender, TabControlCancelEventArgs e)
         {
-            if(this.ApplicationpictureBoxWait.Visible   || this.JsonpicBoxWait.Visible ||
-               this.ConfigurationPanel1pictureBox1.Visible)
+            if(this.ApplicationpictureBoxWait.Visible || this.JsonpicBoxWait.Visible      ||
+               this. SettingspicBoxWait.Visible       || this.FirmwarepicBoxWait.Visible  ||
+               this.ConfigurationPanel1pictureBox1.Visible || !this.ConfigurationPanel1.Enabled)
             {
                 e.Cancel = true;
             }
@@ -2364,6 +2427,37 @@ namespace IPA.MainApp
         }
 
         #endregion
+
+        /**************************************************************************/
+        // ADVANCED TAB
+        /**************************************************************************/
+        #region -- advanced tab --
+
+        private void OnSetLoggerLevel(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                switch(((RadioButton)sender).Text)
+                {
+                    case "INFO":
+                    { 
+                        Logger.SetFileLoggerLevel((int)LOGLEVELS.INFO);
+                        Logger.info("LOGGING LEVEL SET TO INFO.");
+                        break;
+                    }
+
+                    case "DEBUG":
+                    { 
+                        Logger.SetFileLoggerLevel((int)LOGLEVELS.DEBUG);
+                        Logger.debug("LOGGING LEVEL SET TO DEBUG.");
+                        break;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         /**************************************************************************/
         // ACTIONS TAB
         /**************************************************************************/
@@ -2538,6 +2632,7 @@ namespace IPA.MainApp
 
                     this.Invoke(new MethodInvoker(() =>
                     {
+                        this.AdvancedtabPage.Enabled = true;
                         this.FirmwarepicBoxWait.Enabled = true;
                         this.FirmwarepicBoxWait.Visible = true;
                         this.lblFirmwareVersion.Text = "UPDATING FIRMWARE (PLEASE DON'T INTERRUPT)...";

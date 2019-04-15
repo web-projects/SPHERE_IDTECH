@@ -35,7 +35,7 @@ namespace IPA.CommonInterface.ConfigIDTech
             {
                 JsonSerializer serializer = new JsonSerializer();
                 string path = System.IO.Directory.GetCurrentDirectory(); 
-                fileName = path + "\\" + JSON_CONFIG;
+                fileName = path + "\\Assets\\" + JSON_CONFIG;
 
                 if(File.Exists(fileName))
                 {

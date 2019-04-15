@@ -24,6 +24,7 @@ using IPA.DAL.RBADAL.Services;
 using IPA.DAL.RBADAL.Services.Devices.IDTech.Models;
 using IPA.LoggerManager;
 using IPA.CommonInterface.ConfigSphere;
+using System.Security.Permissions;
 
 namespace IPA.DAL.RBADAL
 {
@@ -151,9 +152,6 @@ namespace IPA.DAL.RBADAL
                 Debug.WriteLine("device INFO[Model Name]      : {0}", (object) deviceInformation.ModelName);
                 deviceInformation.Port = di.Port;
                 Debug.WriteLine("device INFO[Port]            : {0}", (object) deviceInformation.Port);
-
-                // Update Device Configuration
-                NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_DEVICE_UPDATE_CONFIG, Message = new object[] { "COMPLETED" } });
             }
 
             // DEVICES with USDK Support
@@ -192,6 +190,12 @@ namespace IPA.DAL.RBADAL
     public ConfigSphereSerializer GetConfigSphereSerializer()
     {
         return SphereSerializer;
+    }
+
+    [SecurityPermissionAttribute(SecurityAction.Demand, Flags = SecurityPermissionFlag.Infrastructure)]
+    public override object InitializeLifetimeService()
+    {
+        return null;
     }
 
     #endregion
@@ -488,11 +492,12 @@ namespace IPA.DAL.RBADAL
 
            if(devInfo != null)
            {
-              deviceInformation.SerialNumber    = devInfo.SerialNumber;
-              deviceInformation.FirmwareVersion = devInfo.FirmwareVersion;
-              deviceInformation.ModelName       = devInfo.ModelName;
-              deviceInformation.ModelNumber     = devInfo.ModelNumber;
-              deviceInformation.Port            = devInfo.Port;
+              deviceInformation.SerialNumber     = devInfo.SerialNumber;
+              deviceInformation.FirmwareVersion  = devInfo.FirmwareVersion;
+              deviceInformation.EMVKernelVersion = devInfo.EMVKernelVersion;
+              deviceInformation.ModelName        = devInfo.ModelName;
+              deviceInformation.ModelNumber      = devInfo.ModelNumber;
+              deviceInformation.Port             = devInfo.Port;
            }
 
            // Update Device Configuration
@@ -1815,17 +1820,17 @@ namespace IPA.DAL.RBADAL
         }
  
         // Terminal Information
-        //string enable_read_terminal_data = System.Configuration.ConfigurationManager.AppSettings["tc_read_terminal_data"] ?? "true";
-        //bool read_terminal_data;
-        //bool.TryParse(enable_read_terminal_data, out read_terminal_data);
-        //if(read_terminal_data)
-        //{
-        //    IDTechSerializer.terminalCfg.general_configuration.Contact.terminal_ics_type = GetTerminalType() ?? null;
-        //    object [] message1 = Device.GetTerminalData(ref IDTechSerializer, ref exponent);
-        //
-        //    // Display Terminal Data to User
-        //    NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA, Message = message1 });
-        //}
+        string enable_read_terminal_data = System.Configuration.ConfigurationManager.AppSettings["tc_read_terminal_data"] ?? "true";
+        bool read_terminal_data;
+        bool.TryParse(enable_read_terminal_data, out read_terminal_data);
+        if(read_terminal_data)
+        {
+            IDTechSerializer.terminalCfg.general_configuration.Contact.terminal_ics_type = GetTerminalType() ?? null;
+            object [] message1 = Device.GetTerminalData(ref IDTechSerializer, ref exponent);
+        
+            // Display Terminal Data to User
+            //NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA, Message = message1 });
+        }
 
         // Encryption Control
         string enable_read_encryption = System.Configuration.ConfigurationManager.AppSettings["tc_read_encryption"] ?? "true";
@@ -2720,75 +2725,103 @@ namespace IPA.DAL.RBADAL
 
     public void GetSphereTerminalData()
     {
-        string [] message = { "" };
-        if(configurationMode == ConfigurationModes.FROM_DEVICE)
-        {
-            message = Device.GetTerminalData();
-        }
-        else
-        {
-            if(SphereSerializer.DeviceFirmwareMatches(deviceInformation.ModelNumber, deviceInformation.FirmwareVersion))
+        try
+        { 
+            string [] message = { "" };
+            if(configurationMode == ConfigurationModes.FROM_DEVICE)
             {
-                Logger.info("DEVICE INFO: MODEL={0}, FIRMWARE={1}", deviceInformation.ModelNumber, SphereSerializer.GetDeviceFirmware(deviceInformation.ModelNumber));
-                Device.ValidateTerminalData(ref SphereSerializer);
-                message = SphereSerializer.GetTerminalDataString(deviceInformation.SerialNumber, deviceInformation.EMVKernelVersion);
+                message = Device.GetTerminalData();
             }
             else
             {
-                Logger.error("DEVICE INFO: MODEL={0} - NO VERSION MATCHING [{1}]", deviceInformation.ModelNumber, deviceInformation.FirmwareVersion);
-                message[0] = "NO FIRMWARE VERSION MATCH";
+                if(SphereSerializer.DeviceFirmwareMatches(deviceInformation.ModelNumber, deviceInformation.FirmwareVersion))
+                {
+                    Logger.info("DEVICE INFO: MODEL={0}, FIRMWARE={1}", deviceInformation.ModelNumber, SphereSerializer.GetDeviceFirmware(deviceInformation.ModelNumber));
+                    Device.ValidateTerminalData(ref SphereSerializer);
+                    message = SphereSerializer.GetTerminalDataString(deviceInformation.SerialNumber, deviceInformation.EMVKernelVersion);
+                }
+                else
+                {
+                    Logger.error("DEVICE INFO: MODEL={0} - NO VERSION MATCHING [{1}]", deviceInformation.ModelNumber, deviceInformation.FirmwareVersion);
+                    message[0] = "NO FIRMWARE VERSION MATCH";
+                }
             }
-        }
 
-        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA, Message = message });
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA, Message = message });
+        }
+        catch(Exception e)
+        {
+            Logger.error("device: GetSphereTerminalData() - exception={0}", (object)e.Message);
+        }
     }
 
     public void GetAIDList()
     {
-        string [] message = null;
-        if(configurationMode == ConfigurationModes.FROM_DEVICE)
-        {
-            message = Device.GetAidList();
-        }
-        else
-        {
-            Device.ValidateAidList(ref SphereSerializer);
-            message = SphereSerializer.GetAIDCollection();
-        }
+        try
+        { 
+            string [] message = null;
+            if(configurationMode == ConfigurationModes.FROM_DEVICE)
+            {
+                message = Device.GetAidList();
+            }
+            else
+            {
+                Device.ValidateAidList(ref SphereSerializer);
+                message = SphereSerializer.GetAIDCollection();
+            }
 
-        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_AID_LIST, Message = message });
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_AID_LIST, Message = message });
+        }
+        catch(Exception e)
+        {
+            Logger.error("device: GetAidList() - exception={0}", (object)e.Message);
+        }
     }
 
     public void GetCapKList()
     {
-        string [] message = null;
-        if(configurationMode == ConfigurationModes.FROM_DEVICE)
+        try
         {
-            message = Device.GetCapKList();
-        }
-        else
-        {
-            Device.ValidateCapKList(ref SphereSerializer);
-            message = SphereSerializer.GetCapKCollection();
-        }
+            string [] message = null;
+            if(configurationMode == ConfigurationModes.FROM_DEVICE)
+            {
+                message = Device.GetCapKList();
+            }
+            else
+            {
+                Device.ValidateCapKList(ref SphereSerializer);
+                message = SphereSerializer.GetCapKCollection();
+            }
 
-        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_CAPK_LIST, Message = message });
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_CAPK_LIST, Message = message });
+        }
+        catch(Exception e)
+        {
+            Logger.error("device: GetCapKList() - exception={0}", (object)e.Message);
+        }
     }
 
     public void GetConfigGroup(int group)
     {
-        string [] message = null;
-        if(configurationMode == ConfigurationModes.FROM_DEVICE)
+        try
         {
-           message = Device.GetConfigGroup(group);
-        }
-        else
-        {
-            Device.ValidateConfigGroup(SphereSerializer, group);
-            message = SphereSerializer.GetConfigGroupCollection(group);
-        }
+            string [] message = null;
+            if(configurationMode == ConfigurationModes.FROM_DEVICE)
+            {
+               message = Device.GetConfigGroup(group);
+            }
+            else
+            {
+                Device.ValidateConfigGroup(SphereSerializer, group);
+                message = SphereSerializer.GetConfigGroupCollection(group);
+            }
 
-        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_CONFIG_GROUP, Message = message });
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_CONFIG_GROUP, Message = message });
+        }
+        catch(Exception e)
+        {
+            Logger.error("device: GetConfigGroup() - exception={0}", (object)e.Message);
+        }
     }
     #endregion
 

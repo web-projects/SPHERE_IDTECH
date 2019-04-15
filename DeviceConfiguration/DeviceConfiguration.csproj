@@ -11,6 +11,7 @@
     <AssemblyName>DeviceConfiguration</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,6 +75,7 @@
     <Compile Include="DeviceCfg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DALUtils.cs" />
+    <Compile Include="Properties\Version.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj">

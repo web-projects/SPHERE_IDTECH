@@ -119,14 +119,16 @@
             this.ConfigurationGroupBox1 = new System.Windows.Forms.GroupBox();
             this.radioLoadFromDevice = new System.Windows.Forms.RadioButton();
             this.radioLoadFromFile = new System.Windows.Forms.RadioButton();
-            this.FirmwaretabPage = new System.Windows.Forms.TabPage();
+            this.AdvancedtabPage = new System.Windows.Forms.TabPage();
             this.FirmwarepicBoxWait = new System.Windows.Forms.PictureBox();
+            this.AdvancedLogginggroupBox1 = new System.Windows.Forms.GroupBox();
+            this.AdvancedLoggingradioButtonDebug = new System.Windows.Forms.RadioButton();
+            this.AdvancedLoggingradioButtonInfo = new System.Windows.Forms.RadioButton();
             this.lblFirmwareVersion = new System.Windows.Forms.Label();
             this.btnFirmwareUpdate = new System.Windows.Forms.Button();
             this.FirmwareConfigurationPanel1label1 = new System.Windows.Forms.Label();
             this.FirmwareprogressBar1 = new System.Windows.Forms.ProgressBar();
             this.FirmwareopenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpicBoxMain)).BeginInit();
             this.JsontabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.JsonpicBoxWait)).BeginInit();
@@ -154,8 +156,9 @@
             this.ConfigurationPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).BeginInit();
             this.ConfigurationGroupBox1.SuspendLayout();
-            this.FirmwaretabPage.SuspendLayout();
+            this.AdvancedtabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirmwarepicBoxWait)).BeginInit();
+            this.AdvancedLogginggroupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ApplicationpicBoxMain
@@ -688,7 +691,7 @@
             this.MaintabControl.Controls.Add(this.RawModetabPage);
             this.MaintabControl.Controls.Add(this.TerminalDatatabPage);
             this.MaintabControl.Controls.Add(this.JsontabPage);
-            this.MaintabControl.Controls.Add(this.FirmwaretabPage);
+            this.MaintabControl.Controls.Add(this.AdvancedtabPage);
             this.MaintabControl.Location = new System.Drawing.Point(12, 53);
             this.MaintabControl.Name = "MaintabControl";
             this.MaintabControl.SelectedIndex = 0;
@@ -1133,19 +1136,20 @@
             this.radioLoadFromFile.UseVisualStyleBackColor = true;
             this.radioLoadFromFile.CheckedChanged += new System.EventHandler(this.OnLoadFromFile);
             // 
-            // FirmwaretabPage
+            // AdvancedtabPage
             // 
-            this.FirmwaretabPage.Controls.Add(this.FirmwarepicBoxWait);
-            this.FirmwaretabPage.Controls.Add(this.lblFirmwareVersion);
-            this.FirmwaretabPage.Controls.Add(this.btnFirmwareUpdate);
-            this.FirmwaretabPage.Controls.Add(this.FirmwareConfigurationPanel1label1);
-            this.FirmwaretabPage.Controls.Add(this.FirmwareprogressBar1);
-            this.FirmwaretabPage.Location = new System.Drawing.Point(4, 22);
-            this.FirmwaretabPage.Name = "FirmwaretabPage";
-            this.FirmwaretabPage.Size = new System.Drawing.Size(692, 518);
-            this.FirmwaretabPage.TabIndex = 2;
-            this.FirmwaretabPage.Text = "Firmware";
-            this.FirmwaretabPage.UseVisualStyleBackColor = true;
+            this.AdvancedtabPage.Controls.Add(this.FirmwarepicBoxWait);
+            this.AdvancedtabPage.Controls.Add(this.AdvancedLogginggroupBox1);
+            this.AdvancedtabPage.Controls.Add(this.lblFirmwareVersion);
+            this.AdvancedtabPage.Controls.Add(this.btnFirmwareUpdate);
+            this.AdvancedtabPage.Controls.Add(this.FirmwareConfigurationPanel1label1);
+            this.AdvancedtabPage.Controls.Add(this.FirmwareprogressBar1);
+            this.AdvancedtabPage.Location = new System.Drawing.Point(4, 22);
+            this.AdvancedtabPage.Name = "AdvancedtabPage";
+            this.AdvancedtabPage.Size = new System.Drawing.Size(692, 518);
+            this.AdvancedtabPage.TabIndex = 2;
+            this.AdvancedtabPage.Text = "Advanced";
+            this.AdvancedtabPage.UseVisualStyleBackColor = true;
             // 
             // FirmwarepicBoxWait
             // 
@@ -1157,12 +1161,47 @@
             this.FirmwarepicBoxWait.Location = new System.Drawing.Point(0, 166);
             this.FirmwarepicBoxWait.Margin = new System.Windows.Forms.Padding(2);
             this.FirmwarepicBoxWait.Name = "FirmwarepicBoxWait";
-            this.FirmwarepicBoxWait.Size = new System.Drawing.Size(688, 356);
+            this.FirmwarepicBoxWait.Size = new System.Drawing.Size(688, 350);
             this.FirmwarepicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.FirmwarepicBoxWait.TabIndex = 4;
             this.FirmwarepicBoxWait.TabStop = false;
             this.FirmwarepicBoxWait.Visible = false;
             this.FirmwarepicBoxWait.WaitOnLoad = true;
+            // 
+            // AdvancedLogginggroupBox1
+            // 
+            this.AdvancedLogginggroupBox1.Controls.Add(this.AdvancedLoggingradioButtonDebug);
+            this.AdvancedLogginggroupBox1.Controls.Add(this.AdvancedLoggingradioButtonInfo);
+            this.AdvancedLogginggroupBox1.Location = new System.Drawing.Point(25, 166);
+            this.AdvancedLogginggroupBox1.Name = "AdvancedLogginggroupBox1";
+            this.AdvancedLogginggroupBox1.Size = new System.Drawing.Size(642, 74);
+            this.AdvancedLogginggroupBox1.TabIndex = 15;
+            this.AdvancedLogginggroupBox1.TabStop = false;
+            this.AdvancedLogginggroupBox1.Text = "LOGGING LEVEL";
+            // 
+            // AdvancedLoggingradioButtonDebug
+            // 
+            this.AdvancedLoggingradioButtonDebug.AutoSize = true;
+            this.AdvancedLoggingradioButtonDebug.Location = new System.Drawing.Point(85, 32);
+            this.AdvancedLoggingradioButtonDebug.Name = "AdvancedLoggingradioButtonDebug";
+            this.AdvancedLoggingradioButtonDebug.Size = new System.Drawing.Size(63, 17);
+            this.AdvancedLoggingradioButtonDebug.TabIndex = 1;
+            this.AdvancedLoggingradioButtonDebug.TabStop = true;
+            this.AdvancedLoggingradioButtonDebug.Text = "DEBUG";
+            this.AdvancedLoggingradioButtonDebug.UseVisualStyleBackColor = true;
+            this.AdvancedLoggingradioButtonDebug.CheckedChanged += new System.EventHandler(this.OnSetLoggerLevel);
+            // 
+            // AdvancedLoggingradioButtonInfo
+            // 
+            this.AdvancedLoggingradioButtonInfo.AutoSize = true;
+            this.AdvancedLoggingradioButtonInfo.Location = new System.Drawing.Point(18, 32);
+            this.AdvancedLoggingradioButtonInfo.Name = "AdvancedLoggingradioButtonInfo";
+            this.AdvancedLoggingradioButtonInfo.Size = new System.Drawing.Size(50, 17);
+            this.AdvancedLoggingradioButtonInfo.TabIndex = 0;
+            this.AdvancedLoggingradioButtonInfo.TabStop = true;
+            this.AdvancedLoggingradioButtonInfo.Text = "INFO";
+            this.AdvancedLoggingradioButtonInfo.UseVisualStyleBackColor = true;
+            this.AdvancedLoggingradioButtonInfo.CheckedChanged += new System.EventHandler(this.OnSetLoggerLevel);
             // 
             // lblFirmwareVersion
             // 
@@ -1252,9 +1291,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).EndInit();
             this.ConfigurationGroupBox1.ResumeLayout(false);
             this.ConfigurationGroupBox1.PerformLayout();
-            this.FirmwaretabPage.ResumeLayout(false);
-            this.FirmwaretabPage.PerformLayout();
+            this.AdvancedtabPage.ResumeLayout(false);
+            this.AdvancedtabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirmwarepicBoxWait)).EndInit();
+            this.AdvancedLogginggroupBox1.ResumeLayout(false);
+            this.AdvancedLogginggroupBox1.PerformLayout();
             this.ResumeLayout(false);
 
     }
@@ -1363,14 +1404,16 @@
     private System.Windows.Forms.Button JsonbuttonClose;
     private System.Windows.Forms.PictureBox JsonpicBoxWait;
     // TAB: FIRMWARE
-    private System.Windows.Forms.TabPage FirmwaretabPage;
+    private System.Windows.Forms.TabPage AdvancedtabPage;
     private System.Windows.Forms.Button btnFirmwareUpdate;
     private System.Windows.Forms.Label lblFirmwareVersion;
     private System.Windows.Forms.Label FirmwareConfigurationPanel1label1;
     private System.Windows.Forms.OpenFileDialog FirmwareopenFileDialog1;
     private System.Windows.Forms.ProgressBar FirmwareprogressBar1;
     private System.Windows.Forms.PictureBox FirmwarepicBoxWait;
-    private System.ComponentModel.BackgroundWorker backgroundWorker1;
+    private System.Windows.Forms.GroupBox AdvancedLogginggroupBox1;
+    private System.Windows.Forms.RadioButton AdvancedLoggingradioButtonDebug;
+    private System.Windows.Forms.RadioButton AdvancedLoggingradioButtonInfo;
   }
 }
 
