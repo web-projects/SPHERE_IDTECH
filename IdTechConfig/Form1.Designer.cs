@@ -129,6 +129,7 @@
             this.FirmwareConfigurationPanel1label1 = new System.Windows.Forms.Label();
             this.FirmwareprogressBar1 = new System.Windows.Forms.ProgressBar();
             this.FirmwareopenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.AdvancedLoggingradioButtonNone = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpicBoxMain)).BeginInit();
             this.JsontabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.JsonpicBoxWait)).BeginInit();
@@ -1170,6 +1171,7 @@
             // 
             // AdvancedLogginggroupBox1
             // 
+            this.AdvancedLogginggroupBox1.Controls.Add(this.AdvancedLoggingradioButtonNone);
             this.AdvancedLogginggroupBox1.Controls.Add(this.AdvancedLoggingradioButtonDebug);
             this.AdvancedLogginggroupBox1.Controls.Add(this.AdvancedLoggingradioButtonInfo);
             this.AdvancedLogginggroupBox1.Location = new System.Drawing.Point(25, 166);
@@ -1182,7 +1184,7 @@
             // AdvancedLoggingradioButtonDebug
             // 
             this.AdvancedLoggingradioButtonDebug.AutoSize = true;
-            this.AdvancedLoggingradioButtonDebug.Location = new System.Drawing.Point(85, 32);
+            this.AdvancedLoggingradioButtonDebug.Location = new System.Drawing.Point(172, 32);
             this.AdvancedLoggingradioButtonDebug.Name = "AdvancedLoggingradioButtonDebug";
             this.AdvancedLoggingradioButtonDebug.Size = new System.Drawing.Size(63, 17);
             this.AdvancedLoggingradioButtonDebug.TabIndex = 1;
@@ -1191,10 +1193,22 @@
             this.AdvancedLoggingradioButtonDebug.UseVisualStyleBackColor = true;
             this.AdvancedLoggingradioButtonDebug.CheckedChanged += new System.EventHandler(this.OnSetLoggerLevel);
             // 
+            // AdvancedLoggingradioButtonNone
+            // 
+            this.AdvancedLoggingradioButtonNone.AutoSize = true;
+            this.AdvancedLoggingradioButtonNone.Location = new System.Drawing.Point(26, 32);
+            this.AdvancedLoggingradioButtonNone.Name = "AdvancedLoggingradioButtonNone";
+            this.AdvancedLoggingradioButtonNone.Size = new System.Drawing.Size(56, 17);
+            this.AdvancedLoggingradioButtonNone.TabIndex = 2;
+            this.AdvancedLoggingradioButtonNone.TabStop = true;
+            this.AdvancedLoggingradioButtonNone.Text = "NONE";
+            this.AdvancedLoggingradioButtonNone.UseVisualStyleBackColor = true;
+            this.AdvancedLoggingradioButtonNone.CheckedChanged += new System.EventHandler(this.OnSetLoggerLevel);
+            // 
             // AdvancedLoggingradioButtonInfo
             // 
             this.AdvancedLoggingradioButtonInfo.AutoSize = true;
-            this.AdvancedLoggingradioButtonInfo.Location = new System.Drawing.Point(18, 32);
+            this.AdvancedLoggingradioButtonInfo.Location = new System.Drawing.Point(99, 32);
             this.AdvancedLoggingradioButtonInfo.Name = "AdvancedLoggingradioButtonInfo";
             this.AdvancedLoggingradioButtonInfo.Size = new System.Drawing.Size(50, 17);
             this.AdvancedLoggingradioButtonInfo.TabIndex = 0;
@@ -1414,6 +1428,7 @@
     private System.Windows.Forms.GroupBox AdvancedLogginggroupBox1;
     private System.Windows.Forms.RadioButton AdvancedLoggingradioButtonDebug;
     private System.Windows.Forms.RadioButton AdvancedLoggingradioButtonInfo;
+    private System.Windows.Forms.RadioButton AdvancedLoggingradioButtonNone;
   }
 }
 

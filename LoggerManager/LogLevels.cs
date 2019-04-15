@@ -15,7 +15,8 @@ namespace IPA.LoggerManager
         INFO    = 0x02,
         WARNING = 0x04,
         ERROR   = 0x08,
-        FATAL   = 0x10
+        FATAL   = 0x10,
+        ALL     = 0x1F
     }
     public static class LogLevels
     {

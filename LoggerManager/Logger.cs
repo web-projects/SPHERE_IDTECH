@@ -26,7 +26,31 @@ namespace IPA.LoggerManager
 
         public static void SetFileLoggerLevel(int level)
         {
-            logLevel = level;
+            switch((LOGLEVELS)(level))
+            {
+                case LOGLEVELS.NONE:
+                {
+                    logLevel = (int)LOGLEVELS.NONE;
+                    break;
+                }
+
+                case LOGLEVELS.INFO:
+                {
+                    if(logLevel == (int)LOGLEVELS.NONE)
+                    {
+                        logLevel = (int)LOGLEVELS.ALL;
+                    }
+                    logLevel |= (int)LOGLEVELS.INFO;
+                    logLevel &= ~(int)LOGLEVELS.DEBUG;
+                    break;
+                }
+
+                case LOGLEVELS.DEBUG:
+                {
+                    logLevel = (int)LOGLEVELS.ALL;
+                    break;
+                }
+            }
         }
 
         public static void SetDBLoggerName(string filepath)

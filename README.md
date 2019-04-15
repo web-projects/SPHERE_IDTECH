@@ -32,4 +32,5 @@ This an application to Configure IDTech Devices.
 * 20190409 - Implemented Augusta Configuration reader.
 * 20190410 - Corrected packages warning.
 * 20190415 - Implemented serial number tag 9F1E in compressed form.
+           - Update AppSettings after logging option change.
            

@@ -238,6 +238,15 @@ namespace IPA.MainApp
             }
         }
 
+        private void UpdateAppSetting(string key, string value)
+        {
+            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            configuration.AppSettings.Settings[key].Value = value;
+            configuration.Save();
+
+            ConfigurationManager.RefreshSection("appSettings");
+        }
+
         #endregion
 
         /********************************************************************************************************/
@@ -2439,17 +2448,26 @@ namespace IPA.MainApp
             {
                 switch(((RadioButton)sender).Text)
                 {
+                    case "NONE":
+                    { 
+                        Logger.SetFileLoggerLevel((int)LOGLEVELS.NONE);
+                        UpdateAppSetting("IPA.DAL.Application.Client.LogLevel", "NONE");
+                        break;
+                    }
+
                     case "INFO":
                     { 
                         Logger.SetFileLoggerLevel((int)LOGLEVELS.INFO);
                         Logger.info("LOGGING LEVEL SET TO INFO.");
+                        UpdateAppSetting("IPA.DAL.Application.Client.LogLevel", "INFO|WARNING|ERROR|FATAL");
                         break;
                     }
 
                     case "DEBUG":
                     { 
                         Logger.SetFileLoggerLevel((int)LOGLEVELS.DEBUG);
-                        Logger.debug("LOGGING LEVEL SET TO DEBUG.");
+                        Logger.info("LOGGING LEVEL SET TO DEBUG.");
+                        UpdateAppSetting("IPA.DAL.Application.Client.LogLevel", "DEBUG|INFO|WARNING|ERROR|FATAL");
                         break;
                     }
                 }
