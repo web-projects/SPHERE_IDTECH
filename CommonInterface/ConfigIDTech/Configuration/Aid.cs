@@ -47,9 +47,9 @@ namespace IPA.CommonInterface.ConfigIDTech.Configuration
                     Debug.WriteLine("{0} : {1}", kvp.Key , kvp.Value);
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("Aid::ConvertTLVToValuePairs(): - exception={0}", (object)exp.Message);
+                Debug.WriteLine("Aid::ConvertTLVToValuePairs(): - exception={0}", (object)ex.Message);
             }
             return text;
         }

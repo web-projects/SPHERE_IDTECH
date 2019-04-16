@@ -61,9 +61,9 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
                 }
                 Debug.WriteLine("======================================================================");
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("TerminalDatga::ConvertTLVToValuePairs(): - exception={0}", (object)exp.Message);
+                Debug.WriteLine("TerminalDatga::ConvertTLVToValuePairs(): - exception={0}", (object)ex.Message);
             }
             return text;
         }

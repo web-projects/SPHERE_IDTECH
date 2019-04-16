@@ -156,9 +156,9 @@ namespace IPA.DAL.RBADAL.Services
                     serialnumber = System.Text.Encoding.UTF8.GetString(result, 14, 10);
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-               Debug.WriteLine("DeviceCfg::GetKeyboardModeSerialNumber(): - exception={0}", (object)exp.Message);
+               Debug.WriteLine("DeviceCfg::GetKeyboardModeSerialNumber(): - exception={0}", (object)ex.Message);
             }
 
             return serialnumber;
@@ -183,9 +183,9 @@ namespace IPA.DAL.RBADAL.Services
                     }
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-               Debug.WriteLine("DeviceCfg::GetKeybaordModeFirmwareVersion(): - exception={0}", (object)exp.Message);
+               Debug.WriteLine("DeviceCfg::GetKeybaordModeFirmwareVersion(): - exception={0}", (object)ex.Message);
             }
 
             return firmwareversion;
@@ -344,9 +344,9 @@ namespace IPA.DAL.RBADAL.Services
                     Debug.WriteLine(" ] - LEN: {0}", result.Length);
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-               Debug.WriteLine("DeviceCfg::SetVP3000DeviceHidMode(): - exception={0}", (object)exp.Message);
+               Debug.WriteLine("DeviceCfg::SetVP3000DeviceHidMode(): - exception={0}", (object)ex.Message);
             }
         }
 
@@ -369,9 +369,9 @@ namespace IPA.DAL.RBADAL.Services
 
                 var status = SetupVivoCommand(readConfig, out result);
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-               Debug.WriteLine("DeviceCfg::VP3000PingReport(): - exception={0}", (object)exp.Message);
+               Debug.WriteLine("DeviceCfg::VP3000PingReport(): - exception={0}", (object)ex.Message);
             }
         }
         #endregion

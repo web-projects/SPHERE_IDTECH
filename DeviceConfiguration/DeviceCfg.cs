@@ -1882,9 +1882,9 @@ namespace IPA.DAL.RBADAL
         {
             IDTechSerializer.terminalCfg.config_meta.Customer.Company = "TrustCommerce";
         }
-        catch(Exception exp)
+        catch(Exception ex)
         {
-            Debug.WriteLine("DeviceCfg::GetCompany(): - exception={0}", (object)exp.Message);
+            Debug.WriteLine("DeviceCfg::GetCompany(): - exception={0}", (object)ex.Message);
         }
     }
 
@@ -1904,7 +1904,7 @@ namespace IPA.DAL.RBADAL
         {
           case (int) EXPIRATION_MASK.MASK:
           {
-            mask = child.Value.Equals("True", StringComparison.OrdinalIgnoreCase) ? true : false;
+            mask = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
             break;
           }
         }
@@ -1976,25 +1976,25 @@ namespace IPA.DAL.RBADAL
           {
             case (int) SWIPE_FORCE_ENCRYPTION.TRACK1:
             {
-              track1 = child.Value.Equals("True", StringComparison.OrdinalIgnoreCase) ? true : false;
+              track1 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
               break;
             }
 
             case (int) SWIPE_FORCE_ENCRYPTION.TRACK2:
             {
-              track2 = child.Value.Equals("True", StringComparison.OrdinalIgnoreCase) ? true : false;
+              track2 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
               break;
             }
 
             case (int) SWIPE_FORCE_ENCRYPTION.TRACK3:
             {
-              track3 = child.Value.Equals("True", StringComparison.OrdinalIgnoreCase) ? true : false;
+              track3 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
               break;
             }
 
             case (int) SWIPE_FORCE_ENCRYPTION.TRACK3CARD0:
             {
-              track3card0 = child.Value.Equals("True", StringComparison.OrdinalIgnoreCase) ? true : false;
+              track3card0 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
               break;
             }
           }
@@ -2031,19 +2031,19 @@ namespace IPA.DAL.RBADAL
         {
           case (int) SWIPE_MASK.TRACK1:
           {
-            track1 = child.Value.Equals("True", StringComparison.OrdinalIgnoreCase) ? true : false;
+            track1 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
             break;
           }
 
           case (int) SWIPE_MASK.TRACK2:
           {
-            track2 = child.Value.Equals("True", StringComparison.OrdinalIgnoreCase) ? true : false;
+            track2 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
             break;
           }
 
           case (int) SWIPE_MASK.TRACK3:
           {
-            track3 = child.Value.Equals("True", StringComparison.OrdinalIgnoreCase) ? true : false;
+            track3 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
             break;
           }
         }
@@ -2257,9 +2257,9 @@ namespace IPA.DAL.RBADAL
               string [] message = { expMask, panDigits, swipeForce, swipeMask, msrSetting };
               NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_GET_DEVICE_CONFIGURATION, Message = message });
           }
-          catch(Exception exp)
+          catch(Exception ex)
           {
-             Debug.WriteLine("DeviceCfg::GetDeviceMode(): - exception={0}", (object)exp.Message);
+             Debug.WriteLine("DeviceCfg::GetDeviceMode(): - exception={0}", (object)ex.Message);
           }
       }
       else
@@ -2331,9 +2331,9 @@ namespace IPA.DAL.RBADAL
           //TO-DO
         }
       }
-      catch(Exception exp)
+      catch(Exception ex)
       {
-         Debug.WriteLine("DeviceCfg::SetDeviceConfiguration(): - exception={0}", (object)exp.Message);
+         Debug.WriteLine("DeviceCfg::SetDeviceConfiguration(): - exception={0}", (object)ex.Message);
       }
     }
 
@@ -2450,9 +2450,9 @@ namespace IPA.DAL.RBADAL
                }
             }
         }
-        catch(Exception exp)
+        catch(Exception ex)
         {
-           Debug.WriteLine("DeviceCfg::SetDeviceMode(): - exception={0}", (object)exp.Message);
+           Debug.WriteLine("DeviceCfg::SetDeviceMode(): - exception={0}", (object)ex.Message);
         }
     }
 
@@ -2548,9 +2548,9 @@ namespace IPA.DAL.RBADAL
                 }
             }
         }
-        catch(Exception exp)
+        catch(Exception ex)
         {
-           Debug.WriteLine("DeviceCfg::SetEmvQCMode(): - exception={0}", (object)exp.Message);
+           Debug.WriteLine("DeviceCfg::SetEmvQCMode(): - exception={0}", (object)ex.Message);
         }
 
         return result;
@@ -2581,9 +2581,9 @@ namespace IPA.DAL.RBADAL
             // Restart device discovery
             DeviceRemovedHandler();
         }
-        catch(Exception exp)
+        catch(Exception ex)
         {
-           Logger.error("DeviceCfg::DisableQCEmvMode(): - exception={0}", (object)exp.Message);
+           Logger.error("DeviceCfg::DisableQCEmvMode(): - exception={0}", (object)ex.Message);
         }
     }    
 
@@ -2975,9 +2975,9 @@ namespace IPA.DAL.RBADAL
                     }
                 }
             }
-            catch (Exception exp)
+            catch (Exception ex)
             {
-                Logger.error("device: FirmwareUpdate() - exception={0}", (object)exp.Message);
+                Logger.error("device: FirmwareUpdate() - exception={0}", (object)ex.Message);
             }
         }
         public bool FirmwareIsUpdating()
@@ -2990,9 +2990,9 @@ namespace IPA.DAL.RBADAL
             {
                 Device.FactoryReset();
             }
-            catch (Exception exp)
+            catch (Exception ex)
             {
-                Logger.error("device: FactoryReset() - exception={0}", (object)exp.Message);
+                Logger.error("device: FactoryReset() - exception={0}", (object)ex.Message);
             }
             finally
             {

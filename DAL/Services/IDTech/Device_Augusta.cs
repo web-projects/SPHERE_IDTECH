@@ -234,9 +234,9 @@ namespace IPA.DAL.RBADAL.Services
                     serializer.terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_configuration_checksum = response;
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: GetTerminalInfo() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: GetTerminalInfo() - exception={0}", (object)ex.Message);
             }
         }
 
@@ -277,9 +277,9 @@ namespace IPA.DAL.RBADAL.Services
                     }
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: GetTerminalData() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: GetTerminalData() - exception={0}", (object)ex.Message);
             }
 
             return data;
@@ -319,9 +319,9 @@ namespace IPA.DAL.RBADAL.Services
                     }
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: GetCapkList() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: GetCapkList() - exception={0}", (object)ex.Message);
             }
         }
         
@@ -360,9 +360,9 @@ namespace IPA.DAL.RBADAL.Services
                     }
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: GetAidList() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: GetAidList() - exception={0}", (object)ex.Message);
             }
         }
         #endregion
@@ -414,9 +414,9 @@ namespace IPA.DAL.RBADAL.Services
                     Debug.WriteLine("TERMINAL DATA: emv_retrieveTerminalData() - ERROR={0}", rt);
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: GetTerminalData() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: GetTerminalData() - exception={0}", (object)ex.Message);
             }
 
             return data;
@@ -547,9 +547,9 @@ namespace IPA.DAL.RBADAL.Services
                                             Logger.error( "device: ValidateTerminalData() error={0} DATA={1}", rt, BitConverter.ToString(terminalData).Replace("-", string.Empty));
                                         }
                                     }
-                                    catch(Exception exp)
+                                    catch(Exception ex)
                                     {
-                                        Debug.WriteLine("device: ValidateTerminalData() - exception={0}", (object)exp.Message);
+                                        Debug.WriteLine("device: ValidateTerminalData() - exception={0}", (object)ex.Message);
                                     }
                                 }
                             }
@@ -561,9 +561,9 @@ namespace IPA.DAL.RBADAL.Services
                     }
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: ValidateTerminalData() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: ValidateTerminalData() - exception={0}", (object)ex.Message);
             }
         }
         
@@ -614,9 +614,9 @@ namespace IPA.DAL.RBADAL.Services
                         Debug.WriteLine("TERMINAL DATA: emv_retrieveAIDList() - ERROR={0}", rt);
                     }
                 }
-                catch(Exception exp)
+                catch(Exception ex)
                 {
-                    Debug.WriteLine("device: GetTerminalData() - exception={0}", (object)exp.Message);
+                    Debug.WriteLine("device: GetTerminalData() - exception={0}", (object)ex.Message);
                 }
 
             return data;
@@ -774,9 +774,9 @@ namespace IPA.DAL.RBADAL.Services
                     }
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: ValidateAidList() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: ValidateAidList() - exception={0}", (object)ex.Message);
             }
          }
     
@@ -832,9 +832,10 @@ namespace IPA.DAL.RBADAL.Services
                     Debug.WriteLine("device: emv_retrieveCAPKList() - ERROR={0}", rt);
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: GetTerminalData() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: GetTerminalData() - exception={0}", (object)ex.Message);
+                throw;
             }
 
             return data;
@@ -978,9 +979,9 @@ namespace IPA.DAL.RBADAL.Services
                     }
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: ValidateAidList() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: ValidateAidList() - exception={0}", (object)ex.Message);
             }
         }
 
@@ -1018,9 +1019,9 @@ namespace IPA.DAL.RBADAL.Services
 
                 serializer.terminalCfg.general_configuration.msr_settings = msr_settings;
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: GetMSRSettings() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: GetMSRSettings() - exception={0}", (object)ex.Message);
             }
         }
 
@@ -1058,9 +1059,9 @@ namespace IPA.DAL.RBADAL.Services
                     }
                 }
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: GetEncryptionControl() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: GetEncryptionControl() - exception={0}", (object)ex.Message);
             }
         }
 
@@ -1139,9 +1140,9 @@ namespace IPA.DAL.RBADAL.Services
                 // ICC
                 //rt = IDT_Augusta.SharedController.emv_removeAllCRL();
             }
-            catch(Exception exp)
+            catch(Exception ex)
             {
-                Debug.WriteLine("device: FactoryReset() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("device: FactoryReset() - exception={0}", (object)ex.Message);
             }
         }
         #endregion

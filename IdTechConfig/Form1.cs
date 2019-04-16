@@ -409,15 +409,6 @@ namespace IPA.MainApp
                 this.ApplicationlblModelNumber.Text = "";
                 this.ApplicationlblPort.Text = "";
                 this.ApplicationtxtCardData.Text = "";
-
-                // Disable Tab(s)
-                this.ApplicationtabPage.Enabled = false;
-                this.ConfigurationtabPage.Enabled = false;
-                this.SettingstabPage.Enabled = false;
-                this.RawModetabPage.Enabled = false;
-                this.TerminalDatatabPage.Enabled = false;
-                this.JsontabPage.Enabled = false;
-
                 this.ApplicationtxtCardData.Text = "";
                 this.ApplicationtxtCardData.ForeColor = this.ApplicationtxtCardData.BackColor;
                 this.ApplicationbtnShowTags.Text = "TAGS";
@@ -624,10 +615,10 @@ namespace IPA.MainApp
                     if(worker != null)
                     {
                         string worker1 = worker[0];
-                        if(!worker1.Equals("Unknown", StringComparison.OrdinalIgnoreCase))
+                        if(!worker1.Equals("Unknown", StringComparison.CurrentCultureIgnoreCase))
                         {
                             worker1 += "/";
-                            if(worker[1].Equals("KB"))
+                            if(worker[1].Equals("KB", StringComparison.CurrentCultureIgnoreCase))
                             {
                                 worker1 += "KEYBOARD";
                             }
@@ -743,9 +734,9 @@ namespace IPA.MainApp
                             this.Invoke(new MethodInvoker(() =>
                             {
                                 this.ApplicationtabPage.Enabled = true;
+                                this.MaintabControl.SelectedTab = this.ApplicationtabPage;
                                 this.ApplicationpictureBoxWait.Enabled = true;
                                 this.ApplicationpictureBoxWait.Visible = true;
-                                this.MaintabControl.SelectedTab = this.ApplicationtabPage;
                             }));
                         }
                     }
@@ -802,19 +793,20 @@ namespace IPA.MainApp
                         this.btnFirmwareUpdate.Enabled = false;
                         this.lblFirmwareVersion.Text = "UNKNOWN";
 
-                        MaintabControl.SelectedTab = this.ApplicationtabPage;
+                        this.ApplicationtabPage.Enabled = true;
+                        this.MaintabControl.SelectedTab = this.ApplicationtabPage;
 
-                        if(MaintabControl.Contains(RawModetabPage))
+                        if(this.MaintabControl.Contains(this.RawModetabPage))
                         {
-                            MaintabControl.TabPages.Remove(RawModetabPage);
+                            this.MaintabControl.TabPages.Remove(this.RawModetabPage);
                         }
-                        if(MaintabControl.Contains(TerminalDatatabPage))
+                        if(this.MaintabControl.Contains(this.TerminalDatatabPage))
                         {
-                            MaintabControl.TabPages.Remove(TerminalDatatabPage);
+                            this.MaintabControl.TabPages.Remove(this.TerminalDatatabPage);
                         }
-                        if(MaintabControl.Contains(JsontabPage))
+                        if(this.MaintabControl.Contains(this.JsontabPage))
                         {
-                            MaintabControl.TabPages.Remove(JsontabPage);
+                            this.MaintabControl.TabPages.Remove(this.JsontabPage);
                         }
                     }));
                 }
@@ -825,9 +817,9 @@ namespace IPA.MainApp
                 this.Invoke(new MethodInvoker(() =>
                 {
                     this.ApplicationtabPage.Enabled = true;
+                    this.MaintabControl.SelectedTab = this.ApplicationtabPage;
                     this.ApplicationpictureBoxWait.Enabled = true;
                     this.ApplicationpictureBoxWait.Visible = true;
-                    this.MaintabControl.SelectedTab = this.ApplicationtabPage;
                 }));
             }
 
@@ -963,9 +955,9 @@ namespace IPA.MainApp
                         devicePlugin.CardReadNextState(data[2]);
                     }).Start();
                 }
-                catch (Exception exp)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("main: ProcessCardData() - exception={0}", (object)exp.Message);
+                    Debug.WriteLine("main: ProcessCardData() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -1036,9 +1028,9 @@ namespace IPA.MainApp
                     this.SettingspicBoxWait.Visible = false;
                     this.JsonpicBoxWait.Visible = false;
                 }
-                catch (Exception exp)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("main: GetDeviceConfiguration() - exception={0}", (object)exp.Message);
+                    Debug.WriteLine("main: GetDeviceConfiguration() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -1063,7 +1055,7 @@ namespace IPA.MainApp
                     string [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
 
                     // Expiration Mask
-                    this.SettingscBxExpirationMask.Checked = data[0].Equals("Masked", StringComparison.OrdinalIgnoreCase) ? true : false;
+                    this.SettingscBxExpirationMask.Checked = data[0].Equals("Masked", StringComparison.CurrentCultureIgnoreCase) ? true : false;
 
                     // PAN Clear Digits
                     this.SettingstxtPAN.Text = data[1];
@@ -1082,10 +1074,10 @@ namespace IPA.MainApp
                         string t2Value = track2[1].Trim();
                         string t3Value = track3[1].Trim();
                         string t3Card0Value = track3Card0[1].Trim();
-                        bool t1Val = t1Value.Equals("ON", StringComparison.OrdinalIgnoreCase) ? true : false;
-                        bool t2Val = t2Value.Equals("ON", StringComparison.OrdinalIgnoreCase) ? true : false;
-                        bool t3Val = t3Value.Equals("ON", StringComparison.OrdinalIgnoreCase) ? true : false;
-                        bool t3Card0Val = t3Card0Value.Equals("ON", StringComparison.OrdinalIgnoreCase) ? true : false;
+                        bool t1Val = t1Value.Equals("ON", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+                        bool t2Val = t2Value.Equals("ON", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+                        bool t3Val = t3Value.Equals("ON", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+                        bool t3Card0Val = t3Card0Value.Equals("ON", StringComparison.CurrentCultureIgnoreCase) ? true : false;
 
                         // Compare to existing values
                         if(this.SettingscBxTrack1.Checked != t1Val) {
@@ -1116,9 +1108,9 @@ namespace IPA.MainApp
                         t2Value = track2[1].Trim();
                         t3Value = track3[1].Trim();
 
-                        t1Val = t1Value.Equals("ON", StringComparison.OrdinalIgnoreCase) ? true : false;
-                        t2Val = t2Value.Equals("ON", StringComparison.OrdinalIgnoreCase) ? true : false;
-                        t3Val = t3Value.Equals("ON", StringComparison.OrdinalIgnoreCase) ? true : false;
+                        t1Val = t1Value.Equals("ON", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+                        t2Val = t2Value.Equals("ON", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+                        t3Val = t3Value.Equals("ON", StringComparison.CurrentCultureIgnoreCase) ? true : false;
 
                         // Compare to existing values
                         if(this.SettingscBxSwipeMaskTrack1.Checked != t1Val) 
@@ -1150,9 +1142,9 @@ namespace IPA.MainApp
                     this.SettingspicBoxWait.Enabled = false;
                     this.JsonpicBoxWait.Visible  = false;
                 }
-                catch (Exception exp)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)exp.Message);
+                    Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -1280,9 +1272,9 @@ namespace IPA.MainApp
                         }
                     }
                 }
-                catch (Exception exp)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)exp.Message);
+                    Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -1307,9 +1299,9 @@ namespace IPA.MainApp
                     this.RawModetxtCommandResult.Text = "RESPONSE: [" + data[0] + "]";
                     this.RawModebtnExecute.Enabled = true;
                 }
-                catch (Exception exp)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)exp.Message);
+                    Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -1407,9 +1399,9 @@ namespace IPA.MainApp
                         ConfigurationTerminalDatalistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                         ConfigurationTerminalDatalistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                     }
-                    catch (Exception exp)
+                    catch (Exception ex)
                     {
-                        Logger.error("main: ShowTerminalData() - exception={0}", (object) exp.Message);
+                        Logger.error("main: ShowTerminalData() - exception={0}", (object) ex.Message);
                     }
                     finally
                     {
@@ -1478,9 +1470,9 @@ namespace IPA.MainApp
                     this.ConfigurationAIDStabPage.Enabled = true;
                     tabControlConfiguration.SelectedTab = this.ConfigurationAIDStabPage;
                 }
-                catch (Exception exp)
+                catch (Exception ex)
                 {
-                    Logger.error("main: ShowAIDData() - exception={0}", (object) exp.Message);
+                    Logger.error("main: ShowAIDData() - exception={0}", (object) ex.Message);
                 }
                 finally
                 {
@@ -1580,9 +1572,9 @@ namespace IPA.MainApp
                     this.ConfigurationCAPKStabPage.Enabled = true;
                     tabControlConfiguration.SelectedTab = this.ConfigurationCAPKStabPage;
                 }
-                catch (Exception exp)
+                catch (Exception ex)
                 {
-                    Logger.error("main: ShowCapKList() - exception={0}", (object) exp.Message);
+                    Logger.error("main: ShowCapKList() - exception={0}", (object) ex.Message);
                 }
                 finally
                 {
@@ -1662,9 +1654,9 @@ namespace IPA.MainApp
                     ConfigurationGROUPSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                     ConfigurationGROUPSlistView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                 }
-                catch (Exception exp)
+                catch (Exception ex)
                 {
-                    Logger.error("main: ShowConfigGroup() - exception={0}", (object) exp.Message);
+                    Logger.error("main: ShowConfigGroup() - exception={0}", (object) ex.Message);
                 }
                 finally
                 {
@@ -1723,9 +1715,9 @@ namespace IPA.MainApp
                             this.JsonpicBoxWait.Visible = false;
                         }
                     }
-                    catch (Exception exp)
+                    catch (Exception ex)
                     {
-                        Debug.WriteLine("main: ShowJsonConfig() - exception={0}", (object) exp.Message);
+                        Debug.WriteLine("main: ShowJsonConfig() - exception={0}", (object) ex.Message);
                     }
                 };
 
@@ -1755,9 +1747,9 @@ namespace IPA.MainApp
                     string [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
                     this.ApplicationbtnMode.Enabled = data[0].Equals("Enable") ? true : false;
                 }
-                catch (Exception exp)
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("main: SetModeButtonEnabled() - exception={0}", (object) exp.Message);
+                    Debug.WriteLine("main: SetModeButtonEnabled() - exception={0}", (object) ex.Message);
                 }
             };
 
@@ -2032,7 +2024,23 @@ namespace IPA.MainApp
                     this.ConfigurationTerminalDatapicBoxWait.Visible = true;
                     this.ConfigurationTerminalDatapicBoxWait.Enabled = true;
                     System.Windows.Forms.Application.DoEvents();
-                    new Thread(() => { Thread.CurrentThread.IsBackground = true; devicePlugin. GetSphereTerminalData(); }).Start();
+                    new Thread(() => 
+                    {
+                        try 
+                        { 
+                            Thread.CurrentThread.IsBackground = true; devicePlugin. GetSphereTerminalData(); 
+                        }
+                        catch(Exception)
+                        {
+                            this.Invoke(new MethodInvoker(() =>
+                            {
+                                this.ConfigurationPanel1.Enabled = true;
+                                this.ConfigurationTerminalDatapicBoxWait.Visible = false;
+                                this.ConfigurationTerminalDatapicBoxWait.Enabled = false;
+                                System.Windows.Forms.Application.DoEvents();
+                            }));
+                        }
+                    }).Start();
                 }));
 
                 ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
@@ -2045,7 +2053,23 @@ namespace IPA.MainApp
                     this.ConfigurationAIDSpicBoxWait.Visible = true;
                     this.ConfigurationAIDSpicBoxWait.Enabled = true;
                     System.Windows.Forms.Application.DoEvents();
-                    new Thread(() => { Thread.CurrentThread.IsBackground = true; devicePlugin.GetAIDList(); }).Start();
+                    new Thread(() => 
+                    { 
+                        try
+                        {
+                            Thread.CurrentThread.IsBackground = true; devicePlugin.GetAIDList(); 
+                        }
+                        catch(Exception)
+                        {
+                            this.Invoke(new MethodInvoker(() =>
+                            {
+                                this.ConfigurationPanel1.Enabled = true;
+                                this.ConfigurationAIDSpicBoxWait.Visible = false;
+                                this.ConfigurationAIDSpicBoxWait.Enabled = false;
+                                System.Windows.Forms.Application.DoEvents();
+                            }));
+                        }
+                    }).Start();
                 }));
 
                 ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
@@ -2058,7 +2082,22 @@ namespace IPA.MainApp
                     this.ConfigurationCAPKSpicBoxWait.Visible = true;
                     this.ConfigurationCAPKSpicBoxWait.Enabled = true;
                     System.Windows.Forms.Application.DoEvents();
-                    new Thread(() => { Thread.CurrentThread.IsBackground = true; devicePlugin.GetCapKList(); }).Start();
+                    new Thread(() => 
+                    { 
+                        try
+                        { 
+                            Thread.CurrentThread.IsBackground = true; devicePlugin.GetCapKList(); 
+                        }
+                        catch(Exception)
+                        {
+                            this.Invoke(new MethodInvoker(() =>
+                            {
+                                this.ConfigurationPanel1.Enabled = true;
+                                this.ConfigurationCAPKSpicBoxWait.Visible = false;
+                                this.ConfigurationCAPKSpicBoxWait.Enabled = false;
+                            }));
+                        }
+                    }).Start();
                 }));
 
                 ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
@@ -2263,9 +2302,9 @@ namespace IPA.MainApp
                 // Make call to DeviceCfg
                 devicePlugin.SetDeviceConfiguration(payload);
             }
-            catch (Exception exp)
+            catch (Exception ex)
             {
-                Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)ex.Message);
             }
         }
 
@@ -2328,9 +2367,9 @@ namespace IPA.MainApp
                     serializer.WriteConfig();
                 }
             }
-            catch (Exception exp)
+            catch (Exception ex)
             {
-                Debug.WriteLine("main: SaveConfiguration() - exception={0}", (object)exp.Message);
+                Debug.WriteLine("main: SaveConfiguration() - exception={0}", (object)ex.Message);
             }
         }
 
