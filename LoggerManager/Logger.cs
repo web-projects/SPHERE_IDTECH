@@ -53,6 +53,11 @@ namespace IPA.LoggerManager
             }
         }
 
+        public static int GetFileLoggerLevel()
+        {
+            return logLevel;
+        }
+
         public static void SetDBLoggerName(string filepath)
         {
             dbLoggerPath = filepath;

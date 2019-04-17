@@ -94,7 +94,6 @@
     <Compile Include="Properties\Version.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\configuration.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
