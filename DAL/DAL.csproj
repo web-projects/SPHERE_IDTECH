@@ -62,7 +62,7 @@
       <HintPath>..\sdk\Augusta\Augusta_parse.dll</HintPath>
     </Reference>
     <Reference Include="CommonInterface">
-      <HintPath>..\CommonInterface\bin\Debug\CommonInterface.dll</HintPath>
+      <HintPath>..\CommonInterface\bin\Release\CommonInterface.dll</HintPath>
     </Reference>
     <Reference Include="HidLibrary, Version=3.2.46.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\hidlibrary.3.2.46.0\lib\HidLibrary.dll</HintPath>
@@ -84,7 +84,7 @@
       <HintPath>..\sdk\NEOII\L100_pin.dll</HintPath>
     </Reference>
     <Reference Include="LoggerManager">
-      <HintPath>..\LoggerManager\bin\Debug\LoggerManager.dll</HintPath>
+      <HintPath>..\LoggerManager\bin\Release\LoggerManager.dll</HintPath>
     </Reference>
     <Reference Include="NEO2_config">
       <HintPath>..\sdk\NEOII\NEO2_config.dll</HintPath>

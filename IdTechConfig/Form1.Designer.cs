@@ -122,6 +122,7 @@
             this.AdvancedtabPage = new System.Windows.Forms.TabPage();
             this.FirmwarepicBoxWait = new System.Windows.Forms.PictureBox();
             this.AdvancedLogginggroupBox1 = new System.Windows.Forms.GroupBox();
+            this.AdvancedLoggingradioButtonNone = new System.Windows.Forms.RadioButton();
             this.AdvancedLoggingradioButtonDebug = new System.Windows.Forms.RadioButton();
             this.AdvancedLoggingradioButtonInfo = new System.Windows.Forms.RadioButton();
             this.lblFirmwareVersion = new System.Windows.Forms.Label();
@@ -129,7 +130,6 @@
             this.FirmwareConfigurationPanel1label1 = new System.Windows.Forms.Label();
             this.FirmwareprogressBar1 = new System.Windows.Forms.ProgressBar();
             this.FirmwareopenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.AdvancedLoggingradioButtonNone = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpicBoxMain)).BeginInit();
             this.JsontabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.JsonpicBoxWait)).BeginInit();
@@ -1181,18 +1181,6 @@
             this.AdvancedLogginggroupBox1.TabStop = false;
             this.AdvancedLogginggroupBox1.Text = "LOGGING LEVEL";
             // 
-            // AdvancedLoggingradioButtonDebug
-            // 
-            this.AdvancedLoggingradioButtonDebug.AutoSize = true;
-            this.AdvancedLoggingradioButtonDebug.Location = new System.Drawing.Point(172, 32);
-            this.AdvancedLoggingradioButtonDebug.Name = "AdvancedLoggingradioButtonDebug";
-            this.AdvancedLoggingradioButtonDebug.Size = new System.Drawing.Size(63, 17);
-            this.AdvancedLoggingradioButtonDebug.TabIndex = 1;
-            this.AdvancedLoggingradioButtonDebug.TabStop = true;
-            this.AdvancedLoggingradioButtonDebug.Text = "DEBUG";
-            this.AdvancedLoggingradioButtonDebug.UseVisualStyleBackColor = true;
-            this.AdvancedLoggingradioButtonDebug.CheckedChanged += new System.EventHandler(this.OnSetLoggerLevel);
-            // 
             // AdvancedLoggingradioButtonNone
             // 
             this.AdvancedLoggingradioButtonNone.AutoSize = true;
@@ -1204,6 +1192,18 @@
             this.AdvancedLoggingradioButtonNone.Text = "NONE";
             this.AdvancedLoggingradioButtonNone.UseVisualStyleBackColor = true;
             this.AdvancedLoggingradioButtonNone.CheckedChanged += new System.EventHandler(this.OnSetLoggerLevel);
+            // 
+            // AdvancedLoggingradioButtonDebug
+            // 
+            this.AdvancedLoggingradioButtonDebug.AutoSize = true;
+            this.AdvancedLoggingradioButtonDebug.Location = new System.Drawing.Point(172, 32);
+            this.AdvancedLoggingradioButtonDebug.Name = "AdvancedLoggingradioButtonDebug";
+            this.AdvancedLoggingradioButtonDebug.Size = new System.Drawing.Size(63, 17);
+            this.AdvancedLoggingradioButtonDebug.TabIndex = 1;
+            this.AdvancedLoggingradioButtonDebug.TabStop = true;
+            this.AdvancedLoggingradioButtonDebug.Text = "DEBUG";
+            this.AdvancedLoggingradioButtonDebug.UseVisualStyleBackColor = true;
+            this.AdvancedLoggingradioButtonDebug.CheckedChanged += new System.EventHandler(this.OnSetLoggerLevel);
             // 
             // AdvancedLoggingradioButtonInfo
             // 
@@ -1417,7 +1417,7 @@
     private System.Windows.Forms.TextBox JsontextBox1;
     private System.Windows.Forms.Button JsonbuttonClose;
     private System.Windows.Forms.PictureBox JsonpicBoxWait;
-    // TAB: FIRMWARE
+    // TAB: ADVANCED
     private System.Windows.Forms.TabPage AdvancedtabPage;
     private System.Windows.Forms.Button btnFirmwareUpdate;
     private System.Windows.Forms.Label lblFirmwareVersion;

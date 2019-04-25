@@ -47,31 +47,35 @@ namespace IPA.CommonInterface.Helpers
         {
             using(MemoryStream output = new MemoryStream())
             { 
-                using (DeflateStream dstream = new DeflateStream(output, CompressionLevel.Optimal))
+                using (var dstream = new DeflateStream(output, CompressionLevel.Optimal))
                 {
-                    dstream.Write(data, 0, data.Length);
+                    using (var writer = new BinaryWriter(dstream, System.Text.Encoding.GetEncoding(437)))
+                    { 
+                        writer.Write(data, 0, data.Length);
+                    }
                 }
                 return output.ToArray();
             }
-            /*using (MemoryStream memory = new MemoryStream())
-            {
-                using (GZipStream gzip = new GZipStream(memory, CompressionMode.Compress, true))
-                {
-                    gzip.Write(data, 0, data.Length);
-                }
-                return memory.ToArray();
-            }*/
         }
 
         public static byte[] SystemDecompress(byte[] data)
         {
-            MemoryStream input = new MemoryStream(data);
-            MemoryStream output = new MemoryStream();
-            using (DeflateStream dstream = new DeflateStream(input, CompressionMode.Decompress))
-            {
-                dstream.CopyTo(output);
+            using(MemoryStream input = new MemoryStream(data))
+            { 
+                using(MemoryStream output = new MemoryStream())
+                { 
+                    using (var dstream = new DeflateStream(input, CompressionMode.Decompress))
+                    {
+                        using (var reader = new BinaryReader(dstream, System.Text.Encoding.GetEncoding(437)))
+                        {
+                            //reader.ReadToEnd();
+                            dstream.CopyTo(output);
+                            dstream.Close();
+                        }
+                    }
+                    return output.ToArray();
+                }
             }
-            return output.ToArray();
         }
 
         public static string Compress(string data)

@@ -6,7 +6,6 @@ This an application to Configure IDTech Devices.
 
 * Quick summary
 * Version
-* git remote add origin https://github.com/web-projects/SPHERE_IDTECH.git
 
 ### How do I get set up? ###
 
@@ -34,4 +33,4 @@ This an application to Configure IDTech Devices.
 * 20190415 - Implemented serial number tag 9F1E in compressed form.
            - Update AppSettings after logging option change.
 * 20190417 - Added initial unit tests.
-           
+* 20190425 - Added Advanced tab logging option.

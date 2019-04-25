@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonInterface">
-      <HintPath>..\CommonInterface\bin\Debug\CommonInterface.dll</HintPath>
+      <HintPath>..\CommonInterface\bin\Release\CommonInterface.dll</HintPath>
     </Reference>
     <Reference Include="HidLibrary, Version=3.2.46.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\hidlibrary.3.2.46.0\lib\HidLibrary.dll</HintPath>
@@ -41,7 +41,7 @@
       <HintPath>..\sdk\IDTechSDK.dll</HintPath>
     </Reference>
     <Reference Include="LoggerManager">
-      <HintPath>..\LoggerManager\bin\Debug\LoggerManager.dll</HintPath>
+      <HintPath>..\LoggerManager\bin\Release\LoggerManager.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

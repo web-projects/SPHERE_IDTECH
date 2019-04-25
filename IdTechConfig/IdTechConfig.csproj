@@ -85,7 +85,7 @@
       <HintPath>..\sdk\NEOII\L100_pin.dll</HintPath>
     </Reference>
     <Reference Include="LoggerManager">
-      <HintPath>..\LoggerManager\bin\Debug\LoggerManager.dll</HintPath>
+      <HintPath>..\LoggerManager\bin\Release\LoggerManager.dll</HintPath>
     </Reference>
     <Reference Include="NEO2_config">
       <HintPath>..\sdk\NEOII\NEO2_config.dll</HintPath>

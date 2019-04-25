@@ -74,6 +74,7 @@ namespace IPA.MainApp
         bool isNonAugusta;
 
         DEV_USB_MODE dev_usb_mode;
+        int loggingLevels;
 
         // Timers
         Stopwatch stopWatch;
@@ -219,16 +220,15 @@ namespace IPA.MainApp
                     string path = System.IO.Directory.GetCurrentDirectory(); 
                     string filepath = path + "\\" + logname;
 
-                    int levels = 0;
                     foreach(var item in logLevels)
                     {
                         foreach(var level in LogLevels.LogLevelsDictonary.Where(x => x.Value.Equals(item)).Select(x => x.Key))
                         {
-                            levels += (int)level;
+                            loggingLevels += (int)level;
                         }
                     }
 
-                    Logger.SetFileLoggerConfiguration(filepath, levels);
+                    Logger.SetFileLoggerConfiguration(filepath, loggingLevels);
                     Logger.info( "{0} VERSION {1}.", System.IO.Path.GetFileNameWithoutExtension(fullName).ToUpper(), Assembly.GetEntryAssembly().GetName().Version);
                 }
             }
@@ -2443,12 +2443,40 @@ namespace IPA.MainApp
                     this.RawModetxtCommand.Focus();
                 }));
             }
-            else if (MaintabControl.SelectedTab?.Name.Equals("FirmwaretabPage") ?? false)
+            else if (MaintabControl.SelectedTab?.Name.Equals("AdvancedtabPage") ?? false)
             {
+                int logLevel = Logger.GetFileLoggerLevel();
+                if(logLevel == (int)LOGLEVELS.ALL)
+                {
+                    logLevel = (int)LOGLEVELS.DEBUG;
+                }
+                else if(logLevel > (int)LOGLEVELS.INFO)
+                {
+                    logLevel = (int)LOGLEVELS.INFO;
+                }
                 // Configuration Mode
                 this.Invoke(new MethodInvoker(() =>
                 {
                     ConfigurationGROUPStabPagecomboBox1.SelectedIndex = -1;
+                    switch(logLevel)
+                    {
+                        case (int)LOGLEVELS.NONE:
+                        {
+                            this.AdvancedLoggingradioButtonNone.Checked = true;
+                            break;
+                        }
+                        case (int)LOGLEVELS.INFO:
+                        {
+                            this.AdvancedLoggingradioButtonInfo.Checked = true;
+                            break;
+                        }
+                        case (int)LOGLEVELS.DEBUG:
+                        {
+                            this.AdvancedLoggingradioButtonDebug.Checked = true;
+                            break;
+                        }
+                    }
+
                 }));
             }
         }
@@ -2498,7 +2526,7 @@ namespace IPA.MainApp
                     { 
                         Logger.SetFileLoggerLevel((int)LOGLEVELS.INFO);
                         Logger.info("LOGGING LEVEL SET TO INFO.");
-                        UpdateAppSetting("IPA.DAL.Application.Client.LogLevel", "INFO|WARNING|ERROR|FATAL");
+                        UpdateAppSetting("IPA.DAL.Application.Client.LogLevel", "FATAL|ERROR|WARNING|INFO");
                         break;
                     }
 
@@ -2506,7 +2534,7 @@ namespace IPA.MainApp
                     { 
                         Logger.SetFileLoggerLevel((int)LOGLEVELS.DEBUG);
                         Logger.info("LOGGING LEVEL SET TO DEBUG.");
-                        UpdateAppSetting("IPA.DAL.Application.Client.LogLevel", "DEBUG|INFO|WARNING|ERROR|FATAL");
+                        UpdateAppSetting("IPA.DAL.Application.Client.LogLevel", "FATAL|ERROR|WARNING|INFO|DEBUG");
                         break;
                     }
                 }

@@ -40,16 +40,16 @@
   <ItemGroup>
     <Reference Include="CommonInterface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\CommonInterface\bin\Debug\CommonInterface.dll</HintPath>
+      <HintPath>..\CommonInterface\bin\Release\CommonInterface.dll</HintPath>
     </Reference>
     <Reference Include="DAL">
-      <HintPath>..\DAL\bin\Debug\DAL.dll</HintPath>
+      <HintPath>..\DAL\bin\Release\DAL.dll</HintPath>
     </Reference>
     <Reference Include="DeviceConfiguration">
-      <HintPath>..\DeviceConfiguration\bin\Debug\DeviceConfiguration.dll</HintPath>
+      <HintPath>..\DeviceConfiguration\bin\Release\DeviceConfiguration.dll</HintPath>
     </Reference>
     <Reference Include="LoggerManager">
-      <HintPath>..\LoggerManager\bin\Debug\LoggerManager.dll</HintPath>
+      <HintPath>..\LoggerManager\bin\Release\LoggerManager.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.4.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
