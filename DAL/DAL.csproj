@@ -61,9 +61,6 @@
     <Reference Include="Augusta_parse">
       <HintPath>..\sdk\Augusta\Augusta_parse.dll</HintPath>
     </Reference>
-    <Reference Include="CommonInterface">
-      <HintPath>..\CommonInterface\bin\Release\CommonInterface.dll</HintPath>
-    </Reference>
     <Reference Include="HidLibrary, Version=3.2.46.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\hidlibrary.3.2.46.0\lib\HidLibrary.dll</HintPath>
     </Reference>
@@ -82,9 +79,6 @@
     </Reference>
     <Reference Include="L100_pin">
       <HintPath>..\sdk\NEOII\L100_pin.dll</HintPath>
-    </Reference>
-    <Reference Include="LoggerManager">
-      <HintPath>..\LoggerManager\bin\Release\LoggerManager.dll</HintPath>
     </Reference>
     <Reference Include="NEO2_config">
       <HintPath>..\sdk\NEOII\NEO2_config.dll</HintPath>
@@ -222,6 +216,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NEO2_Devices.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonInterface\CommonInterface.csproj">
+      <Project>{88da37a0-8e42-45c4-81d5-e89cd6c83816}</Project>
+      <Name>CommonInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoggerManager\LoggerManager.csproj">
+      <Project>{a0695e15-75a1-48a1-8ff4-35b78dd7eff5}</Project>
+      <Name>LoggerManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

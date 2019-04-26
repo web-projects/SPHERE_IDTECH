@@ -84,9 +84,6 @@
     <Reference Include="L100_pin">
       <HintPath>..\sdk\NEOII\L100_pin.dll</HintPath>
     </Reference>
-    <Reference Include="LoggerManager">
-      <HintPath>..\LoggerManager\bin\Release\LoggerManager.dll</HintPath>
-    </Reference>
     <Reference Include="NEO2_config">
       <HintPath>..\sdk\NEOII\NEO2_config.dll</HintPath>
     </Reference>
@@ -240,6 +237,10 @@
     <ProjectReference Include="..\CommonInterface\CommonInterface.csproj">
       <Project>{88da37a0-8e42-45c4-81d5-e89cd6c83816}</Project>
       <Name>CommonInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoggerManager\LoggerManager.csproj">
+      <Project>{a0695e15-75a1-48a1-8ff4-35b78dd7eff5}</Project>
+      <Name>LoggerManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{165d403c-205d-4302-978d-234981f456c8}</Project>

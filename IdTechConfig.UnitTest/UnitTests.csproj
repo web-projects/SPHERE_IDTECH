@@ -38,19 +38,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommonInterface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\CommonInterface\bin\Release\CommonInterface.dll</HintPath>
-    </Reference>
-    <Reference Include="DAL">
-      <HintPath>..\DAL\bin\Release\DAL.dll</HintPath>
-    </Reference>
-    <Reference Include="DeviceConfiguration">
-      <HintPath>..\DeviceConfiguration\bin\Release\DeviceConfiguration.dll</HintPath>
-    </Reference>
-    <Reference Include="LoggerManager">
-      <HintPath>..\LoggerManager\bin\Release\LoggerManager.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.4.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
@@ -77,6 +64,28 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommonInterface\CommonInterface.csproj">
+      <Project>{88da37a0-8e42-45c4-81d5-e89cd6c83816}</Project>
+      <Name>CommonInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoggerManager\LoggerManager.csproj">
+      <Project>{a0695e15-75a1-48a1-8ff4-35b78dd7eff5}</Project>
+      <Name>LoggerManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{165d403c-205d-4302-978d-234981f456c8}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceConfiguration\DeviceConfiguration.csproj">
+      <Project>{d03b9c37-6bff-4e70-bb0e-c4dea43621c8}</Project>
+      <Name>DeviceConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IdTechConfig\IdTechConfig.csproj">
+      <Project>{62af8551-65f6-4570-917a-177eaeb9539c}</Project>
+      <Name>IdTechConfig</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

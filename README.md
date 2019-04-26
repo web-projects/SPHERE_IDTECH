@@ -34,3 +34,4 @@ This an application to Configure IDTech Devices.
            - Update AppSettings after logging option change.
 * 20190417 - Added initial unit tests.
 * 20190425 - Added Advanced tab logging option.
+* 20190426 - Cleaned up projects dependencies.
