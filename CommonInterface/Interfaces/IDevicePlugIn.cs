@@ -37,7 +37,7 @@ namespace IPA.CommonInterface.Interfaces
     // Configuration Mode
     void SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes mode);
     // TERMINAL DATA
-    void  GetSphereTerminalData();
+    void  GetSphereTerminalData(int majorcfg);
     // AID
     void GetAIDList();
     // CAPK
@@ -48,6 +48,6 @@ namespace IPA.CommonInterface.Interfaces
     // Firmware is Updating
     bool FirmwareIsUpdating();
     // Factory Reset
-    void FactoryReset();
+    void FactoryReset(int majorcfg);
   }
 }

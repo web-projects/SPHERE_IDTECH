@@ -317,9 +317,9 @@ if (deviceID.ToLower().Contains("usb\\") && ((deviceID.Contains($"VID_{IDTECH}")
         #endregion
 
         #region --- SPHERE SERIALIZER ---
-        public string [] GetTerminalData()
+        public string [] GetTerminalData(int majorcfg)
         {
-            return deviceInterface?.GetTerminalData();
+            return deviceInterface?.GetTerminalData(majorcfg);
         }
 
         public void ValidateTerminalData(ref ConfigSphereSerializer serializer)
@@ -364,9 +364,9 @@ if (deviceID.ToLower().Contains("usb\\") && ((deviceID.Contains($"VID_{IDTECH}")
         {
             deviceInterface?.CloseDevice();
         }
-        public void FactoryReset()
+        public void FactoryReset(int majorcfg)
         {
-            deviceInterface?.FactoryReset();
+            deviceInterface?.FactoryReset(majorcfg);
         }
         #endregion
 

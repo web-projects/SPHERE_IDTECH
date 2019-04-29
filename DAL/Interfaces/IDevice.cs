@@ -72,7 +72,7 @@ namespace IPA.DAL.RBADAL.Interfaces
         #endregion
 
         #region --- SPHERE SERIALIZER ---
-        string[] GetTerminalData();
+        string[] GetTerminalData(int majorcfg);
         void ValidateTerminalData(ref ConfigSphereSerializer serializer);
         string [] GetAidList();
         void ValidateAidList(ref ConfigSphereSerializer serializer);
@@ -85,7 +85,7 @@ namespace IPA.DAL.RBADAL.Interfaces
         string[] GetConfigGroup(int group);
         void ValidateConfigGroup(ConfigSphereSerializer serializer, int group);
         void CloseDevice();
-        void FactoryReset();
+        void FactoryReset(int majorcfg);
         #endregion
     }
 }

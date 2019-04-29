@@ -1840,7 +1840,7 @@ if(empty)
         #endregion
 
         #region --- SPHERE SERIALIZER ---
-        public virtual string [] GetTerminalData()
+        public virtual string [] GetTerminalData(int majorcfgint)
         {
             return null;
         }
@@ -1882,7 +1882,7 @@ if(empty)
         public virtual void CloseDevice()
         {
         }
-        public virtual void FactoryReset()
+        public virtual void FactoryReset(int majorcfg)
         {
         }
         #endregion

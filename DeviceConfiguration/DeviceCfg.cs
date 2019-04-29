@@ -2723,14 +2723,14 @@ namespace IPA.DAL.RBADAL
         }
     }
 
-    public void GetSphereTerminalData()
+    public void GetSphereTerminalData(int majorcfg)
     {
         try
         { 
             string [] message = { "" };
             if(configurationMode == ConfigurationModes.FROM_DEVICE)
             {
-                message = Device.GetTerminalData();
+                message = Device.GetTerminalData(majorcfg);
             }
             else
             {
@@ -2984,11 +2984,11 @@ namespace IPA.DAL.RBADAL
         {
             return firmwareUpdate;
         }
-        public void FactoryReset()
+        public void FactoryReset(int majorcfg)
         {
             try
             {
-                Device.FactoryReset();
+                Device.FactoryReset(majorcfg);
             }
             catch (Exception ex)
             {

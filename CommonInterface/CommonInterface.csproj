@@ -60,6 +60,7 @@
     <Compile Include="ConfigSphere\ConfigSphereSerializer.cs" />
     <Compile Include="ConfigSphere\Configuration\Aid.cs" />
     <Compile Include="ConfigSphere\Configuration\Capk.cs" />
+    <Compile Include="ConfigSphere\Configuration\ConfigurationID.cs" />
     <Compile Include="ConfigSphere\Configuration\Msr.cs" />
     <Compile Include="ConfigSphere\Configuration\MsrConfigItem.cs" />
     <Compile Include="ConfigSphere\Configuration\TerminalConfiguration.cs" />

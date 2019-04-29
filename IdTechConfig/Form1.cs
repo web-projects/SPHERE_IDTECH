@@ -24,6 +24,8 @@ using IPA.DAL.RBADAL.Services;
 using System.Configuration;
 using System.Reflection;
 using IPA.DAL.RBADAL;
+using IPA.CommonInterface.ConfigSphere.Configuration;
+using System.Text.RegularExpressions;
 
 namespace IPA.MainApp
 {
@@ -1322,6 +1324,8 @@ namespace IPA.MainApp
                 // Invoker with Parameter(s)
                 MethodInvoker mi = () =>
                 {
+                    this.ConfigurationIDgrpBox.Visible = false;
+
                     try
                     {
                         string [] data = ((IEnumerable) payload)?.Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray() ?? null;
@@ -1380,6 +1384,22 @@ namespace IPA.MainApp
                                         tabControlConfiguration.TabPages.Remove(ConfigurationGROUPStabPage);
                                     }
                                     this.ConfigurationGROUPStabPage.Enabled = false;
+                                }
+
+                                // Set ConfigurationID
+                                if(this.radioLoadFromFile.Checked)
+                                {
+                                    ConfigurationID configurationID = devicePlugin?.GetConfigSphereSerializer().GetConfigurationID();
+
+                                    // Update Configuration File
+                                    if(configurationID != null)
+                                    {
+                                        this.ConfigurationPlatform.Text = configurationID.Platform;
+                                        this.ConfigurationEnvironment.Text = configurationID.CardEnvironment;
+                                        this.ConfigurationEntryModelbl.Text = configurationID.EntryModes.FirstOrDefault();
+                                        this.ConfigurationIDgrpBox.Visible = true;
+                                    }
+
                                 }
                             }
                             else
@@ -2027,8 +2047,12 @@ namespace IPA.MainApp
                     new Thread(() => 
                     {
                         try 
-                        { 
-                            Thread.CurrentThread.IsBackground = true; devicePlugin. GetSphereTerminalData(); 
+                        {
+                            TerminalSettings termsettings = devicePlugin?.GetConfigSphereSerializer()?.GetTerminalSettings();
+                            string workerstr = termsettings?.MajorConfiguration ?? "5C";
+                            string majorcfgstr = Regex.Replace(workerstr, "[^0-9.]", string.Empty);
+                            int majorcfgint = Convert.ToUInt16(majorcfgstr);
+                            Thread.CurrentThread.IsBackground = true; devicePlugin. GetSphereTerminalData(majorcfgint); 
                         }
                         catch(Exception)
                         {
@@ -2160,6 +2184,7 @@ namespace IPA.MainApp
         {
             this.Invoke(new MethodInvoker(() =>
             {
+                this.ConfigurationIDgrpBox.Visible = false;
                 this.ConfigurationPanel1btnDeviceMode.Enabled = false;
                 this.ConfigurationPanel1btnEMVMode.Enabled = false;
                 if (this.ConfigurationCollapseButton.Visible)
@@ -2177,7 +2202,13 @@ namespace IPA.MainApp
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
-                devicePlugin.FactoryReset();
+
+                TerminalSettings termsettings = devicePlugin?.GetConfigSphereSerializer()?.GetTerminalSettings();
+                string workerstr = termsettings?.MajorConfiguration ?? "5C";
+                string majorcfgstr = Regex.Replace(workerstr, "[^0-9.]", string.Empty);
+                int majorcfgint = Convert.ToUInt16(majorcfgstr);
+                devicePlugin.FactoryReset(majorcfgint);
+
                 // Load Configuration from DEVICE
                 devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_DEVICE);
                 this.Invoke(new MethodInvoker(() =>
@@ -2290,10 +2321,10 @@ namespace IPA.MainApp
         /**************************************************************************/
         #region -- settings tab --
 
-        public List<MsrConfigItem> configExpirationMask;
-        public List<MsrConfigItem> configPanDigits;
-        public List<MsrConfigItem> configSwipeForceEncryption;
-        public List<MsrConfigItem> configSwipeMask;
+        public List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem> configExpirationMask;
+        public List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem> configPanDigits;
+        public List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem> configSwipeForceEncryption;
+        public List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem> configSwipeMask;
 
         public static void SetDeviceConfig(IDevicePlugIn devicePlugin, object payload)
         {
@@ -2622,32 +2653,32 @@ namespace IPA.MainApp
             }));
 
             // EXPIRATION MASK
-            configExpirationMask = new List<MsrConfigItem>
+            configExpirationMask = new List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem>
             {
-                { new MsrConfigItem() { Name="expirationmask", Id=(int)EXPIRATION_MASK.MASK, Value=string.Format("{0}", this.SettingscBxExpirationMask.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="expirationmask", Id=(int)CommonInterface.ConfigIDTech.Configuration.EXPIRATION_MASK.MASK, Value=string.Format("{0}", this.SettingscBxExpirationMask.Checked.ToString()) }},
             };
 
             // PAN DIGITS
-            configPanDigits = new List<MsrConfigItem>
+            configPanDigits = new List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem>
             {
-            { new MsrConfigItem() { Name="digits", Id=(int)PAN_DIGITS.DIGITS, Value=string.Format("{0}", this.SettingstxtPAN.Text) }},
+            { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="digits", Id=(int)CommonInterface.ConfigIDTech.Configuration.PAN_DIGITS.DIGITS, Value=string.Format("{0}", this.SettingstxtPAN.Text) }},
             };
 
             // SWIPE FORCE
-            configSwipeForceEncryption = new List<MsrConfigItem>
+            configSwipeForceEncryption = new List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem>
             {
-                { new MsrConfigItem() { Name="track1",      Id=(int)SWIPE_FORCE_ENCRYPTION.TRACK1, Value=string.Format("{0}",      this.SettingscBxTrack1.Checked.ToString()) }},
-                { new MsrConfigItem() { Name="track2",      Id=(int)SWIPE_FORCE_ENCRYPTION.TRACK2, Value=string.Format("{0}",      this.SettingscBxTrack2.Checked.ToString()) }},
-                { new MsrConfigItem() { Name="track3",      Id=(int)SWIPE_FORCE_ENCRYPTION.TRACK3, Value=string.Format("{0}",      this.SettingscBxTrack3.Checked.ToString()) }},
-                { new MsrConfigItem() { Name="track3Card0", Id=(int)SWIPE_FORCE_ENCRYPTION.TRACK3CARD0, Value=string.Format("{0}", this.SettingscBxTrack3Card0.Checked.ToString()) }}
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track1",      Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK1, Value=string.Format("{0}",      this.SettingscBxTrack1.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track2",      Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK2, Value=string.Format("{0}",      this.SettingscBxTrack2.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track3",      Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK3, Value=string.Format("{0}",      this.SettingscBxTrack3.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track3Card0", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK3CARD0, Value=string.Format("{0}", this.SettingscBxTrack3Card0.Checked.ToString()) }}
             };
 
             // SWIPE MASK
-            configSwipeMask = new List<MsrConfigItem>
+            configSwipeMask = new List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem>
             {
-                { new MsrConfigItem() { Name="track1", Id=(int)SWIPE_MASK.TRACK1, Value=string.Format("{0}", this.SettingscBxSwipeMaskTrack1.Checked.ToString()) }},
-                { new MsrConfigItem() { Name="track2", Id=(int)SWIPE_MASK.TRACK2, Value=string.Format("{0}", this.SettingscBxSwipeMaskTrack2.Checked.ToString()) }},
-                { new MsrConfigItem() { Name="track3", Id=(int)SWIPE_MASK.TRACK3, Value=string.Format("{0}", this.SettingscBxSwipeMaskTrack3.Checked.ToString()) }}
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track1", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_MASK.TRACK1, Value=string.Format("{0}", this.SettingscBxSwipeMaskTrack1.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track2", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_MASK.TRACK2, Value=string.Format("{0}", this.SettingscBxSwipeMaskTrack2.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track3", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_MASK.TRACK3, Value=string.Format("{0}", this.SettingscBxSwipeMaskTrack3.Checked.ToString()) }}
             };
 
             // Build Payload Package

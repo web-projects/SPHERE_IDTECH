@@ -24,6 +24,7 @@ namespace IPA.CommonInterface.ConfigSphere
         
         // Accessors
         private DeviceConfiguration DeviceConfig;
+        private ConfigurationID configurationID = new ConfigurationID();
         private string[] md = new string[0];
         private AIDList aid = new AIDList();
         private CAPKList capk = new CAPKList();
@@ -108,6 +109,11 @@ namespace IPA.CommonInterface.ConfigSphere
         public SortedDictionary<string, string> GetTerminalData(string serialNumber, string EMVKernelVer)
         {
             return GetAllTerminalData(serialNumber, EMVKernelVer);
+        }
+
+        public ConfigurationID GetConfigurationID()
+        { 
+            return configurationID;
         }
 
         public string[] GetTerminalDataString(string serialNumber, string EMVKernelVer)
@@ -301,19 +307,23 @@ namespace IPA.CommonInterface.ConfigSphere
                 {
                     // devConfig
                     DeviceConfig = terminalCfg.Configuration.First();
+                    // ConfigurationID
+                    configurationID = DeviceConfig.ConfigurationID;
                     // Manufacturer
-                    Debug.WriteLine("device configuration: manufacturer ----------------: [{0}]", (object) DeviceConfig.ConfigurationID.Manufacturer);
+                    Debug.WriteLine("device configuration: manufacturer ----------------: [{0}]", (object) configurationID.Manufacturer);
                     // Models
-                    md = DeviceConfig.ConfigurationID.Models;
+                    md = configurationID.Models;
                     //DisplayCollection(mf.modelFirmware, "modelFirmware");
+                    // EMVConfiguration
+                    emvConfiguration = DeviceConfig.EMVConfiguration;
                     // AID List
-                    aid.Aid = DeviceConfig.EMVConfiguration.AIDList;
+                    aid.Aid = emvConfiguration.AIDList;
                     //DisplayCollection(aid.Aid, "AIDList");
                     // CAPK List
-                    capk.CAPK = DeviceConfig.EMVConfiguration.CAPKList;
+                    capk.CAPK = emvConfiguration.CAPKList;
                     //DisplayCollection(capk.Capk, "CapkList");
                     // Terminal Settings
-                    termSettings = DeviceConfig.EMVConfiguration.TerminalSettings;
+                    termSettings = emvConfiguration.TerminalSettings;
                     //Debug.WriteLine("device configuration: Terminal Settings --------------");
                     //Debug.WriteLine("MajorConfiguration        : {0}", (object) termSettings.MajorConfiguration);
                     //Debug.WriteLine("MajorConfigurationChecksum: {0}", (object) termSettings.MajorConfigurationChecksum[0]);

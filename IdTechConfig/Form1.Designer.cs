@@ -119,6 +119,13 @@
             this.ConfigurationGroupBox1 = new System.Windows.Forms.GroupBox();
             this.radioLoadFromDevice = new System.Windows.Forms.RadioButton();
             this.radioLoadFromFile = new System.Windows.Forms.RadioButton();
+            this.ConfigurationIDgrpBox = new System.Windows.Forms.GroupBox();
+            this.ConfigurationEntryMode = new System.Windows.Forms.Label();
+            this.ConfigurationEnvironment = new System.Windows.Forms.Label();
+            this.ConfigurationPlatform = new System.Windows.Forms.Label();
+            this.ConfigurationEntryModelbl = new System.Windows.Forms.Label();
+            this.ConfigurationEnvironmentlbl = new System.Windows.Forms.Label();
+            this.ConfigurationPlatformlbl = new System.Windows.Forms.Label();
             this.AdvancedtabPage = new System.Windows.Forms.TabPage();
             this.FirmwarepicBoxWait = new System.Windows.Forms.PictureBox();
             this.AdvancedLogginggroupBox1 = new System.Windows.Forms.GroupBox();
@@ -157,6 +164,7 @@
             this.ConfigurationPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).BeginInit();
             this.ConfigurationGroupBox1.SuspendLayout();
+            this.ConfigurationIDgrpBox.SuspendLayout();
             this.AdvancedtabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirmwarepicBoxWait)).BeginInit();
             this.AdvancedLogginggroupBox1.SuspendLayout();
@@ -1003,6 +1011,7 @@
             // ConfigurationPanel1
             // 
             this.ConfigurationPanel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ConfigurationPanel1.Controls.Add(this.ConfigurationIDgrpBox);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationPanel1pictureBox1);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationPanel1label2);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationPanel1btnDeviceMode);
@@ -1023,9 +1032,9 @@
             // 
             this.ConfigurationPanel1pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ConfigurationPanel1pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationPanel1pictureBox1.Image")));
-            this.ConfigurationPanel1pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.ConfigurationPanel1pictureBox1.Location = new System.Drawing.Point(0, 1);
             this.ConfigurationPanel1pictureBox1.Name = "ConfigurationPanel1pictureBox1";
-            this.ConfigurationPanel1pictureBox1.Size = new System.Drawing.Size(245, 510);
+            this.ConfigurationPanel1pictureBox1.Size = new System.Drawing.Size(245, 511);
             this.ConfigurationPanel1pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.ConfigurationPanel1pictureBox1.TabIndex = 19;
             this.ConfigurationPanel1pictureBox1.TabStop = false;
@@ -1136,6 +1145,76 @@
             this.radioLoadFromFile.Text = "FILE";
             this.radioLoadFromFile.UseVisualStyleBackColor = true;
             this.radioLoadFromFile.CheckedChanged += new System.EventHandler(this.OnLoadFromFile);
+            // 
+            // ConfigurationIDgrpBox
+            // 
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEntryMode);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEntryModelbl);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEnvironment);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEnvironmentlbl);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationPlatform);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationPlatformlbl);
+            this.ConfigurationIDgrpBox.Location = new System.Drawing.Point(7, 292);
+            this.ConfigurationIDgrpBox.Name = "ConfigurationIDgrpBox";
+            this.ConfigurationIDgrpBox.Size = new System.Drawing.Size(203, 209);
+            this.ConfigurationIDgrpBox.TabIndex = 20;
+            this.ConfigurationIDgrpBox.TabStop = false;
+            this.ConfigurationIDgrpBox.Text = "ConfigurationID";
+            this.ConfigurationIDgrpBox.Visible = false;
+            // 
+            // ConfigurationEntryMode
+            // 
+            this.ConfigurationEntryMode.AutoSize = true;
+            this.ConfigurationEntryMode.Location = new System.Drawing.Point(112, 128);
+            this.ConfigurationEntryMode.Name = "ConfigurationEntryMode";
+            this.ConfigurationEntryMode.Size = new System.Drawing.Size(37, 13);
+            this.ConfigurationEntryMode.TabIndex = 5;
+            this.ConfigurationEntryMode.Text = "12345";
+            // 
+            // ConfigurationEnvironment
+            // 
+            this.ConfigurationEnvironment.AutoSize = true;
+            this.ConfigurationEnvironment.Location = new System.Drawing.Point(112, 85);
+            this.ConfigurationEnvironment.Name = "ConfigurationEnvironment";
+            this.ConfigurationEnvironment.Size = new System.Drawing.Size(37, 13);
+            this.ConfigurationEnvironment.TabIndex = 4;
+            this.ConfigurationEnvironment.Text = "12345";
+            // 
+            // ConfigurationPlatform
+            // 
+            this.ConfigurationPlatform.AutoSize = true;
+            this.ConfigurationPlatform.Location = new System.Drawing.Point(112, 37);
+            this.ConfigurationPlatform.Name = "ConfigurationPlatform";
+            this.ConfigurationPlatform.Size = new System.Drawing.Size(37, 13);
+            this.ConfigurationPlatform.TabIndex = 3;
+            this.ConfigurationPlatform.Text = "12345";
+            // 
+            // ConfigurationEntryModelbl
+            // 
+            this.ConfigurationEntryModelbl.AutoSize = true;
+            this.ConfigurationEntryModelbl.Location = new System.Drawing.Point(13, 128);
+            this.ConfigurationEntryModelbl.Name = "ConfigurationEntryModelbl";
+            this.ConfigurationEntryModelbl.Size = new System.Drawing.Size(64, 13);
+            this.ConfigurationEntryModelbl.TabIndex = 2;
+            this.ConfigurationEntryModelbl.Text = "Entry Mode:";
+            // 
+            // ConfigurationEnvironmentlbl
+            // 
+            this.ConfigurationEnvironmentlbl.AutoSize = true;
+            this.ConfigurationEnvironmentlbl.Location = new System.Drawing.Point(13, 85);
+            this.ConfigurationEnvironmentlbl.Name = "ConfigurationEnvironmentlbl";
+            this.ConfigurationEnvironmentlbl.Size = new System.Drawing.Size(69, 13);
+            this.ConfigurationEnvironmentlbl.TabIndex = 1;
+            this.ConfigurationEnvironmentlbl.Text = "Environment:";
+            // 
+            // ConfigurationPlatformlbl
+            // 
+            this.ConfigurationPlatformlbl.AutoSize = true;
+            this.ConfigurationPlatformlbl.Location = new System.Drawing.Point(13, 37);
+            this.ConfigurationPlatformlbl.Name = "ConfigurationPlatformlbl";
+            this.ConfigurationPlatformlbl.Size = new System.Drawing.Size(48, 13);
+            this.ConfigurationPlatformlbl.TabIndex = 0;
+            this.ConfigurationPlatformlbl.Text = "Platform:";
             // 
             // AdvancedtabPage
             // 
@@ -1305,6 +1384,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).EndInit();
             this.ConfigurationGroupBox1.ResumeLayout(false);
             this.ConfigurationGroupBox1.PerformLayout();
+            this.ConfigurationIDgrpBox.ResumeLayout(false);
+            this.ConfigurationIDgrpBox.PerformLayout();
             this.AdvancedtabPage.ResumeLayout(false);
             this.AdvancedtabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.FirmwarepicBoxWait)).EndInit();
@@ -1357,6 +1438,13 @@
     private System.Windows.Forms.Button ConfigurationCollapseButton;
     private System.Windows.Forms.Button ConfigurationExpandButton;
     private System.Windows.Forms.PictureBox ConfigurationPanel1pictureBox1;
+    private System.Windows.Forms.GroupBox ConfigurationIDgrpBox;
+    private System.Windows.Forms.Label ConfigurationEntryMode;
+    private System.Windows.Forms.Label ConfigurationEnvironment;
+    private System.Windows.Forms.Label ConfigurationPlatform;
+    private System.Windows.Forms.Label ConfigurationEntryModelbl;
+    private System.Windows.Forms.Label ConfigurationEnvironmentlbl;
+    private System.Windows.Forms.Label ConfigurationPlatformlbl;
     // SUB-TAB: TERMINAL DATA
     private System.Windows.Forms.TabPage ConfigurationTerminalDatatabPage;
     private System.Windows.Forms.ListView ConfigurationTerminalDatalistView;

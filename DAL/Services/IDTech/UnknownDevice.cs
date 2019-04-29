@@ -281,7 +281,7 @@ namespace IPA.DAL.RBADAL.Services
         #endregion
 
         #region --- SPHERE SERIALIZER ---
-        public virtual string [] GetTerminalData()
+        public virtual string [] GetTerminalData(int majorcfgint)
         {
             return null;
         }
@@ -324,7 +324,7 @@ namespace IPA.DAL.RBADAL.Services
         public virtual void CloseDevice()
         {
         }
-        public virtual void FactoryReset()
+        public virtual void FactoryReset(int majorcfg)
         {
         }
         #endregion
