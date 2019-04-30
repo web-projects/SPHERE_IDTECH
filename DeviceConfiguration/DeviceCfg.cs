@@ -2605,6 +2605,11 @@ namespace IPA.DAL.RBADAL
                     response = TerminalMajorConfiguration.CONFIG_2C;
                     break;
                 }
+                case TerminalMajorConfiguration.TERMCFG_4:
+                {
+                    response = TerminalMajorConfiguration.CONFIG_4C;
+                    break;
+                }
                 case TerminalMajorConfiguration.TERMCFG_5:
                 {
                     response = TerminalMajorConfiguration.CONFIG_5C;
@@ -2895,112 +2900,112 @@ namespace IPA.DAL.RBADAL
         return message;
     }
 
-        public void FirmwareUpdate(string fullPathfilename, byte[] bytes)
+    public void FirmwareUpdate(string fullPathfilename, byte[] bytes)
+    {
+        try
         {
-            try
+            if (bytes.Length > 0)
             {
-                if (bytes.Length > 0)
+                /*TODO: GUI UNIT TEST
+                new Thread(() =>
                 {
-                    /*TODO: GUI UNIT TEST
-                    new Thread(() =>
+                    Thread.CurrentThread.IsBackground = false;
+
+                    for(int i = 1; i <= bytes.Length / 1024; i++)
                     {
-                        Thread.CurrentThread.IsBackground = false;
-
-                        for(int i = 1; i <= bytes.Length / 1024; i++)
-                        {
-                            Debug.WriteLine("device: sent block {0} of {1}", i.ToString(), (bytes.Length / 1024).ToString());
-                            string [] message = { i.ToString() };
-                            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STEP, Message = message });
-                            Thread.Sleep(10);
-                        }
-                        Thread.Sleep(1000);
-                        SetDeviceFirmwareVersion();
-                    }).Start();
-
-                    return;*/
-
-                    // Validate FW Signature
-                    byte[] FirmwareSignature = new byte[64];
-                    Array.Copy(bytes, 64, FirmwareSignature, 0, 32);
-                    DeviceFirmwareSignature Signature = new DeviceFirmwareSignature();
-                    Dictionary<string, string> Values = Common.processTLVUnencrypted(FirmwareSignature);
-
-                    foreach (var Item in Values)
-                    {
-                        switch (Int32.Parse(Item.Key))
-                        {
-                            case (int)DeviceFirmwareSignature.SignatureIndex.SIG_VERSION:
-                            {
-                                Signature.Version = Common.hexStringToString(Item.Value);
-                                break;
-                            }
-
-                            case (int)DeviceFirmwareSignature.SignatureIndex.SIG_MODELNAME:
-                            {
-                                Signature.ModelName = Common.hexStringToString(Item.Value);
-                                break;
-                            }
-
-                            case (int)DeviceFirmwareSignature.SignatureIndex.SIG_TYPE:
-                            {
-                                Signature.Type = Item.Value;
-                                break;
-                            }
-                        }
+                        Debug.WriteLine("device: sent block {0} of {1}", i.ToString(), (bytes.Length / 1024).ToString());
+                        string [] message = { i.ToString() };
+                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STEP, Message = message });
+                        Thread.Sleep(10);
                     }
+                    Thread.Sleep(1000);
+                    SetDeviceFirmwareVersion();
+                }).Start();
 
-                    foreach (var ModelName in Signature.Devices.Where(x => x.Key.Equals(deviceInformation.ModelName, StringComparison.CurrentCultureIgnoreCase)).Select(y => y.Value))
+                return;*/
+
+                // Validate FW Signature
+                byte[] FirmwareSignature = new byte[64];
+                Array.Copy(bytes, 64, FirmwareSignature, 0, 32);
+                DeviceFirmwareSignature Signature = new DeviceFirmwareSignature();
+                Dictionary<string, string> Values = Common.processTLVUnencrypted(FirmwareSignature);
+
+                foreach (var Item in Values)
+                {
+                    switch (Int32.Parse(Item.Key))
                     {
-                        if (ModelName.Equals(Signature.ModelName, StringComparison.CurrentCultureIgnoreCase))
+                        case (int)DeviceFirmwareSignature.SignatureIndex.SIG_VERSION:
                         {
-                            RETURN_CODE rt = IDT_Device.SharedController.device_updateDeviceFirmware(bytes);
-                            if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
-                            {
-                                string filename = System.IO.Path.GetFileName(fullPathfilename);
-                                Logger.debug("device: firmware update started for: {0}", filename);
-                                firmwareUpdate = true;
-                            }
-                            else
-                            {
-                                Logger.error("device: firmware Update Failed Error Code: 0x{0:X}", (ushort)rt);
-                            }
+                            Signature.Version = Common.hexStringToString(Item.Value);
+                            break;
                         }
-                        else
+
+                        case (int)DeviceFirmwareSignature.SignatureIndex.SIG_MODELNAME:
                         {
-                            string[] message = { string.Format("UPDATE FAILED: [{0}] FIRMWARE DOESN'T MATCH DEVICE MODEL {1}", Signature.ModelName, deviceInformation.ModelName) };
-                            Logger.error("device: {0}", message[0]);
-                            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_FAILED, Message = message });
+                            Signature.ModelName = Common.hexStringToString(Item.Value);
+                            break;
+                        }
+
+                        case (int)DeviceFirmwareSignature.SignatureIndex.SIG_TYPE:
+                        {
+                            Signature.Type = Item.Value;
                             break;
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logger.error("device: FirmwareUpdate() - exception={0}", (object)ex.Message);
+
+                foreach (var ModelName in Signature.Devices.Where(x => x.Key.Equals(deviceInformation.ModelName, StringComparison.CurrentCultureIgnoreCase)).Select(y => y.Value))
+                {
+                    if (ModelName.Equals(Signature.ModelName, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        RETURN_CODE rt = IDT_Device.SharedController.device_updateDeviceFirmware(bytes);
+                        if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+                        {
+                            string filename = System.IO.Path.GetFileName(fullPathfilename);
+                            Logger.debug("device: firmware update started for: {0}", filename);
+                            firmwareUpdate = true;
+                        }
+                        else
+                        {
+                            Logger.error("device: firmware Update Failed Error Code: 0x{0:X}", (ushort)rt);
+                        }
+                    }
+                    else
+                    {
+                        string[] message = { string.Format("UPDATE FAILED: [{0}] FIRMWARE DOESN'T MATCH DEVICE MODEL {1}", Signature.ModelName, deviceInformation.ModelName) };
+                        Logger.error("device: {0}", message[0]);
+                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_FAILED, Message = message });
+                        break;
+                    }
+                }
             }
         }
-        public bool FirmwareIsUpdating()
+        catch (Exception ex)
         {
-            return firmwareUpdate;
+            Logger.error("device: FirmwareUpdate() - exception={0}", (object)ex.Message);
         }
-        public void FactoryReset(int majorcfg)
-        {
-            try
-            {
-                Device.FactoryReset(majorcfg);
-            }
-            catch (Exception ex)
-            {
-                Logger.error("device: FactoryReset() - exception={0}", (object)ex.Message);
-            }
-            finally
-            {
-                NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_UI_ENABLE_BUTTONS });
-            }
-        }
-        #endregion
     }
+    public bool FirmwareIsUpdating()
+    {
+        return firmwareUpdate;
+    }
+    public void FactoryReset(int majorcfg)
+    {
+        try
+        {
+            Device.FactoryReset(majorcfg);
+        }
+        catch (Exception ex)
+        {
+            Logger.error("device: FactoryReset() - exception={0}", (object)ex.Message);
+        }
+        finally
+        {
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_UI_ENABLE_BUTTONS });
+        }
+    }
+    #endregion
+  }
 
      #region -- main interface --
      internal class DeviceInformation
@@ -3026,8 +3031,10 @@ namespace IPA.DAL.RBADAL
      internal static class TerminalMajorConfiguration
      {
         internal const string CONFIG_2C = "2C";
+        internal const string CONFIG_4C = "4C";
         internal const string CONFIG_5C = "5C";
         internal const string TERMCFG_2 = "32";
+        internal const string TERMCFG_4 = "34";
         internal const string TERMCFG_5 = "35";
      }
 

@@ -260,7 +260,7 @@ namespace IPA.CommonInterface.ConfigSphere
             string [] result = GetDeviceFirmware(model);
             foreach(var version in result)
             {
-                if(version.Equals(firmware))
+                if(version.Equals(firmware, StringComparison.InvariantCultureIgnoreCase))
                 {
                     matched = true;
                     break;

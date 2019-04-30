@@ -1415,10 +1415,12 @@ namespace IPA.MainApp
                                     {
                                         this.ConfigurationPlatform.Text = configurationID.Platform;
                                         this.ConfigurationEnvironment.Text = configurationID.CardEnvironment;
-                                        this.ConfigurationEntryModelbl.Text = configurationID.EntryModes.FirstOrDefault();
+                                        this.ConfigurationEntryMode.Text = configurationID.EntryModes.FirstOrDefault();
                                         this.ConfigurationIDgrpBox.Visible = true;
                                     }
 
+                                    this.ConfigurationModel.Text = this.ApplicationlblModelNumber.Text;
+                                    this.ConfigurationVersion.Text = this.ApplicationlblFirmwareVersion.Text;
                                 }
                             }
                             else

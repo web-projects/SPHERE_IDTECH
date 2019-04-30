@@ -54,6 +54,13 @@ namespace IPA.DAL.RBADAL.Services
             PopulateDeviceInfo();
         }
 
+        public byte[] CommandRawMode(string command)
+        {
+            byte[] response = null;
+            RETURN_CODE rt = IDT_Augusta.SharedController.device_sendDataCommand(command, true, ref response);
+            return response;
+        }
+
         private bool PopulateDeviceInfo()
         {
             serialNumber = "";
@@ -72,6 +79,14 @@ namespace IPA.DAL.RBADAL.Services
             rt = IDT_Augusta.SharedController.device_getFirmwareVersion(ref firmwareVersion);
             if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
             {
+                byte[] firmwareExtendedVersion = CommandRawMode("7831");
+                if(firmwareExtendedVersion[0] == 0x06)
+                {
+                    byte[] fwExtendedVersion = new byte[firmwareExtendedVersion.Length - 1];
+                    Array.Copy(firmwareExtendedVersion, 1, fwExtendedVersion, 0, firmwareExtendedVersion.Length - 1);
+                    firmwareVersion = Common.getASCIIArray(Common.getHexStringFromBytes(fwExtendedVersion));
+                }
+
                 if(deviceMode == IDTECH_DEVICE_PID.AUGUSTA_KYB || deviceMode == IDTECH_DEVICE_PID.AUGUSTAS_KYB)
                 {
                     var result = Regex.Match(firmwareVersion, @"^N\v\n");
@@ -139,12 +154,20 @@ namespace IPA.DAL.RBADAL.Services
             // Validate the format firmwareInfo see if the version # exists
             var version = firmwareInfo.Substring(firmwareInfo.IndexOf('V') + 1,
                                                  firmwareInfo.Length - firmwareInfo.IndexOf('V') - 1).Trim();
-            var mReg = Regex.Match(version, @"[0-9]+\.[0-9]+");
+            var mReg = Regex.Match(version, @"[0-9]+\.[0-9]+\.[0-9]+");
 
             // If the parse succeeded 
             if (mReg.Success)
             {
                 version = mReg.Value;
+            }
+            else
+            {
+                mReg = Regex.Match(version, @"[0-9]+\.[0-9]+");
+                if (mReg.Success)
+                {
+                    version = mReg.Value;
+                }
             }
 
             return version;

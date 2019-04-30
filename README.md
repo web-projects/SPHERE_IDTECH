@@ -37,3 +37,5 @@ This an application to Configure IDTech Devices.
 * 20190426 - Cleaned up projects dependencies.
 * 20190429 - Added check for Major configuration.
 * 20190430 - Separated General Settings from MSR Settings.
+           - Added extended firmware version.
+           

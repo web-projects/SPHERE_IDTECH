@@ -141,6 +141,10 @@
             this.FirmwareConfigurationPanel1label1 = new System.Windows.Forms.Label();
             this.FirmwareprogressBar1 = new System.Windows.Forms.ProgressBar();
             this.FirmwareopenFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.ConfigurationModellbl = new System.Windows.Forms.Label();
+            this.ConfigurationVerlbl = new System.Windows.Forms.Label();
+            this.ConfigurationModel = new System.Windows.Forms.Label();
+            this.ConfigurationVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpicBoxMain)).BeginInit();
             this.JsontabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.JsonpicBoxWait)).BeginInit();
@@ -1084,6 +1088,10 @@
             // 
             // ConfigurationIDgrpBox
             // 
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationVersion);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationModel);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationVerlbl);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationModellbl);
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEntryMode);
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEntryModelbl);
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEnvironment);
@@ -1101,7 +1109,7 @@
             // ConfigurationEntryMode
             // 
             this.ConfigurationEntryMode.AutoSize = true;
-            this.ConfigurationEntryMode.Location = new System.Drawing.Point(112, 128);
+            this.ConfigurationEntryMode.Location = new System.Drawing.Point(112, 166);
             this.ConfigurationEntryMode.Name = "ConfigurationEntryMode";
             this.ConfigurationEntryMode.Size = new System.Drawing.Size(37, 13);
             this.ConfigurationEntryMode.TabIndex = 5;
@@ -1110,7 +1118,7 @@
             // ConfigurationEntryModelbl
             // 
             this.ConfigurationEntryModelbl.AutoSize = true;
-            this.ConfigurationEntryModelbl.Location = new System.Drawing.Point(13, 128);
+            this.ConfigurationEntryModelbl.Location = new System.Drawing.Point(13, 166);
             this.ConfigurationEntryModelbl.Name = "ConfigurationEntryModelbl";
             this.ConfigurationEntryModelbl.Size = new System.Drawing.Size(64, 13);
             this.ConfigurationEntryModelbl.TabIndex = 2;
@@ -1119,7 +1127,7 @@
             // ConfigurationEnvironment
             // 
             this.ConfigurationEnvironment.AutoSize = true;
-            this.ConfigurationEnvironment.Location = new System.Drawing.Point(112, 85);
+            this.ConfigurationEnvironment.Location = new System.Drawing.Point(112, 132);
             this.ConfigurationEnvironment.Name = "ConfigurationEnvironment";
             this.ConfigurationEnvironment.Size = new System.Drawing.Size(37, 13);
             this.ConfigurationEnvironment.TabIndex = 4;
@@ -1128,7 +1136,7 @@
             // ConfigurationEnvironmentlbl
             // 
             this.ConfigurationEnvironmentlbl.AutoSize = true;
-            this.ConfigurationEnvironmentlbl.Location = new System.Drawing.Point(13, 85);
+            this.ConfigurationEnvironmentlbl.Location = new System.Drawing.Point(13, 132);
             this.ConfigurationEnvironmentlbl.Name = "ConfigurationEnvironmentlbl";
             this.ConfigurationEnvironmentlbl.Size = new System.Drawing.Size(69, 13);
             this.ConfigurationEnvironmentlbl.TabIndex = 1;
@@ -1137,7 +1145,7 @@
             // ConfigurationPlatform
             // 
             this.ConfigurationPlatform.AutoSize = true;
-            this.ConfigurationPlatform.Location = new System.Drawing.Point(112, 37);
+            this.ConfigurationPlatform.Location = new System.Drawing.Point(112, 98);
             this.ConfigurationPlatform.Name = "ConfigurationPlatform";
             this.ConfigurationPlatform.Size = new System.Drawing.Size(37, 13);
             this.ConfigurationPlatform.TabIndex = 3;
@@ -1146,7 +1154,7 @@
             // ConfigurationPlatformlbl
             // 
             this.ConfigurationPlatformlbl.AutoSize = true;
-            this.ConfigurationPlatformlbl.Location = new System.Drawing.Point(13, 37);
+            this.ConfigurationPlatformlbl.Location = new System.Drawing.Point(13, 98);
             this.ConfigurationPlatformlbl.Name = "ConfigurationPlatformlbl";
             this.ConfigurationPlatformlbl.Size = new System.Drawing.Size(48, 13);
             this.ConfigurationPlatformlbl.TabIndex = 0;
@@ -1390,6 +1398,42 @@
             // 
             this.FirmwareopenFileDialog1.FileName = "FirmwareopenFileDialog1";
             // 
+            // ConfigurationModellbl
+            // 
+            this.ConfigurationModellbl.AutoSize = true;
+            this.ConfigurationModellbl.Location = new System.Drawing.Point(13, 30);
+            this.ConfigurationModellbl.Name = "ConfigurationModellbl";
+            this.ConfigurationModellbl.Size = new System.Drawing.Size(39, 13);
+            this.ConfigurationModellbl.TabIndex = 6;
+            this.ConfigurationModellbl.Text = "Model:";
+            // 
+            // ConfigurationVerlbl
+            // 
+            this.ConfigurationVerlbl.AutoSize = true;
+            this.ConfigurationVerlbl.Location = new System.Drawing.Point(13, 64);
+            this.ConfigurationVerlbl.Name = "ConfigurationVerlbl";
+            this.ConfigurationVerlbl.Size = new System.Drawing.Size(65, 13);
+            this.ConfigurationVerlbl.TabIndex = 7;
+            this.ConfigurationVerlbl.Text = "FW Version:";
+            // 
+            // ConfigurationModel
+            // 
+            this.ConfigurationModel.AutoSize = true;
+            this.ConfigurationModel.Location = new System.Drawing.Point(112, 30);
+            this.ConfigurationModel.Name = "ConfigurationModel";
+            this.ConfigurationModel.Size = new System.Drawing.Size(37, 13);
+            this.ConfigurationModel.TabIndex = 8;
+            this.ConfigurationModel.Text = "12345";
+            // 
+            // ConfigurationVersion
+            // 
+            this.ConfigurationVersion.AutoSize = true;
+            this.ConfigurationVersion.Location = new System.Drawing.Point(112, 64);
+            this.ConfigurationVersion.Name = "ConfigurationVersion";
+            this.ConfigurationVersion.Size = new System.Drawing.Size(37, 13);
+            this.ConfigurationVersion.TabIndex = 9;
+            this.ConfigurationVersion.Text = "12345";
+            // 
             // Application
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1495,6 +1539,10 @@
     private System.Windows.Forms.Button ConfigurationExpandButton;
     private System.Windows.Forms.PictureBox ConfigurationPanel1pictureBox1;
     private System.Windows.Forms.GroupBox ConfigurationIDgrpBox;
+    private System.Windows.Forms.Label ConfigurationModel;
+    private System.Windows.Forms.Label ConfigurationModellbl;
+    private System.Windows.Forms.Label ConfigurationVersion;
+    private System.Windows.Forms.Label ConfigurationVerlbl;
     private System.Windows.Forms.Label ConfigurationEntryMode;
     private System.Windows.Forms.Label ConfigurationEnvironment;
     private System.Windows.Forms.Label ConfigurationPlatform;
