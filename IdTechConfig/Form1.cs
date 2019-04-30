@@ -64,6 +64,7 @@ namespace IPA.MainApp
 
         // Application Configuration
         bool tc_show_settings_tab;
+        bool tc_show_msrsettings_tab;
         bool tc_show_raw_mode_tab;
         bool tc_show_terminal_data_tab;
         bool tc_show_json_tab;
@@ -108,6 +109,14 @@ namespace IPA.MainApp
             if(!tc_show_settings_tab)
             {
                 MaintabControl.TabPages.Remove(SettingstabPage);
+            }
+
+            // MsrSettings Tab
+            string show_msrsettings_tab = System.Configuration.ConfigurationManager.AppSettings["tc_show_msrsettings_tab"] ?? "false";
+            bool.TryParse(show_msrsettings_tab, out tc_show_msrsettings_tab);
+            if(!tc_show_msrsettings_tab)
+            {
+                MaintabControl.TabPages.Remove(MsrSettingstabPage);
             }
 
             // Raw Mode Tab
@@ -291,15 +300,15 @@ namespace IPA.MainApp
                     break;
                 }
 
-                case NOTIFICATION_TYPE.NT_GET_DEVICE_CONFIGURATION:
+                case NOTIFICATION_TYPE.NT_GET_DEVICE_MSRCONFIGURATION:
                 {
-                    GetDeviceConfigurationUI(sender, args);
+                    GetDeviceMsrConfigurationUI(sender, args);
                     break;
                 }
 
-                case NOTIFICATION_TYPE.NT_SET_DEVICE_CONFIGURATION:
+                case NOTIFICATION_TYPE.NT_SET_DEVICE_MSRCONFIGURATION:
                 {
-                    SetDeviceConfigurationUI(sender, args);
+                    SetDeviceMsrConfigurationUI(sender, args);
                     break;
                 }
 
@@ -470,14 +479,14 @@ namespace IPA.MainApp
             }).Start();
         }
 
-        private void GetDeviceConfigurationUI(object sender, DeviceNotificationEventArgs e)
+        private void GetDeviceMsrConfigurationUI(object sender, DeviceNotificationEventArgs e)
         {
-            GetDeviceConfiguration(e.Message);
+            GetDeviceMsrConfiguration(e.Message);
         }
 
-        private void SetDeviceConfigurationUI(object sender, DeviceNotificationEventArgs e)
+        private void SetDeviceMsrConfigurationUI(object sender, DeviceNotificationEventArgs e)
         {
-            SetDeviceConfiguration(e.Message);
+            SetDeviceMsrConfiguration(e.Message);
         }
 
         private void SetDeviceModeUI(object sender, DeviceNotificationEventArgs e)
@@ -644,6 +653,7 @@ namespace IPA.MainApp
                 this.ApplicationtabPage.Enabled = true;
                 this.ConfigurationtabPage.Enabled = true;
                 this.SettingstabPage.Enabled = tc_show_settings_tab;
+                this.MsrSettingstabPage.Enabled = tc_show_msrsettings_tab;
                 this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                 this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
                 this.JsontabPage.Enabled = tc_show_json_tab;
@@ -712,6 +722,7 @@ namespace IPA.MainApp
                     this.ApplicationtabPage.Enabled = false;
                     this.ConfigurationtabPage.Enabled = false;
                     this.SettingstabPage.Enabled = false;
+                    this.MsrSettingstabPage.Enabled = false;
                     this.RawModetabPage.Enabled = false;
                     this.TerminalDatatabPage.Enabled = false;
                 }));
@@ -947,6 +958,7 @@ namespace IPA.MainApp
                         this.ApplicationtabPage.Enabled = true;
                         this.ConfigurationtabPage.Enabled = true;
                         this.SettingstabPage.Enabled = tc_show_settings_tab;
+                        this.MsrSettingstabPage.Enabled = tc_show_msrsettings_tab;
                         this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                         this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
                     }
@@ -986,6 +998,7 @@ namespace IPA.MainApp
                 this.ApplicationtabPage.Enabled = true;
                 this.ConfigurationtabPage.Enabled = true;
                 this.SettingstabPage.Enabled = tc_show_settings_tab;
+                this.MsrSettingstabPage.Enabled = tc_show_msrsettings_tab;
                 this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                 this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
             };
@@ -1000,7 +1013,7 @@ namespace IPA.MainApp
             }
         }
 
-        private void GetDeviceConfiguration(object payload)
+        private void GetDeviceMsrConfiguration(object payload)
         {
             // Invoker with Parameter(s)
             MethodInvoker mi = () =>
@@ -1022,12 +1035,13 @@ namespace IPA.MainApp
                     this.ApplicationtabPage.Enabled = true;
                     this.ConfigurationtabPage.Enabled = true;
                     this.SettingstabPage.Enabled = tc_show_settings_tab;
+                    this.MsrSettingstabPage.Enabled = tc_show_msrsettings_tab;
                     this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                     this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
                     this.JsontabPage.Enabled = tc_show_json_tab;
                     this.AdvancedtabPage.Enabled = tc_show_advanced_tab;
-                    this.SettingspicBoxWait.Enabled = false;
-                    this.SettingspicBoxWait.Visible = false;
+                    this.MsrSettingspicBoxWait.Enabled = false;
+                    this.MsrSettingspicBoxWait.Visible = false;
                     this.JsonpicBoxWait.Visible = false;
                 }
                 catch (Exception ex)
@@ -1046,7 +1060,7 @@ namespace IPA.MainApp
             }
         }
 
-        private void SetDeviceConfiguration(object payload)
+        private void SetDeviceMsrConfiguration(object payload)
         {
             // Invoker with Parameter(s)
             MethodInvoker mi = () =>
@@ -1057,10 +1071,10 @@ namespace IPA.MainApp
                     string [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
 
                     // Expiration Mask
-                    this.SettingscBxExpirationMask.Checked = data[0].Equals("Masked", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+                    this.MsrSettingscBxExpirationMask.Checked = data[0].Equals("Masked", StringComparison.CurrentCultureIgnoreCase) ? true : false;
 
                     // PAN Clear Digits
-                    this.SettingstxtPAN.Text = data[1];
+                    this.MsrSettingstxtPAN.Text = data[1];
 
                     // Swipe Force Mask
                     string [] values = data[2].Split(',');
@@ -1082,20 +1096,20 @@ namespace IPA.MainApp
                         bool t3Card0Val = t3Card0Value.Equals("ON", StringComparison.CurrentCultureIgnoreCase) ? true : false;
 
                         // Compare to existing values
-                        if(this.SettingscBxTrack1.Checked != t1Val) {
-                            this.SettingscBxTrack1.Checked = t1Val;
+                        if(this.MsrSettingscBxTrack1.Checked != t1Val) {
+                            this.MsrSettingscBxTrack1.Checked = t1Val;
                         }
 
-                        if(this.SettingscBxTrack2.Checked != t2Val) {
-                            this.SettingscBxTrack2.Checked = t2Val;
+                        if(this.MsrSettingscBxTrack2.Checked != t2Val) {
+                            this.MsrSettingscBxTrack2.Checked = t2Val;
                         }
 
-                        if(this.SettingscBxTrack3.Checked != t3Val) {
-                            this.SettingscBxTrack3.Checked = t3Val;
+                        if(this.MsrSettingscBxTrack3.Checked != t3Val) {
+                            this.MsrSettingscBxTrack3.Checked = t3Val;
                         }
 
-                        if(this.SettingscBxTrack3Card0.Checked != t3Card0Val) {
-                            this.SettingscBxTrack3Card0.Checked = t3Card0Val;
+                        if(this.MsrSettingscBxTrack3Card0.Checked != t3Card0Val) {
+                            this.MsrSettingscBxTrack3Card0.Checked = t3Card0Val;
                         }
 
                         // Swipe Mask
@@ -1115,19 +1129,19 @@ namespace IPA.MainApp
                         t3Val = t3Value.Equals("ON", StringComparison.CurrentCultureIgnoreCase) ? true : false;
 
                         // Compare to existing values
-                        if(this.SettingscBxSwipeMaskTrack1.Checked != t1Val) 
+                        if(this.MsrSettingscBxSwipeMaskTrack1.Checked != t1Val) 
                         {
-                            this.SettingscBxSwipeMaskTrack1.Checked = t1Val;
+                            this.MsrSettingscBxSwipeMaskTrack1.Checked = t1Val;
                         }
 
-                        if(this.SettingscBxSwipeMaskTrack2.Checked != t2Val) 
+                        if(this.MsrSettingscBxSwipeMaskTrack2.Checked != t2Val) 
                         {
-                            this.SettingscBxSwipeMaskTrack2.Checked = t2Val;
+                            this.MsrSettingscBxSwipeMaskTrack2.Checked = t2Val;
                         }
 
-                        if(this.SettingscBxSwipeMaskTrack3.Checked != t3Val) 
+                        if(this.MsrSettingscBxSwipeMaskTrack3.Checked != t3Val) 
                         {
-                            this.SettingscBxSwipeMaskTrack3.Checked = t3Val;
+                            this.MsrSettingscBxSwipeMaskTrack3.Checked = t3Val;
                         }
                     }
 
@@ -1135,18 +1149,19 @@ namespace IPA.MainApp
                     this.ApplicationtabPage.Enabled = true;
                     this.ConfigurationtabPage.Enabled = true;
                     this.SettingstabPage.Enabled = tc_show_settings_tab;
+                    this.MsrSettingstabPage.Enabled = tc_show_msrsettings_tab;
                     this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                     this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
                     this.JsontabPage.Enabled = tc_show_json_tab;
                     this.AdvancedtabPage.Enabled = tc_show_advanced_tab;
 
-                    this.SettingspicBoxWait.Visible  = false;
-                    this.SettingspicBoxWait.Enabled = false;
+                    this.MsrSettingspicBoxWait.Visible  = false;
+                    this.MsrSettingspicBoxWait.Enabled = false;
                     this.JsonpicBoxWait.Visible  = false;
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)ex.Message);
+                    Debug.WriteLine("main: SetDeviceMsrConfiguration() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -1253,6 +1268,10 @@ namespace IPA.MainApp
                         {
                             MaintabControl.TabPages.Add(SettingstabPage);
                         }
+                        if(!MaintabControl.Contains(MsrSettingstabPage) && tc_show_msrsettings_tab)
+                        {
+                            MaintabControl.TabPages.Add(MsrSettingstabPage);
+                        }
                         if(!MaintabControl.Contains(RawModetabPage) && tc_show_raw_mode_tab)
                         {
                             MaintabControl.TabPages.Add(RawModetabPage);
@@ -1276,7 +1295,7 @@ namespace IPA.MainApp
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)ex.Message);
+                    Debug.WriteLine("main: SetDeviceMode() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -1303,7 +1322,7 @@ namespace IPA.MainApp
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)ex.Message);
+                    Debug.WriteLine("main: SetExecuteResult() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -2326,20 +2345,30 @@ namespace IPA.MainApp
         public List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem> configSwipeForceEncryption;
         public List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem> configSwipeMask;
 
-        public static void SetDeviceConfig(IDevicePlugIn devicePlugin, object payload)
+        public static void SetDeviceMsrConfig(IDevicePlugIn devicePlugin, object payload)
         {
             try
             {
                 // Make call to DeviceCfg
-                devicePlugin.SetDeviceConfiguration(payload);
+                devicePlugin.SetDeviceMsrConfiguration(payload);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("main: SetDeviceConfiguration() - exception={0}", (object)ex.Message);
+                Debug.WriteLine("main: SetDeviceMsrConfig() - exception={0}", (object)ex.Message);
             }
         }
 
         private void OnSettingsControlActive(object sender, EventArgs e)
+        {
+            //TODO
+            // Invoker without Parameter(s)
+            this.Invoke((MethodInvoker)delegate()
+            {
+                this.OnConfigureClick(this, null);
+            });
+        }
+
+        private void OnMsrSettingsControlActive(object sender, EventArgs e)
         {
             ConfigIDTechSerializer serializer = devicePlugin.GetConfigIDTechSerializer();
 
@@ -2347,26 +2376,26 @@ namespace IPA.MainApp
             if(serializer != null)
             {
                 // EXPIRATION MASK
-                this.SettingscBxExpirationMask.Checked = serializer?.terminalCfg?.user_configuration?.expiration_masking?? false;
+                this.MsrSettingscBxExpirationMask.Checked = serializer?.terminalCfg?.user_configuration?.expiration_masking?? false;
 
                 // PAN DIGITS
-                this.SettingstxtPAN.Text = serializer?.terminalCfg?.user_configuration?.pan_clear_digits.ToString();
+                this.MsrSettingstxtPAN.Text = serializer?.terminalCfg?.user_configuration?.pan_clear_digits.ToString();
 
                 // SWIPE FORCE
-                this.SettingscBxTrack1.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track1?? false;
-                this.SettingscBxTrack2.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track2?? false;
-                this.SettingscBxTrack3.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track3?? false;
-                this.SettingscBxTrack3Card0.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track3card0?? false;
+                this.MsrSettingscBxTrack1.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track1?? false;
+                this.MsrSettingscBxTrack2.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track2?? false;
+                this.MsrSettingscBxTrack3.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track3?? false;
+                this.MsrSettingscBxTrack3Card0.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track3card0?? false;
 
                 // SWIPE MASK
-                this.SettingscBxSwipeMaskTrack1.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track1?? false;
-                this.SettingscBxSwipeMaskTrack2.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track2?? false;
-                this.SettingscBxSwipeMaskTrack3.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track3?? false;
+                this.MsrSettingscBxSwipeMaskTrack1.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track1?? false;
+                this.MsrSettingscBxSwipeMaskTrack2.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track2?? false;
+                this.MsrSettingscBxSwipeMaskTrack3.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track3?? false;
 
                 // Invoker without Parameter(s)
                 this.Invoke((MethodInvoker)delegate()
                 {
-                    this.OnConfigureClick(this, null);
+                    this.OnMsrConfigureClick(this, null);
                 });
             }
         }
@@ -2381,18 +2410,18 @@ namespace IPA.MainApp
                 if(serializer != null)
                 {
                     // Update Data: EXPIRATION MASKING
-                    serializer.terminalCfg.user_configuration.expiration_masking = this.SettingscBxExpirationMask.Checked;
+                    serializer.terminalCfg.user_configuration.expiration_masking = this.MsrSettingscBxExpirationMask.Checked;
                     // PAN Clear Digits
-                    serializer.terminalCfg.user_configuration.pan_clear_digits = Convert.ToInt32(this.SettingstxtPAN.Text);
+                    serializer.terminalCfg.user_configuration.pan_clear_digits = Convert.ToInt32(this.MsrSettingstxtPAN.Text);
                     // Swipe Force Mask
-                    serializer.terminalCfg.user_configuration.swipe_force_mask.track1 = this.SettingscBxTrack1.Checked;
-                    serializer.terminalCfg.user_configuration.swipe_force_mask.track2 = this.SettingscBxTrack2.Checked;
-                    serializer.terminalCfg.user_configuration.swipe_force_mask.track3 = this.SettingscBxTrack3.Checked;
-                    serializer.terminalCfg.user_configuration.swipe_force_mask.track3card0 = this.SettingscBxTrack3Card0.Checked;
+                    serializer.terminalCfg.user_configuration.swipe_force_mask.track1 = this.MsrSettingscBxTrack1.Checked;
+                    serializer.terminalCfg.user_configuration.swipe_force_mask.track2 = this.MsrSettingscBxTrack2.Checked;
+                    serializer.terminalCfg.user_configuration.swipe_force_mask.track3 = this.MsrSettingscBxTrack3.Checked;
+                    serializer.terminalCfg.user_configuration.swipe_force_mask.track3card0 = this.MsrSettingscBxTrack3Card0.Checked;
                     // Swipe Mask
-                    serializer.terminalCfg.user_configuration.swipe_mask.track1 = this.SettingscBxSwipeMaskTrack1.Checked;
-                    serializer.terminalCfg.user_configuration.swipe_mask.track2 = this.SettingscBxSwipeMaskTrack2.Checked;
-                    serializer.terminalCfg.user_configuration.swipe_mask.track3 = this.SettingscBxSwipeMaskTrack3.Checked;
+                    serializer.terminalCfg.user_configuration.swipe_mask.track1 = this.MsrSettingscBxSwipeMaskTrack1.Checked;
+                    serializer.terminalCfg.user_configuration.swipe_mask.track2 = this.MsrSettingscBxSwipeMaskTrack2.Checked;
+                    serializer.terminalCfg.user_configuration.swipe_mask.track3 = this.MsrSettingscBxSwipeMaskTrack3.Checked;
 
                     // WRITE to Config
                     serializer.WriteConfig();
@@ -2463,6 +2492,19 @@ namespace IPA.MainApp
                         this.SettingstabPage.Enabled = true;
                         this.SettingspicBoxWait.Enabled = true;
                         this.SettingspicBoxWait.Visible = true;
+                    }));
+                }
+            }
+            else if (MaintabControl.SelectedTab.Name.Equals("MsrSettingstabPage"))
+            {
+                if(this.MsrSettingstabPage.Enabled)
+                { 
+                    // Configuration Mode
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        this.MsrSettingstabPage.Enabled = true;
+                        this.MsrSettingspicBoxWait.Enabled = true;
+                        this.MsrSettingspicBoxWait.Visible = true;
                     }));
                 }
             }
@@ -2584,6 +2626,7 @@ namespace IPA.MainApp
             this.ApplicationtabPage.Enabled = false;
             this.ConfigurationtabPage.Enabled = false;
             this.SettingstabPage.Enabled = false;
+            this.MsrSettingstabPage.Enabled = false;
             this.RawModetabPage.Enabled = false;
             this.TerminalDatatabPage.Enabled = false;
             this.JsontabPage.Enabled = false;
@@ -2651,34 +2694,53 @@ namespace IPA.MainApp
                 this.SettingspicBoxWait.Refresh();
                 System.Windows.Forms.Application.DoEvents();
             }));
+        }
+
+        private void OnMsrConfigureClick(object sender, EventArgs e)
+        {
+            // Disable Tabs
+            this.ApplicationtabPage.Enabled = false;
+            this.RawModetabPage.Enabled = false;
+            this.TerminalDatatabPage.Enabled = false;
+            this.JsontabPage.Enabled = false;
+
+            this.Invoke(new MethodInvoker(() =>
+            {
+                this.MsrSettingstabPage.Enabled = true;
+                this.MsrSettingstabPage.Enabled = true;
+                this.MsrSettingspicBoxWait.Enabled = true;
+                this.MsrSettingspicBoxWait.Visible = true;
+                this.MsrSettingspicBoxWait.Refresh();
+                System.Windows.Forms.Application.DoEvents();
+            }));
 
             // EXPIRATION MASK
             configExpirationMask = new List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem>
             {
-                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="expirationmask", Id=(int)CommonInterface.ConfigIDTech.Configuration.EXPIRATION_MASK.MASK, Value=string.Format("{0}", this.SettingscBxExpirationMask.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="expirationmask", Id=(int)CommonInterface.ConfigIDTech.Configuration.EXPIRATION_MASK.MASK, Value=string.Format("{0}", this.MsrSettingscBxExpirationMask.Checked.ToString()) }},
             };
 
             // PAN DIGITS
             configPanDigits = new List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem>
             {
-            { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="digits", Id=(int)CommonInterface.ConfigIDTech.Configuration.PAN_DIGITS.DIGITS, Value=string.Format("{0}", this.SettingstxtPAN.Text) }},
+            { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="digits", Id=(int)CommonInterface.ConfigIDTech.Configuration.PAN_DIGITS.DIGITS, Value=string.Format("{0}", this.MsrSettingstxtPAN.Text) }},
             };
 
             // SWIPE FORCE
             configSwipeForceEncryption = new List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem>
             {
-                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track1",      Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK1, Value=string.Format("{0}",      this.SettingscBxTrack1.Checked.ToString()) }},
-                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track2",      Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK2, Value=string.Format("{0}",      this.SettingscBxTrack2.Checked.ToString()) }},
-                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track3",      Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK3, Value=string.Format("{0}",      this.SettingscBxTrack3.Checked.ToString()) }},
-                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track3Card0", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK3CARD0, Value=string.Format("{0}", this.SettingscBxTrack3Card0.Checked.ToString()) }}
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track1",      Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK1, Value=string.Format("{0}",      this.MsrSettingscBxTrack1.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track2",      Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK2, Value=string.Format("{0}",      this.MsrSettingscBxTrack2.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track3",      Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK3, Value=string.Format("{0}",      this.MsrSettingscBxTrack3.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track3Card0", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_FORCE_ENCRYPTION.TRACK3CARD0, Value=string.Format("{0}", this.MsrSettingscBxTrack3Card0.Checked.ToString()) }}
             };
 
             // SWIPE MASK
             configSwipeMask = new List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem>
             {
-                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track1", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_MASK.TRACK1, Value=string.Format("{0}", this.SettingscBxSwipeMaskTrack1.Checked.ToString()) }},
-                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track2", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_MASK.TRACK2, Value=string.Format("{0}", this.SettingscBxSwipeMaskTrack2.Checked.ToString()) }},
-                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track3", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_MASK.TRACK3, Value=string.Format("{0}", this.SettingscBxSwipeMaskTrack3.Checked.ToString()) }}
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track1", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_MASK.TRACK1, Value=string.Format("{0}", this.MsrSettingscBxSwipeMaskTrack1.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track2", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_MASK.TRACK2, Value=string.Format("{0}", this.MsrSettingscBxSwipeMaskTrack2.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.MsrConfigItem() { Name="track3", Id=(int)CommonInterface.ConfigIDTech.Configuration.SWIPE_MASK.TRACK3, Value=string.Format("{0}", this.MsrSettingscBxSwipeMaskTrack3.Checked.ToString()) }}
             };
 
             // Build Payload Package
@@ -2691,7 +2753,7 @@ namespace IPA.MainApp
             }
 
             // Settings Read
-            new Thread(() => SetDeviceConfig(devicePlugin, payload)).Start();
+            new Thread(() => SetDeviceMsrConfig(devicePlugin, payload)).Start();
         }
 
         private void OnExecuteCommandClick(object sender, EventArgs e)

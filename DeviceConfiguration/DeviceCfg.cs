@@ -2225,7 +2225,7 @@ namespace IPA.DAL.RBADAL
     // SETTINGS ACTIONS
     /********************************************************************************************************/
     #region -- settings actions --
-    public void GetDeviceConfiguration()
+    public void GetDeviceMsrConfiguration()
     {
       if (!device.IsConnected)
       {
@@ -2255,7 +2255,7 @@ namespace IPA.DAL.RBADAL
 
               // Set Configuration
               string [] message = { expMask, panDigits, swipeForce, swipeMask, msrSetting };
-              NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_GET_DEVICE_CONFIGURATION, Message = message });
+              NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_GET_DEVICE_MSRCONFIGURATION, Message = message });
           }
           catch(Exception ex)
           {
@@ -2275,7 +2275,7 @@ namespace IPA.DAL.RBADAL
     /********************************************************************************************************/
     #region -- configuration actions --
 
-    public void SetDeviceConfiguration(object payload)
+    public void SetDeviceMsrConfiguration(object payload)
     {
       try
       {
@@ -2324,7 +2324,7 @@ namespace IPA.DAL.RBADAL
             message[1] = panDigits;
             message[2] = swipeForceEncrypt;
             message[3] = swipeMask;
-            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_CONFIGURATION, Message = message });
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_MSRCONFIGURATION, Message = message });
         }
         else
         {
