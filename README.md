@@ -38,4 +38,5 @@ This an application to Configure IDTech Devices.
 * 20190429 - Added check for Major configuration.
 * 20190430 - Separated General Settings from MSR Settings.
            - Added extended firmware version.
+* 20190501 - VP5300 Fixes to process configuration file.
            

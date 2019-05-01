@@ -228,7 +228,7 @@ namespace IPA.CommonInterface.ConfigSphere
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("main: exception={0}", (object)ex.Message);
+                Debug.WriteLine("ConfigSphereSerializer: GetConfigGroupCollection() - exception={0}", (object)ex.Message);
             }
             return data;
         }
@@ -250,7 +250,7 @@ namespace IPA.CommonInterface.ConfigSphere
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("main: exception={0}", (object)ex.Message);
+                Debug.WriteLine("ConfigSphereSerializer: GetDeviceFirmware() - exception={0}", (object)ex.Message);
             }
             return result;
         }
@@ -260,7 +260,7 @@ namespace IPA.CommonInterface.ConfigSphere
             string [] result = GetDeviceFirmware(model);
             foreach(var version in result)
             {
-                if(version.Equals(firmware, StringComparison.InvariantCultureIgnoreCase))
+                if(version.Contains(firmware))
                 {
                     matched = true;
                     break;
@@ -281,7 +281,7 @@ namespace IPA.CommonInterface.ConfigSphere
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("main: exception={0}", (object)ex.Message);
+                Debug.WriteLine("ConfigSphereSerializer: DoNotSendTagsMatch() - exception={0}", (object)ex.Message);
             }
             return matched;
         }

@@ -2182,7 +2182,7 @@ namespace IPA.MainApp
                     }
                     catch (Exception ex)
                     {
-                        Logger.error("main: exception={0}", (object)ex.Message);
+                        Logger.error("main: OnConfigGroupSelectionChanged() - exception={0}", (object)ex.Message);
                     }
 
                 }).Start();
@@ -2251,7 +2251,7 @@ namespace IPA.MainApp
                 }
                 catch (Exception ex)
                 {
-                    Logger.error("main: exception={0}", (object)ex.Message);
+                    Logger.error("main: OnSetDeviceMode() - exception={0}", (object)ex.Message);
                 }
 
             }).Start();
@@ -2272,7 +2272,7 @@ namespace IPA.MainApp
                 }
                 catch (Exception ex)
                 {
-                    Logger.error("main: exception={0}", (object)ex.Message);
+                    Logger.error("main: OnEMVModeDisable() - exception={0}", (object)ex.Message);
                 }
 
             }).Start();
@@ -2831,7 +2831,7 @@ namespace IPA.MainApp
                         }
                         catch (Exception ex)
                         {
-                            Logger.error("main: exception={0}", (object)ex.Message);
+                            Logger.error("main: OnFirmwareUpdate() - exception={0}", (object)ex.Message);
                         }
 
                     }).Start();
