@@ -25,6 +25,7 @@ namespace IPA.CommonInterface.ConfigIDTech
         private const string TERMINAL_CONFIG = "TerminalData";
 
         public TerminalConfiguration terminalCfg;
+        private user_configuration userConfig;
 
         private string fileName;
         #endregion
@@ -91,6 +92,7 @@ namespace IPA.CommonInterface.ConfigIDTech
                     Debug.WriteLine("general_configuration: EN->MSRE --------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.msr_encryption_enabled);
                     Debug.WriteLine("general_configuration: EN->ICCE --------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.icc_encryption_enabled);
                     // user_configuration
+                    userConfig = terminalCfg.user_configuration;
                     Debug.WriteLine("user_configuration: expiration_masking -- =[{0}]", (object) terminalCfg.user_configuration.expiration_masking);
                     Debug.WriteLine("user_configuration: pan_clear_digits ---- =[{0}]", (object) terminalCfg.user_configuration.pan_clear_digits);
                     Debug.WriteLine("user_configuration: swipe_force_mask:TK1  =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track1);
@@ -121,7 +123,7 @@ namespace IPA.CommonInterface.ConfigIDTech
 
                     JsonSerializer serializer = new JsonSerializer();
                     string path = System.IO.Directory.GetCurrentDirectory(); 
-                    fileName = path + "\\" + JSON_CONFIG;
+                    fileName = path + "\\Assets\\" + JSON_CONFIG;
 
                     using (StreamWriter sw = new StreamWriter(fileName))
                     using (JsonWriter writer = new JsonTextWriter(sw))
@@ -148,14 +150,14 @@ namespace IPA.CommonInterface.ConfigIDTech
                     // Update timestamp
                     DateTime timenow = DateTime.UtcNow;
                     cfgTerminalDataMetaObject.last_update_timestamp = JsonConvert.SerializeObject(timenow).Trim('"');
-                    Debug.WriteLine(cfgTerminalDataMetaObject.last_update_timestamp);
+                    Debug.WriteLine("TERMINAL DATA UPDATED: {0}", (object) cfgTerminalDataMetaObject.last_update_timestamp);
 
                     cfgTerminalDataMetaObject.general_configuration = terminalCfg.general_configuration;
 
                     JsonSerializer serializer = new JsonSerializer();
                     string path = System.IO.Directory.GetCurrentDirectory(); 
                     string extension = timenow.ToString("yyyyMMddhhmm").Trim('"');
-                    fileName = path + "\\" + TERMINAL_CONFIG + "." + extension + ".json";
+                    fileName = path + "\\Assets\\" + TERMINAL_CONFIG + "." + extension + ".json";
 
                     using (StreamWriter sw = new StreamWriter(fileName))
                     using (JsonWriter writer = new JsonTextWriter(sw))
@@ -167,7 +169,7 @@ namespace IPA.CommonInterface.ConfigIDTech
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("JsonSerializer: exception: {0}", ex);
+                Debug.WriteLine("JsonSerializer: WriteTerminalDataConfig() exception: {0}", ex);
             }
         }
 

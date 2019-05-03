@@ -1775,8 +1775,8 @@ namespace IPA.DAL.RBADAL
       }
       else
       {
-          result += String.Format("Fail Error Code=0x{0:X4} : {1}.", (ushort)rt, IDTechSDK.errorCode.getErrorString(rt));
           Debug.WriteLine(String.Format("Get Mask Option Fail Error Code: 0x{0:X4}", (ushort)rt));
+          Logger.error(String.Format("Fail Error Code=0x{0:X4} : {1}.", (ushort)rt, IDTechSDK.errorCode.getErrorString(rt)));
       }
 
       return result;
@@ -1914,6 +1914,7 @@ namespace IPA.DAL.RBADAL
 
       if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
       {
+          IDTechSerializer.terminalCfg.user_configuration.expiration_masking = mask;
           return GetExpirationMask();
       }
       else
@@ -1948,7 +1949,8 @@ namespace IPA.DAL.RBADAL
 
       if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
       {
-        return GetClearPANDigits();
+         IDTechSerializer.terminalCfg.user_configuration.pan_clear_digits = val;
+         return GetClearPANDigits();
       }
       else
       {
@@ -1977,24 +1979,28 @@ namespace IPA.DAL.RBADAL
             case (int) SWIPE_FORCE_ENCRYPTION.TRACK1:
             {
               track1 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+              IDTechSerializer.terminalCfg.user_configuration.swipe_force_mask.track1 = track1;
               break;
             }
 
             case (int) SWIPE_FORCE_ENCRYPTION.TRACK2:
             {
               track2 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+              IDTechSerializer.terminalCfg.user_configuration.swipe_force_mask.track2 = track2;
               break;
             }
 
             case (int) SWIPE_FORCE_ENCRYPTION.TRACK3:
             {
               track3 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+              IDTechSerializer.terminalCfg.user_configuration.swipe_force_mask.track3 = track3;
               break;
             }
 
             case (int) SWIPE_FORCE_ENCRYPTION.TRACK3CARD0:
             {
               track3card0 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+              IDTechSerializer.terminalCfg.user_configuration.swipe_force_mask.track3card0 = track3card0;
               break;
             }
           }
@@ -2032,18 +2038,21 @@ namespace IPA.DAL.RBADAL
           case (int) SWIPE_MASK.TRACK1:
           {
             track1 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+            IDTechSerializer.terminalCfg.user_configuration.swipe_mask.track1 = track1;
             break;
           }
 
           case (int) SWIPE_MASK.TRACK2:
           {
             track2 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+            IDTechSerializer.terminalCfg.user_configuration.swipe_mask.track2 = track2;
             break;
           }
 
           case (int) SWIPE_MASK.TRACK3:
           {
             track3 = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+            IDTechSerializer.terminalCfg.user_configuration.swipe_mask.track3 = track3;
             break;
           }
         }
@@ -2313,7 +2322,7 @@ namespace IPA.DAL.RBADAL
           Debug.WriteLine("configuration: {0}={1}", child.Name, child.Value);  
         }  
 
-        Debug.WriteLine("main: SetDeviceConfiguration() - track1={0}", (object) item.ElementAt(0).Value);
+        Debug.WriteLine("deviceCfg: SetDeviceConfiguration() - track1={0}", (object) item.ElementAt(0).Value);
 
         if(useUniversalSDK)
         {
