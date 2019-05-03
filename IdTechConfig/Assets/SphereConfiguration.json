@@ -647,7 +647,12 @@
       "ModelFirmware": {
         "IDEM-25XX": [ "1.02.020" ]
       }
-    }
+    },
+    {
+      "ModelFirmware": {
+        "IDEM-85XX": [ "1.02.013.S" ]
+      }
+    }    
     ]    
   }
   ]

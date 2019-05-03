@@ -154,7 +154,7 @@ namespace IPA.DAL.RBADAL.Services
             // Validate the format firmwareInfo see if the version # exists
             var version = firmwareInfo.Substring(firmwareInfo.IndexOf('V') + 1,
                                                  firmwareInfo.Length - firmwareInfo.IndexOf('V') - 1).Trim();
-            var mReg = Regex.Match(version, @"[0-9]+\.[0-9]+\.[0-9]+");
+            var mReg = Regex.Match(version, @"[0-9]+\.[0-9]+\.[0-9]+.S");
 
             // If the parse succeeded 
             if (mReg.Success)
@@ -163,10 +163,18 @@ namespace IPA.DAL.RBADAL.Services
             }
             else
             {
-                mReg = Regex.Match(version, @"[0-9]+\.[0-9]+");
+                mReg = Regex.Match(version, @"[0-9]+\.[0-9]+\.[0-9]+");
                 if (mReg.Success)
                 {
                     version = mReg.Value;
+                }
+                else
+                {
+                    mReg = Regex.Match(version, @"[0-9]+\.[0-9]+");
+                    if (mReg.Success)
+                    {
+                        version = mReg.Value;
+                    }
                 }
             }
 

@@ -27,7 +27,8 @@ IdTechConfig/bin/
 IdTechConfig/obj/
 LoggerManager/bin/
 LoggerManager/obj/
-
+IdTechConfig.UnitTest/bin/
+IdTechConfig.UnitTest/obj/
 /sdk/*.dll
 /auto-generated/*.dll
 

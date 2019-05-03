@@ -2087,17 +2087,6 @@ namespace IPA.DAL.RBADAL
         return;
       }
 
-      int tc_read_msr_timeout = 20000;
-      string read_msr_timeout = System.Configuration.ConfigurationManager.AppSettings["tc_read_msr_timeout"] ?? "20000";
-      int.TryParse(read_msr_timeout, out tc_read_msr_timeout);
-      int msrTimerInterval = tc_read_msr_timeout;
-
-      // Set Read Timeout
-      MSRTimer = new System.Timers.Timer(msrTimerInterval);
-      MSRTimer.AutoReset = false;
-      MSRTimer.Elapsed += (sender, e) => RaiseTimerExpired(new Core.Client.Dal.Models.TimerEventArgs { Timer = TimerType.MSR });
-      MSRTimer.Start();
-
       // CORE's AMOUNT REQUESTED
       amount = "10.00";
       
@@ -2113,12 +2102,34 @@ namespace IPA.DAL.RBADAL
 
           if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
           {
-              Debug.WriteLine("DeviceCfg::GetCardData(): MSR Turned On successfully; Ready to swipe");
+              Logger.info("DeviceCfg::GetCardData(): EMV Turned On successfully; Ready to swipe");
+
+              int tc_read_msr_timeout = 20000;
+              string read_msr_timeout = System.Configuration.ConfigurationManager.AppSettings["tc_read_msr_timeout"] ?? "20000";
+              int.TryParse(read_msr_timeout, out tc_read_msr_timeout);
+              int msrTimerInterval = tc_read_msr_timeout;
+
+              // Set Read Timeout
+              MSRTimer = new System.Timers.Timer(msrTimerInterval);
+              MSRTimer.AutoReset = false;
+              MSRTimer.Elapsed += (sender, e) => RaiseTimerExpired(new Core.Client.Dal.Models.TimerEventArgs { Timer = TimerType.MSR });
+              MSRTimer.Start();
           }
           else
           {
               Debug.WriteLine("DeviceCfg::GetCardData(): start EMV failed Error Code: 0x{0:X}", (ushort)rt);
+              string [] message = new string[] { string.Format("***** REQUEST FAILED WITH ERROR=0x{0:X} : {1} *****", rt, IDTechSDK.errorCode.getErrorString(rt)) };
+              NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = message });
+
               rt = IDT_Augusta.SharedController.emv_cancelTransaction();
+              if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+              {
+                Logger.info("EMV Cancel Transaction: SUCCESSFUL.");
+              }
+              else
+              {
+                Logger.error("EMV Cancel Transaction failed: CODE=0x{0:X} : {1}", rt, IDTechSDK.errorCode.getErrorString(rt));
+              }
 
               // Disable EMV QC Mode
               SetEmvQCMode(false);
@@ -2698,7 +2709,6 @@ namespace IPA.DAL.RBADAL
 
     #endregion
 
-
     #region --- SPHERE SERIALIZER ---
 
     private void SetTerminalData(string configuration)
@@ -3007,7 +3017,7 @@ namespace IPA.DAL.RBADAL
     #endregion
   }
 
-     #region -- main interface --
+  #region -- main interface --
      internal class DeviceInformation
      {
         internal string SerialNumber;

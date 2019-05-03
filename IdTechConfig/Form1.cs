@@ -1001,6 +1001,8 @@ namespace IPA.MainApp
                 this.MsrSettingstabPage.Enabled = tc_show_msrsettings_tab;
                 this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
                 this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
+                TransactionTimer?.Stop();
+                TransactionTimer?.Dispose();
             };
 
             if (InvokeRequired)
