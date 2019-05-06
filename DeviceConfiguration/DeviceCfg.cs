@@ -780,7 +780,6 @@ namespace IPA.DAL.RBADAL
           Debug.WriteLine("DeviceCfg::Callback: Transaction Failed: {0}\r\n", (object) text);
 
           // Allow for GUI Recovery
-          string [] message = { "" };
           NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = new object[] { "***** TRANSACTION FAILED: " + text + " *****" } });
           break;
         }
@@ -1875,8 +1874,14 @@ namespace IPA.DAL.RBADAL
         IDTechSerializer.WriteConfig();
 
         // Display JSON Config to User
-        object [] message = { IDTechSerializer.GetFileName() };
-        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_JSON_CONFIG, Message = message });
+        if(deviceInformation.deviceMode == IDTECH_DEVICE_PID.AUGUSTA_KYB)
+        {
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_DEVICE_UPDATE_CONFIG, Message = new object[] { "COMPLETED" } });
+        }
+        else
+        { 
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_JSON_CONFIG, Message = new object[] { IDTechSerializer.GetFileName() } });
+        }
     }
 
     private void GetCompany()
@@ -2086,8 +2091,7 @@ namespace IPA.DAL.RBADAL
     private void SetDeviceFirmwareVersion()
     {
         deviceInformation.FirmwareVersion  = Device.GetFirmwareVersion();
-        string [] message = { deviceInformation.FirmwareVersion };
-        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_COMPLETE, Message = message });
+        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_COMPLETE, Message = new object[] { deviceInformation.FirmwareVersion } });
     }
 
     #endregion
@@ -2100,9 +2104,7 @@ namespace IPA.DAL.RBADAL
     {
       if (!device.IsConnected)
       {
-        string [] message = { "" };
-        message[0] = "***** REQUEST FAILED: DEVICE IS NOT CONNECTED *****";
-        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = message });
+        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = new object[] { "***** REQUEST FAILED: DEVICE IS NOT CONNECTED *****" } });
         return;
       }
 
@@ -2184,8 +2186,7 @@ namespace IPA.DAL.RBADAL
       }
 
       // Allow for GUI Recovery
-      string [] message = { "***** TRANSACTION FAILED: TIMEOUT *****" };
-      NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = message });
+      NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = new object[] { "***** TRANSACTION FAILED: TIMEOUT *****" } });
     }
 
     public string [] ParseCardData(string data)
@@ -2259,8 +2260,7 @@ namespace IPA.DAL.RBADAL
     {
       if (!device.IsConnected)
       {
-        string [] message = { "***** REQUEST FAILED: DEVICE IS NOT CONNECTED *****" };
-        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = message });
+        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR, Message = new object[] { "***** REQUEST FAILED: DEVICE IS NOT CONNECTED *****" } });
         return;
       }
 
@@ -2284,8 +2284,7 @@ namespace IPA.DAL.RBADAL
               string msrSetting = "WIP";
 
               // Set Configuration
-              string [] message = { expMask, panDigits, swipeForce, swipeMask, msrSetting };
-              NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_GET_DEVICE_MSRCONFIGURATION, Message = message });
+              NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_GET_DEVICE_MSRCONFIGURATION, Message = new object[] { expMask, panDigits, swipeForce, swipeMask, msrSetting } });
           }
           catch(Exception ex)
           {
@@ -2349,12 +2348,7 @@ namespace IPA.DAL.RBADAL
             string swipeMask = SetSwipeMaskOption(paramset4);
 
             // Setup Response
-            object [] message = new object[4];
-            message[0] = expMask;
-            message[1] = panDigits;
-            message[2] = swipeForceEncrypt;
-            message[3] = swipeMask;
-            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_MSRCONFIGURATION, Message = message });
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_MSRCONFIGURATION, Message = new object[] { expMask, panDigits, swipeForceEncrypt, swipeMask } });
         }
         else
         {
@@ -2426,8 +2420,6 @@ namespace IPA.DAL.RBADAL
                                 {
                                     DeviceRemovedHandler();
                                 }
-                                //string [] message = { "Enable" };
-                                //NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_ENABLE_MODE_BUTTON, Message = message } );
                             }
                         }
 
@@ -2564,9 +2556,6 @@ namespace IPA.DAL.RBADAL
                     //rt = IDT_Augusta.SharedController.msr_switchUSBInterfaceMode(true);
                     //Debug.WriteLine("DeviceCfg::SetEmvQCMode() - status={0}", rt);
 
-                    //string [] message = { "Enable" };
-                    //NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_EMV_MODE_BUTTON, Message = message });
-
                     // Restart device discovery
                     //DeviceRemovedHandler();
 
@@ -2604,9 +2593,6 @@ namespace IPA.DAL.RBADAL
             // Set Device to HID MODE
             rt = IDT_Augusta.SharedController.msr_switchUSBInterfaceMode(true);
             Debug.WriteLine("DeviceCfg::DisableQCEmvMode() - status={0}", rt);
-
-            //string [] message = { "Enable" };
-            //NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_EMV_MODE_BUTTON, Message = message });
 
             // Restart device discovery
             DeviceRemovedHandler();
@@ -2943,8 +2929,7 @@ namespace IPA.DAL.RBADAL
                     for(int i = 1; i <= bytes.Length / 1024; i++)
                     {
                         Debug.WriteLine("device: sent block {0} of {1}", i.ToString(), (bytes.Length / 1024).ToString());
-                        string [] message = { i.ToString() };
-                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STEP, Message = message });
+                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_STEP, Message = new object[] { i.ToString() } });
                         Thread.Sleep(10);
                     }
                     Thread.Sleep(1000);

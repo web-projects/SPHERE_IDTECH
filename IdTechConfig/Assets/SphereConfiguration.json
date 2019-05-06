@@ -551,49 +551,49 @@
       "TransactionStartTags": [	        // Tag values to return from emv_startTransaction(), assembled as single value for IDTech tag DFEE1A
       ],
       "TransactionAuthenticateTags": [	// Tag values to return from emv_authenticateTransaction(), assembled as single value for IDTech tag DFEE1A
-              "57",		//		Track 2 Data Equivalent
-              "5A",		//		Application Primary Account Number
-              "82",		//		Application Interchange Profile
-              "4F",		//		Application Identifier ICC
-              "50",		//		Application Label
-              "84",		//		Dedicated Filename
-              "5F20",		//		Cardholder Name
-              "5F24",		//		Application Expiration Date
-              "5F28",		//		Issuer Country Code
-              "5F2A",		//		Transaction Currency Code
-              "5F34",		//		Card Sequence Terminal Number
-              "9F02",		//		Amount Authorized
-              "9F03",		//		Amount Other
-              "9F06",		//		Application Identifier (AID)
-              "9F07",		//		Application Usage Control
-              "9F09",		//		Application Version Number (Reader)
-              "9F10",		//		Issuer Application Data
-              "9F11",		//		Issuer Code Table Index
-              "9F12",		//		Application Preferred Name
-              //"9F16",		//		Merchant Identifier
-              //"9F1C",		//		Terminal Identification
-              "9F4E",		//		Merchant Name and Location
-              //"DFEE54",	//		Kernel ID Transaction Type Group List
-              "9F1A",		//		Terminal Country Code
-              "9F1E",		//		Interface Device Serial Number
-              "9F21",		//		Transaction Time
-              "9F26",		//		Application Cryptogram
-              "9F27",		//		Cryptogram Information Data
-              "9F33",		//		Terminal Capabilities
-              "9F34",		//		Cardholder Verification Method Results
-              "9F35",		//		Terminal Type
-              "9F36",		//		Application Transaction Counter
-              "9F37",		//		Unpredictable Number
-              "9F39",		//		POS Entry Mode (*)
-              "9F40",		//		Additional Terminal Capabilities
-              "9F41",		//		Transaction Sequence Counter
-              "95",		  //		Terminal Verification Results
-              "9A",		  //		Transaction Date
-              "9B",		  //		Processing Code
-              "9C",		  //		Transaction Type
-              //"DFEE25",	//		EMV Result Codes
-              //"DFEE26",	//		TLV Encrypt Information
-              "FFEE01"		//		ViVOpay Group Tag
+        "57",		//		Track 2 Data Equivalent
+        "5A",		//		Application Primary Account Number
+        "82",		//		Application Interchange Profile
+        "4F",		//		Application Identifier ICC
+        "50",		//		Application Label
+        "84",		//		Dedicated Filename
+        "5F20",		//		Cardholder Name
+        "5F24",		//		Application Expiration Date
+        "5F28",		//		Issuer Country Code
+        "5F2A",		//		Transaction Currency Code
+        "5F34",		//		Card Sequence Terminal Number
+        "9F02",		//		Amount Authorized
+        "9F03",		//		Amount Other
+        "9F06",		//		Application Identifier (AID)
+        "9F07",		//		Application Usage Control
+        "9F09",		//		Application Version Number (Reader)
+        "9F10",		//		Issuer Application Data
+        "9F11",		//		Issuer Code Table Index
+        "9F12",		//		Application Preferred Name
+        //"9F16",		//		Merchant Identifier
+        //"9F1C",		//		Terminal Identification
+        "9F4E",		//		Merchant Name and Location
+        //"DFEE54",	//		Kernel ID Transaction Type Group List
+        "9F1A",		//		Terminal Country Code
+        "9F1E",		//		Interface Device Serial Number
+        "9F21",		//		Transaction Time
+        "9F26",		//		Application Cryptogram
+        "9F27",		//		Cryptogram Information Data
+        "9F33",		//		Terminal Capabilities
+        "9F34",		//		Cardholder Verification Method Results
+        "9F35",		//		Terminal Type
+        "9F36",		//		Application Transaction Counter
+        "9F37",		//		Unpredictable Number
+        "9F39",		//		POS Entry Mode (*)
+        "9F40",		//		Additional Terminal Capabilities
+        "9F41",		//		Transaction Sequence Counter
+        "95",		  //		Terminal Verification Results
+        "9A",		  //		Transaction Date
+        "9B",		  //		Processing Code
+        "9C",		  //		Transaction Type
+        //"DFEE25",	//		EMV Result Codes
+        //"DFEE26",	//		TLV Encrypt Information
+        "FFEE01"		//		ViVOpay Group Tag
       ],
       "TransactionCompleteTags": [	    // Tag values to return from emv_completeTransaction(), assembled as single value for IDTech tag DFEE1A
         "4F",		    //		Application Identifier ICC

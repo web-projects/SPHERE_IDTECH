@@ -1271,6 +1271,18 @@ namespace IPA.MainApp
                         {
                             MaintabControl.TabPages.Remove(JsontabPage);
                         }
+                        if(MaintabControl.Contains(ConfigurationtabPage))
+                        {
+                            MaintabControl.TabPages.Remove(ConfigurationtabPage);
+                        }
+                        if(MaintabControl.Contains(SettingstabPage))
+                        {
+                            MaintabControl.TabPages.Remove(SettingstabPage);
+                        }
+                        if(MaintabControl.Contains(AdvancedtabPage))
+                        {
+                            MaintabControl.TabPages.Remove(AdvancedtabPage);
+                        }
                         MaintabControl.SelectedTab = this.ApplicationtabPage;
                     }
                     else
@@ -1279,6 +1291,10 @@ namespace IPA.MainApp
 
                         this.ApplicationbtnCardRead.Enabled = true;
 
+                        if(!MaintabControl.Contains(ConfigurationtabPage))
+                        {
+                            MaintabControl.TabPages.Add(ConfigurationtabPage);
+                        }
                         if(!MaintabControl.Contains(SettingstabPage) && tc_show_settings_tab)
                         {
                             MaintabControl.TabPages.Add(SettingstabPage);
@@ -1786,10 +1802,13 @@ namespace IPA.MainApp
                     Invoke(mi);
                 }
             }
-            else if(this.JsonpicBoxWait.Visible == true)
+            else
             {
-                this.JsonpicBoxWait.Visible = false;
-                MaintabControl.SelectedTab = this.ApplicationtabPage;
+                if(this.JsonpicBoxWait.Visible == true)
+                { 
+                    this.JsonpicBoxWait.Visible = false;
+                    MaintabControl.SelectedTab = this.ApplicationtabPage;
+                }
             }
         }
 

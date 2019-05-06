@@ -42,3 +42,4 @@ This an application to Configure IDTech Devices.
 * 20190502 - Fixes for EMV transaction processing.
 * 20190503 - Reorganized SETTINGS tab page.
 * 20190506 - Improved card processing workflow.
+           - Improved keyboard mode workflow.

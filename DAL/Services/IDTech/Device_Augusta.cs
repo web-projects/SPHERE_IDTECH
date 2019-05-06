@@ -77,6 +77,11 @@ namespace IPA.DAL.RBADAL.Services
 
             string firmwareVersion = "";
             rt = IDT_Augusta.SharedController.device_getFirmwareVersion(ref firmwareVersion);
+            var result = Regex.Match(firmwareVersion, @"^N\v\n");
+            if (rt != RETURN_CODE.RETURN_CODE_DO_SUCCESS || result.Success)
+            {
+                rt = IDT_Augusta.SharedController.device_getFirmwareVersion(ref firmwareVersion);
+            }
             if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
             {
                 byte[] firmwareExtendedVersion = CommandRawMode("7831");
@@ -89,11 +94,19 @@ namespace IPA.DAL.RBADAL.Services
 
                 if(deviceMode == IDTECH_DEVICE_PID.AUGUSTA_KYB || deviceMode == IDTECH_DEVICE_PID.AUGUSTAS_KYB)
                 {
-                    var result = Regex.Match(firmwareVersion, @"^N\v\n");
+                    result = Regex.Match(firmwareVersion, @"^N\v\n");
                     if(result.Success)
                         deviceInfo.FirmwareVersion = firmwareVersion.Substring(result.Index + result.Length);
                     else
+                    { 
                         deviceInfo.FirmwareVersion = firmwareVersion.Trim();
+                        var mReg = Regex.Match(deviceInfo.FirmwareVersion, @"[0-9]+\.[0-9]+[0-9]+");
+                        if(mReg.Success)
+                        {
+                            deviceInfo.FirmwareVersion = mReg.Value.Trim();
+                            deviceInfo.ModelName = firmwareVersion.Split(' ')[2] + " (USB KB)" ?? "";
+                        }
+                    }
                     deviceInfo.Port = "USB-KB";
                 }
                 else
@@ -109,10 +122,18 @@ namespace IPA.DAL.RBADAL.Services
                 Debug.WriteLine("device: PopulateDeviceInfo() - failed to get Firmware version reason={0}", rt);
             }
 
-            deviceInfo.ModelName = IDTechSDK.Profile.IDT_DEVICE_String(deviceType, deviceConnect);
+            var modelName = IDTechSDK.Profile.IDT_DEVICE_String(deviceType, deviceConnect);
+            if(!string.IsNullOrEmpty(modelName))
+            { 
+                deviceInfo.ModelName = modelName;
+            }
             Debug.WriteLine("device INFO[Model Name]        : {0}", (object) deviceInfo.ModelName);
 
             rt = IDT_Augusta.SharedController.config_getModelNumber(ref deviceInfo.ModelNumber);
+            if (rt != RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+            {
+                rt = IDT_Augusta.SharedController.config_getModelNumber(ref deviceInfo.ModelNumber);
+            }
             if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
             {
                 if(deviceMode != IDTECH_DEVICE_PID.AUGUSTA_KYB && deviceMode != IDTECH_DEVICE_PID.AUGUSTAS_KYB)
@@ -224,6 +245,7 @@ namespace IPA.DAL.RBADAL.Services
             }
             else if(deviceMode == IDTECH_DEVICE_PID.AUGUSTA_KYB || deviceMode == IDTECH_DEVICE_PID.AUGUSTAS_KYB)
             {
+                System.Threading.Thread.Sleep(1000);
                 PopulateDeviceInfo();
                 return deviceInfo;
             }
