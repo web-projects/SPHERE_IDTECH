@@ -103,6 +103,7 @@
             this.ConfigurationGROUPStabPageColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationGROUPStabPageColumnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationPanel1 = new System.Windows.Forms.Panel();
+            this.ConfigurationPanel1pictureBox1 = new System.Windows.Forms.PictureBox();
             this.ConfigurationIDgrpBox = new System.Windows.Forms.GroupBox();
             this.ConfigurationVersion = new System.Windows.Forms.Label();
             this.ConfigurationModel = new System.Windows.Forms.Label();
@@ -114,7 +115,6 @@
             this.ConfigurationEnvironmentlbl = new System.Windows.Forms.Label();
             this.ConfigurationPlatform = new System.Windows.Forms.Label();
             this.ConfigurationPlatformlbl = new System.Windows.Forms.Label();
-            this.ConfigurationPanel1pictureBox1 = new System.Windows.Forms.PictureBox();
             this.ConfigurationPanel1label2 = new System.Windows.Forms.Label();
             this.ConfigurationPanel1btnDeviceMode = new System.Windows.Forms.Button();
             this.ConfigurationPanel1btnEMVMode = new System.Windows.Forms.Button();
@@ -174,8 +174,8 @@
             this.ConfigurationGROUPStabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationGROUPSpicBoxWait)).BeginInit();
             this.ConfigurationPanel1.SuspendLayout();
-            this.ConfigurationIDgrpBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).BeginInit();
+            this.ConfigurationIDgrpBox.SuspendLayout();
             this.ConfigurationGroupBox1.SuspendLayout();
             this.ApplicationtabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpictureBoxWait)).BeginInit();
@@ -974,13 +974,13 @@
             // 
             this.ConfigurationPanel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationPanel1pictureBox1);
+            this.ConfigurationPanel1.Controls.Add(this.ConfigurationCollapseButton);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationIDgrpBox);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationPanel1label2);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationPanel1btnDeviceMode);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationPanel1btnEMVMode);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationPanel1label1);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationPanel1btnFactoryReset);
-            this.ConfigurationPanel1.Controls.Add(this.ConfigurationCollapseButton);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationSplitter1);
             this.ConfigurationPanel1.Controls.Add(this.ConfigurationGroupBox1);
             this.ConfigurationPanel1.Dock = System.Windows.Forms.DockStyle.Left;
@@ -989,6 +989,18 @@
             this.ConfigurationPanel1.Name = "ConfigurationPanel1";
             this.ConfigurationPanel1.Size = new System.Drawing.Size(247, 514);
             this.ConfigurationPanel1.TabIndex = 0;
+            // 
+            // ConfigurationPanel1pictureBox1
+            // 
+            this.ConfigurationPanel1pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ConfigurationPanel1pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationPanel1pictureBox1.Image")));
+            this.ConfigurationPanel1pictureBox1.Location = new System.Drawing.Point(0, 1);
+            this.ConfigurationPanel1pictureBox1.Name = "ConfigurationPanel1pictureBox1";
+            this.ConfigurationPanel1pictureBox1.Size = new System.Drawing.Size(245, 511);
+            this.ConfigurationPanel1pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.ConfigurationPanel1pictureBox1.TabIndex = 19;
+            this.ConfigurationPanel1pictureBox1.TabStop = false;
+            this.ConfigurationPanel1pictureBox1.Visible = false;
             // 
             // ConfigurationIDgrpBox
             // 
@@ -1099,18 +1111,6 @@
             this.ConfigurationPlatformlbl.Size = new System.Drawing.Size(48, 13);
             this.ConfigurationPlatformlbl.TabIndex = 0;
             this.ConfigurationPlatformlbl.Text = "Platform:";
-            // 
-            // ConfigurationPanel1pictureBox1
-            // 
-            this.ConfigurationPanel1pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ConfigurationPanel1pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationPanel1pictureBox1.Image")));
-            this.ConfigurationPanel1pictureBox1.Location = new System.Drawing.Point(0, 1);
-            this.ConfigurationPanel1pictureBox1.Name = "ConfigurationPanel1pictureBox1";
-            this.ConfigurationPanel1pictureBox1.Size = new System.Drawing.Size(245, 511);
-            this.ConfigurationPanel1pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.ConfigurationPanel1pictureBox1.TabIndex = 19;
-            this.ConfigurationPanel1pictureBox1.TabStop = false;
-            this.ConfigurationPanel1pictureBox1.Visible = false;
             // 
             // ConfigurationPanel1label2
             // 
@@ -1485,9 +1485,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationGROUPSpicBoxWait)).EndInit();
             this.ConfigurationPanel1.ResumeLayout(false);
             this.ConfigurationPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).EndInit();
             this.ConfigurationIDgrpBox.ResumeLayout(false);
             this.ConfigurationIDgrpBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).EndInit();
             this.ConfigurationGroupBox1.ResumeLayout(false);
             this.ConfigurationGroupBox1.PerformLayout();
             this.ApplicationtabPage.ResumeLayout(false);

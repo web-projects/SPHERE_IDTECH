@@ -74,6 +74,7 @@ namespace IPA.MainApp
         int  tc_configloader_timeout;
         int  tc_transaction_collection_timeout;
         int  tc_minimum_transaction_length;
+        int  tc_transaction_start_delay;
         bool isNonAugusta;
 
         DEV_USB_MODE dev_usb_mode;
@@ -169,6 +170,11 @@ namespace IPA.MainApp
             tc_minimum_transaction_length = 1000;
             string minimum_transaction_length = System.Configuration.ConfigurationManager.AppSettings["tc_minimum_transaction_length"] ?? "1000";
             int.TryParse(minimum_transaction_length, out tc_minimum_transaction_length);
+
+            // Transaction Delay
+            tc_transaction_start_delay = 5000;
+            string transaction_delay = System.Configuration.ConfigurationManager.AppSettings["tc_transaction_start_delay"] ?? "5000";
+            int.TryParse(transaction_delay, out tc_transaction_start_delay);
 
             // Configuration Load Timer
             tc_configloader_timeout = 15000;
@@ -940,7 +946,17 @@ namespace IPA.MainApp
                     if(updateView)
                     {
                         this.ApplicationtxtCardData.Text = (string) data[0];
-                        this.ApplicationbtnCardRead.Enabled = (dev_usb_mode == DEV_USB_MODE.USB_HID_MODE) ? true : false;
+
+                        //delay enabling button
+                        new Thread(() =>
+                        {
+                            Thread.CurrentThread.IsBackground = true;
+                            Thread.Sleep(tc_transaction_start_delay);
+                            this.Invoke(new MethodInvoker(() =>
+                            {
+                                this.ApplicationbtnCardRead.Enabled = (dev_usb_mode == DEV_USB_MODE.USB_HID_MODE) ? true : false;
+                            }));
+                        }).Start();
 
                         this.ApplicationtxtCardData.ForeColor = TEXTBOX_FORE_COLOR;
 
@@ -1749,6 +1765,10 @@ namespace IPA.MainApp
                             this.JsontextBox1.Text = File.ReadAllText(filename[0]);
                             MaintabControl.SelectedTab = this.JsontabPage;
                             this.JsonpicBoxWait.Visible = false;
+                        }
+                        else
+                        {
+                            UpdateUI();
                         }
                     }
                     catch (Exception ex)

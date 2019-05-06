@@ -167,7 +167,7 @@ namespace IPA.DAL.RBADAL
             else if(deviceInformation.deviceMode == IDTECH_DEVICE_PID.VP3000_KYB)
             {
                 deviceType = IDT_DEVICE_Types.IDT_DEVICE_VP3300;
-                SetDeviceConfig();
+                SetDeviceConfig(true);
                 NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
             }
           }
@@ -474,7 +474,7 @@ namespace IPA.DAL.RBADAL
     /********************************************************************************************************/
     #region -- universal sdk interface --
 
-    private void SetDeviceConfig()
+    private void SetDeviceConfig(bool notify)
     {
       if(IDT_DEVICE_Types.IDT_DEVICE_NONE != deviceType)
       {
@@ -501,7 +501,10 @@ namespace IPA.DAL.RBADAL
            }
 
            // Update Device Configuration
-           NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_DEVICE_UPDATE_CONFIG, Message = new object[] { "COMPLETED" } });
+           if(notify)
+           { 
+             NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_DEVICE_UPDATE_CONFIG, Message = new object[] { "COMPLETED" } });
+           }
       }
     }
 
@@ -565,7 +568,7 @@ namespace IPA.DAL.RBADAL
                  }
 
                  // Get Device Configuration
-                 SetDeviceConfig();
+                 SetDeviceConfig(false);
 
                  Thread.Sleep(100);
                  connected = true;
@@ -1842,22 +1845,22 @@ namespace IPA.DAL.RBADAL
         }
 
         // Device Configuration: contact:capk
-        //string enable_read_capk_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_capk_settings"] ?? "true";
-        //bool read_capk_settings;
-        //bool.TryParse(enable_read_capk_settings, out read_capk_settings);
-        //if(read_capk_settings)
-        //{
-        //    Device.GetCapKList(ref IDTechSerializer);
-        //}
+        string enable_read_capk_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_capk_settings"] ?? "true";
+        bool read_capk_settings;
+        bool.TryParse(enable_read_capk_settings, out read_capk_settings);
+        if(read_capk_settings)
+        {
+            Device.GetCapKList(ref IDTechSerializer);
+        }
 
         // Device Configuration: contact:aid
-        //string enable_read_aid_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_aid_settings"] ?? "true";
-        //bool read_aid_settings;
-        //bool.TryParse(enable_read_aid_settings, out read_aid_settings);
-        //if(read_aid_settings)
-        //{
-        //    Device.GetAidList(ref IDTechSerializer);
-        //}
+        string enable_read_aid_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_aid_settings"] ?? "true";
+        bool read_aid_settings;
+        bool.TryParse(enable_read_aid_settings, out read_aid_settings);
+        if(read_aid_settings)
+        {
+            Device.GetAidList(ref IDTechSerializer);
+        }
 
         // MSR Settings
         string enable_read_msr_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_msr_settings"] ?? "true";
@@ -1939,7 +1942,14 @@ namespace IPA.DAL.RBADAL
         {
           case (int) PAN_DIGITS.DIGITS:
           {
-            val = (byte)Int32.Parse(child.Value.Trim());
+            if(String.IsNullOrEmpty(child.Value))
+            {
+                val = 0;
+            }
+            else
+            {
+                val = (byte)Int32.Parse(child.Value.Trim());
+            }
             break;
           }
         }

@@ -362,7 +362,7 @@ namespace IPA.CommonInterface.ConfigSphere
                     // Update timestamp
                     DateTime timenow = DateTime.UtcNow;
                     //user_configuration.last_update_timestamp = JsonConvert.SerializeObject(timenow).Trim('"');
-                    //Debug.WriteLine(user_configuration.last_update_timestamp);
+                    //Debug.WriteLine("TERMINAL DATA UPDATED: {0}", (object) user_configuration.last_update_timestamp);
 
                     JsonSerializer serializer = new JsonSerializer();
                     string path = System.IO.Directory.GetCurrentDirectory(); 
