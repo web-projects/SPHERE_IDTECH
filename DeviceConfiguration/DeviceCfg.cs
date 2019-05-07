@@ -130,7 +130,7 @@ namespace IPA.DAL.RBADAL
             Device.Init(SerialPortService.GetAvailablePorts(), ref deviceInformation.deviceMode);
 
             // Notify Main Form
-            SetDeviceMode(deviceInformation.deviceMode);
+            SetDeviceInterfaceType(deviceInformation.deviceMode);
 
             // connect to device
             Device.Connect();
@@ -372,7 +372,7 @@ namespace IPA.DAL.RBADAL
       }
     }*/
 
-    void SetDeviceMode(IDTECH_DEVICE_PID mode)
+    void SetDeviceInterfaceType(IDTECH_DEVICE_PID mode)
     {
         object [] message = { "" };
 
@@ -428,7 +428,7 @@ namespace IPA.DAL.RBADAL
         }
 
         // Notify Main Form
-        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_MODE, Message = message });
+        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_INTERFACE_TYPE, Message = message });
     }
 
     #endregion
@@ -1803,8 +1803,8 @@ namespace IPA.DAL.RBADAL
         // Terminal Configuration
         string configuration = GetTerminalMajorConfiguration();
 
-        // Get Company
-        GetCompany();
+        // Set Company
+        SetCompany();
 
         // Terminal Info
         string enable_read_terminal_info = System.Configuration.ConfigurationManager.AppSettings["tc_read_terminal_info"] ?? "true";
@@ -1827,9 +1827,8 @@ namespace IPA.DAL.RBADAL
         bool.TryParse(enable_read_terminal_data, out read_terminal_data);
         if(read_terminal_data)
         {
-            IDTechSerializer.terminalCfg.general_configuration.Contact.terminal_ics_type = GetTerminalType() ?? null;
+            IDTechSerializer.terminalCfg.general_configuration.Contact.terminal_ics_type = GetTerminalConfig() ?? null;
             object [] message1 = Device.GetTerminalData(ref IDTechSerializer, ref exponent);
-        
             // Display Terminal Data to User
             //NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA, Message = message1 });
         }
@@ -1884,7 +1883,7 @@ namespace IPA.DAL.RBADAL
         }
     }
 
-    private void GetCompany()
+    private void SetCompany()
     {
         try
         {
@@ -1892,7 +1891,7 @@ namespace IPA.DAL.RBADAL
         }
         catch(Exception ex)
         {
-            Debug.WriteLine("DeviceCfg::GetCompany(): - exception={0}", (object)ex.Message);
+            Debug.WriteLine("DeviceCfg::SetCompany(): - exception={0}", (object)ex.Message);
         }
     }
 
@@ -2361,7 +2360,13 @@ namespace IPA.DAL.RBADAL
       }
     }
 
-    public void SetDeviceMode(string mode)
+    /// <summary>
+    /// NOTES: If Interface of device is changed from USB-HID to USB-KB:
+    ///        1. Device does not support ICC function, and:
+    ///        2. All Terminal Data / Application Data / CA Public Key will be erased.
+    /// </summary>
+    /// <param name="mode"></param>
+    public void SetDeviceInterfaceType(string mode)
     {
         try
         {
@@ -2376,7 +2381,8 @@ namespace IPA.DAL.RBADAL
                     // Get QC Mode State
                     byte [] response = null;
                     string command = USDK_CONFIGURATION_COMMANDS.GET_QUICK_CHIP_MODE_STATE;
-                    RETURN_CODE rt = IDT_Augusta.SharedController.device_sendDataCommand(command, true, ref response);
+                    RETURN_CODE rt = (RETURN_CODE) (Device?.DataCommand(command, ref response, true) ?? 0);
+
 
                     bool disableQC = true;
                     byte result = response[0];
@@ -2398,7 +2404,7 @@ namespace IPA.DAL.RBADAL
                     {
                         command  = USDK_CONFIGURATION_COMMANDS.SET_KYB_QC_MODE_DISABLED;
                         //command = USDK_CONFIGURATION_COMMANDS.SET_QUICK_CHIP_MODE_DISABLED;
-                        rt = IDT_Augusta.SharedController.device_sendDataCommand_ext(command, false, ref response, 60, false);
+                        rt = (RETURN_CODE) (Device?.DataCommandExt(command, ref response, false) ?? 0);
                         result = response[0];
                         if(result == 0x06)
                         {
@@ -2406,7 +2412,7 @@ namespace IPA.DAL.RBADAL
                         }
                         if(attached)
                         { 
-                            IDT_Augusta.SharedController.device_sendDataCommand_ext(command, false, ref response, 60 , false);
+                            rt = (RETURN_CODE) (Device?.DataCommandExt(command, ref response, false) ?? 0);
                             result = response[0];
                             if(result == 0x06)
                             {
@@ -2442,13 +2448,13 @@ namespace IPA.DAL.RBADAL
                     // TURN ON QUICK CHIP MODE
                     byte [] response = null;
                     string command = USDK_CONFIGURATION_COMMANDS.SET_QUICK_CHIP_MODE_ENABLED;
-                    RETURN_CODE rt = IDT_Augusta.SharedController.device_sendDataCommand(command, true, ref response);
+                    RETURN_CODE rt = (RETURN_CODE) (Device?.DataCommand(command, ref response, true) ?? 0);
                     Thread.Sleep(1000);
                     if(attached)
                     { 
                         // Set Device to HID MODE
                         rt = IDT_Augusta.SharedController.msr_switchUSBInterfaceMode(true);
-                        Debug.WriteLine("DeviceCfg::SetDeviceMode(): - status={0}", IDTechSDK.errorCode.getErrorString(rt));
+                        Debug.WriteLine("DeviceCfg::SetDeviceInterfaceType(): - status={0}", IDTechSDK.errorCode.getErrorString(rt));
 
                         // Restart device discovery
                         DeviceRemovedHandler();
@@ -2459,7 +2465,7 @@ namespace IPA.DAL.RBADAL
                   RETURN_CODE rt = IDT_VP3300.SharedController.device_setPollMode(3);
                   if(rt != RETURN_CODE.RETURN_CODE_DO_SUCCESS)
                   {
-                    Debug.WriteLine("DeviceCfg::SetDeviceMode(): VP3000 - error={0}", IDTechSDK.errorCode.getErrorString(rt));
+                    Debug.WriteLine("DeviceCfg::SetDeviceInterfaceType(): VP3000 - error={0}", IDTechSDK.errorCode.getErrorString(rt));
                   }
                }
                else
@@ -2474,7 +2480,7 @@ namespace IPA.DAL.RBADAL
         }
         catch(Exception ex)
         {
-           Debug.WriteLine("DeviceCfg::SetDeviceMode(): - exception={0}", (object)ex.Message);
+           Debug.WriteLine("DeviceCfg::SetDeviceInterfaceType(): - exception={0}", (object)ex.Message);
         }
     }
 
@@ -2488,7 +2494,7 @@ namespace IPA.DAL.RBADAL
         bool isEMVQCEnabled = false;
         byte [] response = null;
         string command = USDK_CONFIGURATION_COMMANDS.GET_QUICK_CHIP_MODE_STATE;
-        RETURN_CODE rt = IDT_Augusta.SharedController.device_sendDataCommand(command, true, ref response);
+        RETURN_CODE rt = (RETURN_CODE) (Device?.DataCommand(command, ref response, true) ?? 0);
         byte result = (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS) ? response[0] : (byte) 0x00;
 
         if(result == 0x06)
@@ -2528,7 +2534,7 @@ namespace IPA.DAL.RBADAL
                 if(!isEMVQCEnabled)
                 {
                     string command = USDK_CONFIGURATION_COMMANDS.SET_QUICK_CHIP_MODE_ENABLED;
-                    RETURN_CODE rt = IDT_Augusta.SharedController.device_sendDataCommand(command, true, ref response);
+                    RETURN_CODE rt = (RETURN_CODE) (Device?.DataCommand(command, ref response, true) ?? 0);
                     result = (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS) ? true : false;
                 }
                 else
@@ -2542,7 +2548,7 @@ namespace IPA.DAL.RBADAL
                 if(isEMVQCEnabled)
                 {
                     string command = USDK_CONFIGURATION_COMMANDS.SET_QUICK_CHIP_MODE_DISABLED;
-                    RETURN_CODE rt = IDT_Augusta.SharedController.device_sendDataCommand(command, true, ref response);
+                    RETURN_CODE rt = (RETURN_CODE) (Device?.DataCommand(command, ref response, true) ?? 0);
                     result = (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS) ? true : false;
                     // Disable ICC
                     //RETURN_CODE rt = IDT_Augusta.SharedController.icc_disable();
@@ -2582,16 +2588,10 @@ namespace IPA.DAL.RBADAL
             // Disable QC Mode
             string command = USDK_CONFIGURATION_COMMANDS.SET_QUICK_CHIP_MODE_DISABLED;
             DeviceCommand(command, true);
-            // Disable ICC
-            RETURN_CODE rt = IDT_Augusta.SharedController.icc_disable();
-            // Remove EMV settings
-            rt = IDT_Augusta.SharedController.emv_removeTerminalData();
-            // Remove All AID
-            rt = IDT_Augusta.SharedController.emv_removeAllApplicationData();
-            // Remove All CAPK
-            rt = IDT_Augusta.SharedController.emv_removeAllCAPK();
-            // Set Device to HID MODE
-            rt = IDT_Augusta.SharedController.msr_switchUSBInterfaceMode(true);
+
+            // Remove ALL EMV Items
+            RETURN_CODE rt = (RETURN_CODE) (Device?.RemoveAllEMV() ?? 0);
+
             Debug.WriteLine("DeviceCfg::DisableQCEmvMode() - status={0}", rt);
 
             // Restart device discovery
@@ -2603,7 +2603,7 @@ namespace IPA.DAL.RBADAL
         }
     }    
 
-    private string GetTerminalType()
+    private string GetTerminalConfig()
     {
         string command = USDK_CONFIGURATION_COMMANDS.GET_MAJOR_TERMINAL_CFG;
         string response = DeviceCommand(command, false);
@@ -2643,14 +2643,14 @@ namespace IPA.DAL.RBADAL
 
     private string GetTerminalMajorConfiguration()
     {
-        string response = GetTerminalType();
-        Debug.WriteLine("Terminal Major Configuration: ----------- =[{0}]", (object) response);
+        string response = GetTerminalConfig();
 
-        if(response.Equals(TerminalMajorConfiguration.CONFIG_2C) || response.Equals(TerminalMajorConfiguration.CONFIG_5C))
+        // Force Major Config to 5C
+        if(!response.Equals(TerminalMajorConfiguration.CONFIG_5C) && !response.Equals("UNDEFINED", StringComparison.InvariantCultureIgnoreCase))
         {
-            // WIP: TESTING
-            ///SetTerminalData(response);
+            response = SetTerminalMajorConfiguration(TerminalMajorConfiguration.CONFIG_5C);
         }
+        Debug.WriteLine("Terminal Major Configuration: ----------- =[{0}]", (object) response);
 
         return response;
     }
@@ -2680,11 +2680,12 @@ namespace IPA.DAL.RBADAL
         {
             //response = DeviceCommand(command, false);
             //Debug.WriteLine("device::SetTerminalMajorConfiguration() reply=[{0}]", (object) response);
-            int configuration = Convert.ToInt32(command.Substring(0, 1));
+            int configuration = Convert.ToInt32(mode.Substring(0, 1));
             RETURN_CODE rt = IDT_Augusta.SharedController.emv_setTerminalMajorConfiguration(configuration);
             if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
             {
                 Debug.WriteLine("DeviceCfg::SetTerminalMajorConfiguration(): success.");
+                response = mode;
             }
             else
             {
@@ -2699,7 +2700,7 @@ namespace IPA.DAL.RBADAL
     {
         byte [] response = null;
         string command = USDK_CONFIGURATION_COMMANDS.GET_EMV_TERMINAL_DATA;
-        RETURN_CODE rt = IDT_Augusta.SharedController.device_sendDataCommand(command, true, ref response);
+        RETURN_CODE rt = (RETURN_CODE) (Device?.DataCommand(command, ref response, true) ?? 0);
         if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS && response != null)
         {
             byte [] tags = response.Skip(3).Take(response.Length - 3).ToArray();
@@ -2715,33 +2716,6 @@ namespace IPA.DAL.RBADAL
     #endregion
 
     #region --- SPHERE SERIALIZER ---
-
-    private void SetTerminalData(string configuration)
-    {
-        string response = SetTerminalMajorConfiguration(configuration);
-
-        // Retrieve all EMV L2 Terminal Data from the reader
-        byte[] data =  GetEMVTerminalData();
-
-        if(data != null)
-        {
-            // Save this to a backup file prior to any other operation
-            IDTechSerializer.WriteTerminalDataConfig();
-
-            byte [] tags = data.Skip(3).Take(data.Length - 3).ToArray();
-
-            // Set Terminal Data) command : "72 46 02 03"
-            RETURN_CODE rt = IDT_Augusta.SharedController.emv_setTerminalData(tags);
-            if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS) 
-            {
-                Debug.WriteLine("device: SetTerminalData() Successful for configuration: ", (object) configuration);
-            }
-            else 
-            {
-                Debug.WriteLine("device: SetTerminalData() failed error=0x{0:X}: {1}", (ushort)rt, IDTechSDK.errorCode.getErrorString(rt));
-            }
-        }
-    }
 
     public void GetSphereTerminalData(int majorcfg)
     {
@@ -2857,21 +2831,22 @@ namespace IPA.DAL.RBADAL
 
         if(useUniversalSDK)
         {
-            byte[] response = null;
-            RETURN_CODE rt = IDT_Augusta.SharedController.device_sendDataCommand(command, true, ref response);
+            byte [] response = null;
+            RETURN_CODE rt = (RETURN_CODE) (Device?.DataCommand(command, ref response, true) ?? 0);
+
             if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
             {
                 message[0] = BitConverter.ToString(response).Replace("-", string.Empty);
             }
             else
-            {
+            { 
                 if(response != null)
                 {
                     message[0] = "COMMAND EXECUTE FAILED - CODE=" + BitConverter.ToString(response).Replace("-", string.Empty);
                 }
                 else
-                {
-                    message[0] =  string.Format("COMMAND EXECUTE FAILED - CODE=0x{0:X4}", (ushort)rt);
+                { 
+                    message[0] = string.Format("COMMAND EXECUTE FAILED - CODE=0x{0:X4}", (ushort)rt);
                 }
             }
 

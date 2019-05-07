@@ -368,6 +368,18 @@ if (deviceID.ToLower().Contains("usb\\") && ((deviceID.Contains($"VID_{IDTECH}")
         {
             deviceInterface?.FactoryReset(majorcfg);
         }
+        public int DataCommand(string command, ref byte [] response, bool calcCRC)
+        {
+            return deviceInterface?.DataCommand(command, ref response, calcCRC) ?? 0;
+        }
+        public int DataCommandExt(string command, ref byte [] response, bool calcCRC)
+        {
+            return deviceInterface?.DataCommandExt(command, ref response, calcCRC) ?? 0;
+        }
+        public int RemoveAllEMV()
+        {
+            return deviceInterface?.RemoveAllEMV() ?? 0;
+        }
         #endregion
 
         public class USBDeviceInfo

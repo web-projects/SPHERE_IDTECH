@@ -431,7 +431,6 @@ namespace IPA.DAL.RBADAL.Services
                 if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
                 { 
                     byte [] tlv = null;
-
                     rt = IDT_Augusta.SharedController.emv_retrieveTerminalData(ref tlv);
                 
                     if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
@@ -1220,6 +1219,33 @@ namespace IPA.DAL.RBADAL.Services
                 Debug.WriteLine("device: FactoryReset() - exception={0}", (object)ex.Message);
             }
         }
+
+        public override int DataCommand(string command, ref byte [] response, bool calcCRC)
+        {
+            return (int) IDT_Augusta.SharedController.device_sendDataCommand(command, calcCRC, ref response);
+        }
+
+        public override int DataCommandExt(string command, ref byte [] response, bool calcCRC)
+        {
+            return (int) IDT_Augusta.SharedController.device_sendDataCommand_ext(command, calcCRC, ref response, 60 , false);
+        }
+
+        public override int RemoveAllEMV()
+        {
+            // Disable ICC
+            RETURN_CODE rt = IDT_Augusta.SharedController.icc_disable();
+            // Remove EMV settings
+            rt = IDT_Augusta.SharedController.emv_removeTerminalData();
+            // Remove All AID
+            rt = IDT_Augusta.SharedController.emv_removeAllApplicationData();
+            // Remove All CAPK
+            rt = IDT_Augusta.SharedController.emv_removeAllCAPK();
+            // Set Device to HID MODE
+            rt = IDT_Augusta.SharedController.msr_switchUSBInterfaceMode(true);
+
+            return (int) rt;
+        }
+
         #endregion
     }
 }

@@ -253,7 +253,7 @@
       },
 
       "TerminalSettings": {
-        "MajorConfiguration": "5C",
+        "MajorConfiguration": "2C",
         "MajorConfigurationChecksum": [			            // Note: can differ by Kernel version
           "DAD6AED81E9375043A1DBEF84C193FE863B2ED7F"		// 5C checksum for EMV Common L2 Version V1.10.037  (can use value to determine if current MajorConfiguration is correct)
         ],

@@ -69,6 +69,7 @@ namespace IPA.MainApp
         bool tc_show_terminal_data_tab;
         bool tc_show_json_tab;
         bool tc_show_advanced_tab;
+        bool tc_show_advanced_firmware_update;
         bool tc_always_on_top;
         int  tc_transaction_timeout;
         int  tc_configloader_timeout;
@@ -150,6 +151,14 @@ namespace IPA.MainApp
             if(!tc_show_advanced_tab)
             {
                 MaintabControl.TabPages.Remove(AdvancedtabPage);
+            }
+
+            // Advanced Tab: Firmware Update
+            string show_advanced_firmware_update = System.Configuration.ConfigurationManager.AppSettings["tc_show_advanced_firmware_update"] ?? "false";
+            bool.TryParse(show_advanced_firmware_update, out tc_show_advanced_firmware_update);
+            if(!tc_show_advanced_firmware_update)
+            {
+                this.AdvancedFirmwaregroupBox1.Visible = false;
             }
 
             // Application Always on Top
@@ -321,9 +330,9 @@ namespace IPA.MainApp
                     break;
                 }
 
-                case NOTIFICATION_TYPE.NT_SET_DEVICE_MODE:
+                case NOTIFICATION_TYPE.NT_SET_DEVICE_INTERFACE_TYPE:
                 {
-                    SetDeviceModeUI(sender, args);
+                    SetDeviceInterfaceTypeUI(sender, args);
                     break;
                 }
 
@@ -424,7 +433,7 @@ namespace IPA.MainApp
             else
             {
                 this.ApplicationlblSerialNumber.Text = "";
-                this.ApplicationlblFirmwareVersion.Text = "";
+                this.ApplicationAdvancedFirmwarelblVersion.Text = "";
                 this.ApplicationlblModelName.Text = "";
                 this.ApplicationlblModelNumber.Text = "";
                 this.ApplicationlblPort.Text = "";
@@ -498,9 +507,9 @@ namespace IPA.MainApp
             SetDeviceMsrConfiguration(e.Message);
         }
 
-        private void SetDeviceModeUI(object sender, DeviceNotificationEventArgs e)
+        private void SetDeviceInterfaceTypeUI(object sender, DeviceNotificationEventArgs e)
         {
-            SetDeviceMode(e.Message);
+            SetDeviceInterfaceType(e.Message);
         }
 
         private void SetExecuteResultUI(object sender, DeviceNotificationEventArgs e)
@@ -582,7 +591,7 @@ namespace IPA.MainApp
             else
             {
                 this.ApplicationlblSerialNumber.Text = "";
-                this.ApplicationlblFirmwareVersion.Text = "";
+                this.ApplicationAdvancedFirmwarelblVersion.Text = "";
                 this.ApplicationlblModelName.Text = "";
                 this.ApplicationlblModelNumber.Text = "";
                 this.ApplicationlblPort.Text = "";
@@ -595,7 +604,7 @@ namespace IPA.MainApp
             Debug.WriteLine("main: update GUI elements =========================================================");
 
             this.ApplicationlblSerialNumber.Text = "";
-            this.ApplicationlblFirmwareVersion.Text = "";
+            this.ApplicationAdvancedFirmwarelblVersion.Text = "";
             this.ApplicationlblModelName.Text = "";
             this.ApplicationlblModelNumber.Text = "";
             this.ApplicationlblPort.Text = "";
@@ -610,14 +619,14 @@ namespace IPA.MainApp
                 if (config != null)
                 {
                     this.ApplicationlblSerialNumber.Text = config[0];
-                    this.ApplicationlblFirmwareVersion.Text = config[1];
+                    this.ApplicationAdvancedFirmwarelblVersion.Text = config[1];
                     this.ApplicationlblModelName.Text = config[2];
                     this.ApplicationlblModelNumber.Text = config[3];
 
-                    this.lblFirmwareVersion.Text = config[1];
-                    this.btnFirmwareUpdate.Enabled = true;
-                    this.btnFirmwareUpdate.Visible = true;
-                    this.FirmwareprogressBar1.Visible = false;
+                    this.AdvancedFirmwarelblVersion.Text = config[1];
+                    this.AdvancedFirmwarebtnUpdate.Enabled = true;
+                    this.AdvancedFirmwarebtnUpdate.Visible = true;
+                    this.AdvancedFirmwareprogressBar1.Visible = false;
 
                     // value expected: either dashed or space separated
                     string [] worker = null;
@@ -810,8 +819,8 @@ namespace IPA.MainApp
                 {
                     this.Invoke(new MethodInvoker(() =>
                     {
-                        this.btnFirmwareUpdate.Enabled = false;
-                        this.lblFirmwareVersion.Text = "UNKNOWN";
+                        this.AdvancedFirmwarebtnUpdate.Enabled = false;
+                        this.AdvancedFirmwarelblVersion.Text = "UNKNOWN";
 
                         this.ApplicationtabPage.Enabled = true;
                         this.MaintabControl.SelectedTab = this.ApplicationtabPage;
@@ -1190,7 +1199,7 @@ namespace IPA.MainApp
             }
         }
 
-        private void SetDeviceMode(object payload)
+        private void SetDeviceInterfaceType(object payload)
         {
             // Invoker with Parameter(s)
             MethodInvoker mi = () =>
@@ -1294,6 +1303,9 @@ namespace IPA.MainApp
                         if(!MaintabControl.Contains(ConfigurationtabPage))
                         {
                             MaintabControl.TabPages.Add(ConfigurationtabPage);
+                            this.ConfigurationCollapseButton.Visible = false;
+                            this.ConfigurationPanel2.Visible = false;
+                            ConfigurationResetLoadFromButtons();
                         }
                         if(!MaintabControl.Contains(SettingstabPage) && tc_show_settings_tab)
                         {
@@ -1322,7 +1334,7 @@ namespace IPA.MainApp
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("main: SetDeviceMode() - exception={0}", (object)ex.Message);
+                    Debug.WriteLine("main: SetDeviceInterfaceType() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -1447,7 +1459,7 @@ namespace IPA.MainApp
                                     }
 
                                     this.ConfigurationModel.Text = this.ApplicationlblModelNumber.Text;
-                                    this.ConfigurationVersion.Text = this.ApplicationlblFirmwareVersion.Text;
+                                    this.ConfigurationVersion.Text = this.ApplicationAdvancedFirmwarelblVersion.Text;
                                 }
                             }
                             else
@@ -1865,7 +1877,7 @@ namespace IPA.MainApp
             MethodInvoker mi = () =>
             {
                 string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
-                this.FirmwareprogressBar1.PerformStep();
+                this.AdvancedFirmwareprogressBar1.PerformStep();
             };
 
             if (InvokeRequired)
@@ -1883,7 +1895,7 @@ namespace IPA.MainApp
             MethodInvoker mi = () =>
             {
                 string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
-                this.lblFirmwareVersion.Text = data[0];
+                this.AdvancedFirmwarelblVersion.Text = data[0];
             };
 
             if (InvokeRequired)
@@ -1901,13 +1913,13 @@ namespace IPA.MainApp
             MethodInvoker mi = () =>
             {
                 string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
-                this.lblFirmwareVersion.Text = data[0];
+                this.AdvancedFirmwarelblVersion.Text = data[0];
                 Thread.Sleep(3000);
-                this.btnFirmwareUpdate.Visible = true;
-                this.btnFirmwareUpdate.Enabled = true;
-                this.FirmwarepicBoxWait.Enabled = false;
-                this.FirmwarepicBoxWait.Visible = false;
-                this.FirmwareprogressBar1.Visible = false;
+                this.AdvancedFirmwarebtnUpdate.Visible = true;
+                this.AdvancedFirmwarebtnUpdate.Enabled = true;
+                this.AdvancedFirmwarepicBoxWait.Enabled = false;
+                this.AdvancedFirmwarepicBoxWait.Visible = false;
+                this.AdvancedFirmwareprogressBar1.Visible = false;
             };
 
             if (InvokeRequired)
@@ -1926,12 +1938,12 @@ namespace IPA.MainApp
             {
                 string[] data = ((IEnumerable)payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
 
-                this.lblFirmwareVersion.Text = data[0];
-                this.btnFirmwareUpdate.Visible = true;
-                this.btnFirmwareUpdate.Enabled = false;
-                this.FirmwarepicBoxWait.Enabled = false;
-                this.FirmwarepicBoxWait.Visible = false;
-                this.FirmwareprogressBar1.Visible = false;
+                this.AdvancedFirmwarelblVersion.Text = data[0];
+                this.AdvancedFirmwarebtnUpdate.Visible = true;
+                this.AdvancedFirmwarebtnUpdate.Enabled = false;
+                this.AdvancedFirmwarepicBoxWait.Enabled = false;
+                this.AdvancedFirmwarepicBoxWait.Visible = false;
+                this.AdvancedFirmwareprogressBar1.Visible = false;
             };
 
             if (InvokeRequired)
@@ -2295,7 +2307,7 @@ namespace IPA.MainApp
             }).Start();
         }
 
-        private void OnSetDeviceMode(object sender, EventArgs e)
+        private void OnSetDeviceInterfaceType(object sender, EventArgs e)
         {
             string mode = this.ConfigurationPanel1btnDeviceMode.Text;
             new Thread(() =>
@@ -2303,18 +2315,18 @@ namespace IPA.MainApp
                 try
                 {
                     Thread.CurrentThread.IsBackground = true;
-                    devicePlugin.SetDeviceMode(mode);
+                    devicePlugin.SetDeviceInterfaceType(mode);
                 }
                 catch (Exception ex)
                 {
-                    Logger.error("main: OnSetDeviceMode() - exception={0}", (object)ex.Message);
+                    Logger.error("main: OnSetInterfaceType() - exception={0}", (object)ex.Message);
                 }
 
             }).Start();
 
             // Disable Buttons
             this.ConfigurationPanel1btnEMVMode.Enabled = false;
-            this.btnFirmwareUpdate.Enabled = false;
+            this.AdvancedFirmwarebtnUpdate.Enabled = false;
         }
 
         private void OnEMVModeDisable(object sender, EventArgs e)
@@ -2599,7 +2611,7 @@ namespace IPA.MainApp
         private void OnDeselectingMainTabPage(object sender, TabControlCancelEventArgs e)
         {
             if(this.ApplicationpictureBoxWait.Visible      || this.JsonpicBoxWait.Visible      ||
-               this. SettingsMsrpicBoxWait.Visible         || this.FirmwarepicBoxWait.Visible  ||
+               this. SettingsMsrpicBoxWait.Visible         || this.AdvancedFirmwarepicBoxWait.Visible  ||
                this.ConfigurationPanel1pictureBox1.Visible || !this.ConfigurationPanel1.Enabled)
             {
                 e.Cancel = true;
@@ -2694,7 +2706,7 @@ namespace IPA.MainApp
             }).Start();
         }
 
-        private void OnModeClick(object sender, EventArgs e)
+        private void OnSetDeviceModeClick(object sender, EventArgs e)
         {
             string mode = this.ApplicationbtnMode.Text;
             TransactionTimer?.Stop();
@@ -2704,7 +2716,7 @@ namespace IPA.MainApp
                 Thread.CurrentThread.IsBackground = true;
                 try
                 {
-                    devicePlugin.SetDeviceMode(mode);
+                    devicePlugin.SetDeviceInterfaceType(mode);
                 }
                 catch(Exception ex)
                 {
@@ -2832,28 +2844,28 @@ namespace IPA.MainApp
 
         private void OnFirmwareUpdate(object sender, EventArgs e)
         {
-            FirmwareopenFileDialog1.Title = "FIRMWARE UPDATE";
-            FirmwareopenFileDialog1.Filter = "NGA FW Files|*.fm";
-            FirmwareopenFileDialog1.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Assets";
+            AdvancedFirmwareopenFileDialog1.Title = "FIRMWARE UPDATE";
+            AdvancedFirmwareopenFileDialog1.Filter = "NGA FW Files|*.fm";
+            AdvancedFirmwareopenFileDialog1.InitialDirectory = System.IO.Directory.GetCurrentDirectory() + "\\Assets";
 
-            if (FirmwareopenFileDialog1.ShowDialog() == DialogResult.OK)
+            if (AdvancedFirmwareopenFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                byte[] bytes = System.IO.File.ReadAllBytes(FirmwareopenFileDialog1.FileName);
+                byte[] bytes = System.IO.File.ReadAllBytes(AdvancedFirmwareopenFileDialog1.FileName);
                 if (bytes.Length > 0)
                 {
                     // Set the initial value of the ProgressBar.
-                    this.FirmwareprogressBar1.Value = 0;
-                    this.FirmwareprogressBar1.Maximum = bytes.Length / 1024;
-                    this.FirmwareprogressBar1.Step = 1;
+                    this.AdvancedFirmwareprogressBar1.Value = 0;
+                    this.AdvancedFirmwareprogressBar1.Maximum = bytes.Length / 1024;
+                    this.AdvancedFirmwareprogressBar1.Step = 1;
 
                     this.Invoke(new MethodInvoker(() =>
                     {
                         this.AdvancedtabPage.Enabled = true;
-                        this.FirmwarepicBoxWait.Enabled = true;
-                        this.FirmwarepicBoxWait.Visible = true;
-                        this.lblFirmwareVersion.Text = "UPDATING FIRMWARE (PLEASE DON'T INTERRUPT)...";
-                        this.btnFirmwareUpdate.Visible = false;
-                        this.FirmwareprogressBar1.Visible = true;
+                        this.AdvancedFirmwarepicBoxWait.Enabled = true;
+                        this.AdvancedFirmwarepicBoxWait.Visible = true;
+                        this.AdvancedFirmwarelblVersion.Text = "UPDATING FIRMWARE (PLEASE DON'T INTERRUPT)...";
+                        this.AdvancedFirmwarebtnUpdate.Visible = false;
+                        this.AdvancedFirmwareprogressBar1.Visible = true;
                         System.Windows.Forms.Application.DoEvents();
                     }));
 
@@ -2863,7 +2875,7 @@ namespace IPA.MainApp
                         try
                         {
                             Thread.CurrentThread.IsBackground = true;
-                            devicePlugin.FirmwareUpdate(FirmwareopenFileDialog1.FileName, bytes);
+                            devicePlugin.FirmwareUpdate(AdvancedFirmwareopenFileDialog1.FileName, bytes);
                         }
                         catch (Exception ex)
                         {

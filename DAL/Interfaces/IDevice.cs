@@ -86,6 +86,9 @@ namespace IPA.DAL.RBADAL.Interfaces
         void ValidateConfigGroup(ConfigSphereSerializer serializer, int group);
         void CloseDevice();
         void FactoryReset(int majorcfg);
+        int DataCommand(string command, ref byte [] response, bool calcCRC);
+        int DataCommandExt(string command, ref byte [] response, bool calcCRC);
+        int RemoveAllEMV();
         #endregion
     }
 }

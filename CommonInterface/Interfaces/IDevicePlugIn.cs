@@ -28,7 +28,7 @@ namespace IPA.CommonInterface.Interfaces
     void GetDeviceMsrConfiguration();
     // Configuration
     void SetDeviceMsrConfiguration(object data);
-    void SetDeviceMode(string mode);
+    void SetDeviceInterfaceType(string mode);
     string DeviceCommand(string command, bool notify);
     // Messaging
     string GetErrorMessage(string data);

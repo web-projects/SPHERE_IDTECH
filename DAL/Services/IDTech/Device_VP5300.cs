@@ -1167,6 +1167,22 @@ namespace IPA.DAL.RBADAL.Services
                 Debug.WriteLine("device: FactoryReset() - exception={0}", (object)ex.Message);
             }
         }
+
+        public override int DataCommand(string command, ref byte [] response, bool calcCRC)
+        {
+            return (int) IDT_SpectrumPro.SharedController.device_sendDataCommand(command, calcCRC, ref response);
+        }
+
+        public override int DataCommandExt(string command, ref byte [] response, bool calcCRC)
+        {
+            return (int) IDT_SpectrumPro.SharedController.device_sendDataCommand_ext(command, calcCRC, ref response, 60 , false);
+        }
+
+        public override int RemoveAllEMV()
+        {
+            return 0;
+        }
+
         #endregion
     }
 }

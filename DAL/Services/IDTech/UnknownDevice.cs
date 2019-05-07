@@ -327,6 +327,18 @@ namespace IPA.DAL.RBADAL.Services
         public virtual void FactoryReset(int majorcfg)
         {
         }
+        public virtual int DataCommand(string command, ref byte [] response, bool calcCRC)
+        {
+            return 0;
+        }
+        public virtual int DataCommandExt(string command, ref byte [] response, bool calcCRC)
+        {
+            return 0;
+        }
+        public virtual int RemoveAllEMV()
+        {
+            return 0;
+        }
         #endregion
 
     }
