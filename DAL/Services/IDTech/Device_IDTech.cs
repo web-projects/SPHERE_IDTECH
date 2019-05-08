@@ -1810,6 +1810,16 @@ if(empty)
         /********************************************************************************************************/
         #region -- device configuration --
 
+        public virtual int SetTerminalConfiguration(int majorcfg)
+        {
+            return 0;
+        }
+
+        public virtual int SetTerminalConfiguration(ConfigSphereSerializer serializer)
+        {
+            return 0;
+        }
+
         public virtual void GetTerminalInfo(ref ConfigIDTechSerializer serializer)
         {
         }

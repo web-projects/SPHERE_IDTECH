@@ -72,6 +72,7 @@
     <Compile Include="Helpers\EncoderDecoder.cs" />
     <Compile Include="Helpers\Encoder\BitStream.cs" />
     <Compile Include="Helpers\Encoder\EncodingExtensions.cs" />
+    <Compile Include="Helpers\MainAssemblyInfo.cs" />
     <Compile Include="Payment\CreditCard.cs" />
     <Compile Include="ConfigIDTech\Factory\AidFactory.cs" />
     <Compile Include="ConfigIDTech\Factory\CapKFactory.cs" />

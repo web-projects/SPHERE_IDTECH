@@ -44,3 +44,4 @@ This an application to Configure IDTech Devices.
 * 20190506 - Improved card processing workflow.
            - Improved keyboard mode workflow.
 * 20190507 - Streamlined device specific methods.
+* 20190508 - Fixes to JSON file processing.

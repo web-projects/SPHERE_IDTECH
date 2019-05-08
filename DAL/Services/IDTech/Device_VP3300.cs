@@ -4,6 +4,7 @@ using IPA.Core.Shared.Enums;
 using IPA.Core.Shared.Helpers.StatusCode;
 using IPA.DAL.RBADAL.Interfaces;
 using IPA.DAL.RBADAL.Services.Devices.IDTech;
+using IPA.LoggerManager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -104,7 +105,7 @@ namespace IPA.DAL.RBADAL.Services
                         deviceInfo.SerialNumber = GetKeyboardModeSerialNumber();
 
                         // VP3300 USB NEO v1.01.107
-                        string [] payload = GetKeybaordModeFirmwareVersion();
+                        string [] payload = GetKeyboardModeFirmwareVersion();
                         if(payload?.Length == 4)
                         {
                             deviceInfo.FirmwareVersion = payload[3].Substring(1, payload[3].Length -1);
@@ -164,7 +165,7 @@ namespace IPA.DAL.RBADAL.Services
             return serialnumber;
         }
 
-        private string [] GetKeybaordModeFirmwareVersion()
+        private string [] GetKeyboardModeFirmwareVersion()
         {
             string [] firmwareversion = null;
             byte[] result;
@@ -185,7 +186,7 @@ namespace IPA.DAL.RBADAL.Services
             }
             catch(Exception ex)
             {
-               Debug.WriteLine("DeviceCfg::GetKeybaordModeFirmwareVersion(): - exception={0}", (object)ex.Message);
+               Debug.WriteLine("DeviceCfg::GetKeyboardModeFirmwareVersion(): - exception={0}", (object)ex.Message);
             }
 
             return firmwareversion;
@@ -313,6 +314,28 @@ namespace IPA.DAL.RBADAL.Services
 
             return base.GetDeviceInfo();
         }
+
+        #region --- SPHERE SERIALIZER ---
+
+        public override int SetTerminalConfiguration(int majorcfg)
+        {
+            RETURN_CODE rt = RETURN_CODE.RETURN_CODE_DO_SUCCESS;
+            //20190508-NOTE: emv_setTerminalMajorConfiguration() not suppported
+            /*try
+            {
+                rt = IDT_VP3300.SharedController.emv_setTerminalMajorConfiguration(majorcfg);
+                if(rt != RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+                {
+                    Logger.error("DeviceCfg::SetTerminalMajorConfiguration(): failed Error Code=0x{0:X}", (ushort)rt);
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine("device: SetTerminalConfiguration() - exception={0}", (object)ex.Message);
+            }*/
+            return (int) rt;
+        }
+        #endregion
 
         #region -- keyboard mode overrides --
         public override void SetVP3000DeviceHidMode()

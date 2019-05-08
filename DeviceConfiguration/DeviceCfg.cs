@@ -176,9 +176,9 @@ namespace IPA.DAL.RBADAL
             throw new Exception("NoDevice");
           }
       }
-      catch (Exception xcp)
+      catch (Exception ex)
       {
-          throw xcp;
+          throw ex;
       }
     }
 
@@ -281,96 +281,6 @@ namespace IPA.DAL.RBADAL
     // DISCOVERY
     /********************************************************************************************************/
     #region -- device discovery ---
-    /*private bool DeviceDiscovery()
-    {
-      lock(discoveryLock)
-      {
-        useUniversalSDK = false;
-
-        var devices = Device.GetUSBDevices();
-
-        if (devices.Count == 1)
-        {
-            var vendor = devices[0].Vendor;
-
-            switch (devices[0].Vendor)
-            {
-                case DeviceManufacturer.IDTech:
-                {
-                    var deviceID = devices[0].DeviceID;
-                    string [] worker = deviceID.Split('&');
- 
-                    // should contain PID_XXXX...
-                    if(Regex.IsMatch(worker[1], "PID_"))
-                    {
-                      string [] worker2 = Regex.Split(worker[1], @"PID_");
-                      string pid = worker2[1].Substring(0, 4);
-
-                      // See if device matches
-                      int pidId = Int32.Parse(pid);
-
-                      object [] message = { "" };
-
-                      switch(pidId)
-                      {
-                        case (int) IDTECH_DEVICE_PID.AUGUSTA_KYB:
-                        {
-                          useUniversalSDK = true;
-                          deviceInformation.deviceMode = IDTECH_DEVICE_PID.AUGUSTA_KYB;
-                          message[0] = USK_DEVICE_MODE.USB_HID;
-                          break;
-                        }
-
-                        case (int) IDTECH_DEVICE_PID.AUGUSTA_HID:
-                        {
-                          useUniversalSDK = true;
-                          deviceInformation.deviceMode = IDTECH_DEVICE_PID.AUGUSTA_HID;
-                          message[0] = USK_DEVICE_MODE.USB_KYB;
-                          break;
-                        }
-
-                        default:
-                        {
-                            message[0] = USK_DEVICE_MODE.UNKNOWN;
-                            break;
-                        }
-                      }
-
-                      // Notify Main Form
-                      NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_MODE, Message = message });
-                    }
-
-                    break;
-                }
-
-                case DeviceManufacturer.Ingenico:
-                    //deviceInterface = new Device_Ingenico();
-                    //deviceInterface.OnNotification += DeviceOnNotification;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(vendor), vendor, null);
-            }
-        }
-        else if(devices.Count > 1)
-        {
-            throw new Exception(DeviceStatus.MultipleDevice.ToString());
-        }
-        else
-        {
-            throw new Exception(DeviceStatus.NoDevice.ToString());
-        }
-
-        // Initialize Universal SDK
-        if(useUniversalSDK)
-        {
-          IDT_Device.setCallback(MessageCallBack);
-          IDT_Device.startUSBMonitoring();
-        }
-
-        return useUniversalSDK;
-      }
-    }*/
 
     void SetDeviceInterfaceType(IDTECH_DEVICE_PID mode)
     {
@@ -567,7 +477,7 @@ namespace IPA.DAL.RBADAL
                     SetEmvQCMode(false);
                  }
 
-                 // Get Device Configuration
+                 // Set Device Configuration
                  SetDeviceConfig(false);
 
                  Thread.Sleep(100);
@@ -2644,14 +2554,7 @@ namespace IPA.DAL.RBADAL
     private string GetTerminalMajorConfiguration()
     {
         string response = GetTerminalConfig();
-
-        // Force Major Config to 5C
-        if(!response.Equals(TerminalMajorConfiguration.CONFIG_5C) && !response.Equals("UNDEFINED", StringComparison.InvariantCultureIgnoreCase))
-        {
-            response = SetTerminalMajorConfiguration(TerminalMajorConfiguration.CONFIG_5C);
-        }
         Debug.WriteLine("Terminal Major Configuration: ----------- =[{0}]", (object) response);
-
         return response;
     }
 
@@ -2681,7 +2584,7 @@ namespace IPA.DAL.RBADAL
             //response = DeviceCommand(command, false);
             //Debug.WriteLine("device::SetTerminalMajorConfiguration() reply=[{0}]", (object) response);
             int configuration = Convert.ToInt32(mode.Substring(0, 1));
-            RETURN_CODE rt = IDT_Augusta.SharedController.emv_setTerminalMajorConfiguration(configuration);
+            RETURN_CODE rt = (RETURN_CODE)(Device?.SetTerminalConfiguration(configuration) ?? 0);
             if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
             {
                 Debug.WriteLine("DeviceCfg::SetTerminalMajorConfiguration(): success.");
@@ -2730,8 +2633,12 @@ namespace IPA.DAL.RBADAL
             {
                 if(SphereSerializer.DeviceFirmwareMatches(deviceInformation.ModelNumber, deviceInformation.FirmwareVersion))
                 {
-                    Logger.info("DEVICE INFO: MODEL={0}, FIRMWARE={1}", deviceInformation.ModelNumber, SphereSerializer.GetDeviceFirmware(deviceInformation.ModelNumber));
-                    Device.ValidateTerminalData(ref SphereSerializer);
+                    Logger.info("DEVICE INFO: MODEL={0}, FIRMWARE={1}", deviceInformation.ModelNumber, SphereSerializer.GetDeviceFirmware(deviceInformation.ModelNumber).FirstOrDefault());
+                    
+                    if((RETURN_CODE)(Device?.SetTerminalConfiguration(SphereSerializer) ??  (int)RETURN_CODE.RETURN_CODE_FAILED) == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+                    { 
+                        Device.ValidateTerminalData(ref SphereSerializer);
+                    }
                     message = SphereSerializer.GetTerminalDataString(deviceInformation.SerialNumber, deviceInformation.EMVKernelVersion);
                 }
                 else

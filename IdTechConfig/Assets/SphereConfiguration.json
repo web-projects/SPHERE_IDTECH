@@ -12,25 +12,20 @@
     "EMVConfiguration": {
       "AIDList": {
         // Note : IDTech does not have AID tags for User-defined name for Application ID (9FFF00) or Application ID (9F06)
-        "A0000000031010": {		            // AID : for Visa Credit (note: IDTech does not prefix with length)
-          "DFEE2D": "90",			            // CTLS Configuration Group (note: suppress for Contact AID)
-	        "9F06": "A0000000031010",	      // CTLS AID (note: suppress for Contact AID)
-	        "9F66": "30804000",		          // CTLS Terminal Transaction Qualifier (TTQ) (note: suppress for Contact AID)
-	        "DFEF4B": "760000",		          // CTLS MSR Equivalent Data Option (note: used in Terminal Data for Contact AID)
-          "5F36": "02",			              // Currency Exponent
-          "DF17": "00000000",		          // Threshold value for biased random selection (Ingenico 9F812B)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF25": "9F3704",			          // Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF19": "99",			              // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
-          "DF18": "99",			              // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "DC4000A800",	          // TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF14": "0010000000",	          // TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF15": "DC4004F800",	          // TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "9F09": "008C",			            // Terminal application version number  -- note : unsure what value to use here
-          //"9F1B": "00000000",		        // Terminal Floor Limit
-	        "9F1B": "00000001",			        // Terminal Floor Limit
-          "DFEE15": "01"			            // ASI (Ingenico 9F841D)
+        "A0000000031010": {		// AID : for Visa Credit (note: IDTech does not prefix with length)
+          "5F36": "02",			    // Currency Exponent
+          "DF17": "00000000",		// Threshold value for biased random selection (Ingenico 9F812B)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
+          "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
+          "DF13": "DC4000A800",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF15": "DC4004F800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "9F09": "008C",			  // Terminal application version number  -- note : unsure what value to use here
+          "9F1B": "00000000",		// Terminal Floor Limit
+          "DFEE15": "01"			  // ASI (Ingenico 9F841D)
         },
-        "A0000000041010": {		  // AID : for MasterCard Credit (note: IDTech does not prefix with length)
+        "A0000000041010": {		// AID : for MasterCard Credit (note: IDTech does not prefix with length)
           "5F36": "02",			    // Currency Exponent
           "DF17": "00000000",		// Threshold value for biased random selection (Ingenico 9F812B)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
@@ -149,103 +144,108 @@
           "9F09": "008C",			  // Terminal application version number  -- note : unsure what value to use here
           "9F1B": "00000000",		// Terminal Floor Limit
           "DFEE15": "01"			  // ASI (Ingenico 9F841D)
-        },
-        "A0000000651010": {			// AID : for JCB (note: IDTech does not prefix with length)
-          "5F36": "02",			    // Currency Exponent
-          "DF17": "00000000",		// Threshold value for biased random selection (Ingenico 9F812B)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-	        //"DF28": "9F020695055F2A029A039C019F3704",			// Default TDOL (Ingenico 9F8125)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
-          "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "FC6024A800",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF15": "FC60ACF800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "9F09": "0200",			  // Terminal application version number  -- note : unsure what value to use here
-          "9F1B": "00000000",		// Terminal Floor Limit
-          "DFEE15": "01"			  // ASI (Ingenico 9F841D)
         }
       },
 
-      "CAPKList": {  // 2018 Set - DEV n Test
-        // Diners Expires 12312025
-        "A000000152-5D": {
-			    "RID": "A000000152",
-			    "Index": "5D",
-			    "Modulus": "AD938EA9888E5155F8CD272749172B3A8C504C17460EFA0BED7CBC5FD32C4A80FD810312281B5A35562800CDC325358A9639C501A537B7AE43DF263E6D232B811ACDB6DDE979D55D6C911173483993A423A0A5B1E1A70237885A241B8EEBB5571E2D32B41F9CC5514DF83F0D69270E109AF1422F985A52CCE04F3DF269B795155A68AD2D6B660DDCD759F0A5DA7B64104D22C2771ECE7A5FFD40C774E441379D1132FAF04CDF55B9504C6DCE9F61776D81C7C45F19B9EFB3749AC7D486A5AD2E781FA9D082FB2677665B99FA5F1553135A1FD2A2A9FBF625CA84A7D736521431178F13100A2516F9A43CE095B032B886C7A6AB126E203BE7",
-			    "Exponent": "00000003",
-			    "Checksum": "B51EC5F7DE9BB6D8BCE8FB5F69BA57A04221F39B"
-		    },
-        // Diners Expires 12312024
-        "A000000152-5C": {
-			    "RID": "A000000152",
-			    "Index": "5C",
-			    "Modulus": "833F275FCF5CA4CB6F1BF880E54DCFEB721A316692CAFEB28B698CAECAFA2B2D2AD8517B1EFB59DDEFC39F9C3B33DDEE40E7A63C03E90A4DD261BC0F28B42EA6E7A1F307178E2D63FA1649155C3A5F926B4C7D7C258BCA98EF90C7F4117C205E8E32C45D10E3D494059D2F2933891B979CE4A831B301B0550CDAE9B67064B31D8B481B85A5B046BE8FFA7BDB58DC0D7032525297F26FF619AF7F15BCEC0C92BCDCBC4FB207D115AA65CD04C1CF982191",
-			    "Exponent": "00000003",
-			    "Checksum": "60154098CBBA350F5F486CA31083D1FC474E31F8"
+      "CAPKList": {
+        // VISA
+        "A000000003-07": {
+          "RID": "A000000003",
+          "Index": "07",
+          "Modulus": "A89F25A56FA6DA258C8CA8B40427D927B4A1EB4D7EA326BBB12F97DED70AE5E4480FC9C5E8A972177110A1CC318D06D2F8F5C4844AC5FA79A4DC470BB11ED635699C17081B90F1B984F12E92C1C529276D8AF8EC7F28492097D8CD5BECEA16FE4088F6CFAB4A1B42328A1B996F9278B0B7E3311CA5EF856C2F888474B83612A82E4E00D0CD4069A6783140433D50725F",
+          "Exponent": "00000003",
+          "Checksum": "B4BC56CC4E88324932CBC643D6898F6FE593B172"
         },
-        // JCB Expires 12312024
-        "A000000065-11": {
-			    "RID": "A000000065",
-			    "Index": "11",
-			    "Modulus": "A2583AA40746E3A63C22478F576D1EFC5FB046135A6FC739E82B55035F71B09BEB566EDB9968DD649B94B6DEDC033899884E908C27BE1CD291E5436F762553297763DAA3B890D778C0F01E3344CECDFB3BA70D7E055B8C760D0179A403D6B55F2B3B083912B183ADB7927441BED3395A199EEFE0DEBD1F5FC3264033DA856F4A8B93916885BD42F9C1F456AAB8CFA83AC574833EB5E87BB9D4C006A4B5346BD9E17E139AB6552D9C58BC041195336485",
-			    "Exponent": "00000003",
-			    "Checksum": "D9FD62C9DD4E6DE7741E9A17FB1FF2C5DB948BCB"
+        // VISA Expires 12312024
+          "A000000003-08": {
+          "RID": "A000000003",
+          "Index": "08",
+          "Modulus": "D9FD6ED75D51D0E30664BD157023EAA1FFA871E4DA65672B863D255E81E137A51DE4F72BCC9E44ACE12127F87E263D3AF9DD9CF35CA4A7B01E907000BA85D24954C2FCA3074825DDD4C0C8F186CB020F683E02F2DEAD3969133F06F7845166ACEB57CA0FC2603445469811D293BFEFBAFAB57631B3DD91E796BF850A25012F1AE38F05AA5C4D6D03B1DC2E568612785938BBC9B3CD3A910C1DA55A5A9218ACE0F7A21287752682F15832A678D6E1ED0B",
+          "Exponent": "00000003",
+          "Checksum": "20D213126955DE205ADC2FD2822BD22DE21CF9A8"
         },
-        // JCB Expires 12312025
-        "A000000065-13": {
-			    "RID": "A000000065",
-			    "Index": "13",
-			    "Modulus": "A3270868367E6E29349FC2743EE545AC53BD3029782488997650108524FD051E3B6EACA6A9A6C1441D28889A5F46413C8F62F3645AAEB30A1521EEF41FD4F3445BFA1AB29F9AC1A74D9A16B93293296CB09162B149BAC22F88AD8F322D684D6B49A12413FC1B6AC70EDEDB18EC1585519A89B50B3D03E14063C2CA58B7C2BA7FB22799A33BCDE6AFCBEB4A7D64911D08D18C47F9BD14A9FAD8805A15DE5A38945A97919B7AB88EFA11A88C0CD92C6EE7DC352AB0746ABF13585913C8A4E04464B77909C6BD94341A8976C4769EA6C0D30A60F4EE8FA19E767B170DF4FA80312DBA61DB645D5D1560873E2674E1F620083F30180BD96CA589",
-			    "Exponent": "00000003",
-			    "Checksum": "54CFAE617150DFA09D3F901C9123524523EBEDF3"
+        // VISA Expires 12312026
+        "A000000003-09": {
+          "RID": "A000000003",
+          "Index": "09",
+          "Modulus": "9D912248DE0A4E39C1A7DDE3F6D2588992C1A4095AFBD1824D1BA74847F2BC4926D2EFD904B4B54954CD189A54C5D1179654F8F9B0D2AB5F0357EB642FEDA95D3912C6576945FAB897E7062CAA44A4AA06B8FE6E3DBA18AF6AE3738E30429EE9BE03427C9D64F695FA8CAB4BFE376853EA34AD1D76BFCAD15908C077FFE6DC5521ECEF5D278A96E26F57359FFAEDA19434B937F1AD999DC5C41EB11935B44C18100E857F431A4A5A6BB65114F174C2D7B59FDF237D6BB1DD0916E644D709DED56481477C75D95CDD68254615F7740EC07F330AC5D67BCD75BF23D28A140826C026DBDE971A37CD3EF9B8DF644AC385010501EFC6509D7A41",
+          "Exponent": "00000003",
+          "Checksum": "1FF80A40173F52D7D27E0F26A146A1C8CCB29046"
         },
-        // AMEX Expires 12312026
-        "A000000025-CA": {
-			    "RID": "A000000025",
-			    "Index": "CA",
-			    "Modulus": "C23ECBD7119F479C2EE546C123A585D697A7D10B55C2D28BEF0D299C01DC65420A03FE5227ECDECB8025FBC86EEBC1935298C1753AB849936749719591758C315FA150400789BB14FADD6EAE2AD617DA38163199D1BAD5D3F8F6A7A20AEF420ADFE2404D30B219359C6A4952565CCCA6F11EC5BE564B49B0EA5BF5B3DC8C5C6401208D0029C3957A8C5922CBDE39D3A564C6DEBB6BD2AEF91FC27BB3D3892BEB9646DCE2E1EF8581EFFA712158AAEC541C0BBB4B3E279D7DA54E45A0ACC3570E712C9F7CDF985CFAFD382AE13A3B214A9E8E1E71AB1EA707895112ABC3A97D0FCB0AE2EE5C85492B6CFD54885CDD6337E895CC70FB3255E3",
-			    "Exponent": "00000003",
-			    "Checksum": "6BDA32B1AA171444C7E8F88075A74FBFE845765F"
-        },
-        // AMEX Expires 12312024
-          "A000000025-C9": {
-			    "RID": "A000000025",
-			    "Index": "C9",
-			    "Modulus": "B362DB5733C15B8797B8ECEE55CB1A371F760E0BEDD3715BB270424FD4EA26062C38C3F4AAA3732A83D36EA8E9602F6683EECC6BAFF63DD2D49014BDE4D6D603CD744206B05B4BAD0C64C63AB3976B5C8CAAF8539549F5921C0B700D5B0F83C4E7E946068BAAAB5463544DB18C63801118F2182EFCC8A1E85E53C2A7AE839A5C6A3CABE73762B70D170AB64AFC6CA482944902611FB0061E09A67ACB77E493D998A0CCF93D81A4F6C0DC6B7DF22E62DB",
-			    "Exponent": "00000003",
-			    "Checksum": "8E8DFF443D78CD91DE88821D70C98F0638E51E49"
-        },
-        // Visa Expires 12312024
-        "A000000003-92": {
-			    "RID": "A000000003",
-			    "Index": "92",
-			    "Modulus": "996AF56F569187D09293C14810450ED8EE3357397B18A2458EFAA92DA3B6DF6514EC060195318FD43BE9B8F0CC669E3F844057CBDDF8BDA191BB64473BC8DC9A730DB8F6B4EDE3924186FFD9B8C7735789C23A36BA0B8AF65372EB57EA5D89E7D14E9C7B6B557460F10885DA16AC923F15AF3758F0F03EBD3C5C2C949CBA306DB44E6A2C076C5F67E281D7EF56785DC4D75945E491F01918800A9E2DC66F60080566CE0DAF8D17EAD46AD8E30A247C9F",
-			    "Exponent": "00000003",
-			    "Checksum": "429C954A3859CEF91295F663C963E582ED6EB253"
-        },
-        // Visa Expires 12312026
-        "A000000003-94": {
-			    "RID": "A000000003",
-			    "Index": "94",
-			    "Modulus": "ACD2B12302EE644F3F835ABD1FC7A6F62CCE48FFEC622AA8EF062BEF6FB8BA8BC68BBF6AB5870EED579BC3973E121303D34841A796D6DCBC41DBF9E52C4609795C0CCF7EE86FA1D5CB041071ED2C51D2202F63F1156C58A92D38BC60BDF424E1776E2BC9648078A03B36FB554375FC53D57C73F5160EA59F3AFC5398EC7B67758D65C9BFF7828B6B82D4BE124A416AB7301914311EA462C19F771F31B3B57336000DFF732D3B83DE07052D730354D297BEC72871DCCF0E193F171ABA27EE464C6A97690943D59BDABB2A27EB71CEEBDAFA1176046478FD62FEC452D5CA393296530AA3F41927ADFE434A2DF2AE3054F8840657A26E0FC617",
-			    "Exponent": "00000003",
-			    "Checksum": "C4A3C43CCF87327D136B804160E47D43B60E6E0F"
+
+        // MasterCard
+        "A000000004-04": {
+          "RID": "A000000004",
+          "Index": "04",
+          "Modulus": "A6DA428387A502D7DDFB7A74D3F412BE762627197B25435B7A81716A700157DDD06F7CC99D6CA28C2470527E2C03616B9C59217357C2674F583B3BA5C7DCF2838692D023E3562420B4615C439CA97C44DC9A249CFCE7B3BFB22F68228C3AF13329AA4A613CF8DD853502373D62E49AB256D2BC17120E54AEDCED6D96A4287ACC5C04677D4A5A320DB8BEE2F775E5FEC5",
+          "Exponent": "00000003",
+          "Checksum": "381A035DA58B482EE2AF75F4C3F2CA469BA4AA6C"
         },
         // MasterCard Expires 12312024
-        "A000000004-F1": {
-			    "RID": "A000000004",
-			    "Index": "F1",
-			    "Modulus": "A0DCF4BDE19C3546B4B6F0414D174DDE294AABBB828C5A834D73AAE27C99B0B053A90278007239B6459FF0BBCD7B4B9C6C50AC02CE91368DA1BD21AAEADBC65347337D89B68F5C99A09D05BE02DD1F8C5BA20E2F13FB2A27C41D3F85CAD5CF6668E75851EC66EDBF98851FD4E42C44C1D59F5984703B27D5B9F21B8FA0D93279FBBF69E090642909C9EA27F898959541AA6757F5F624104F6E1D3A9532F2A6E51515AEAD1B43B3D7835088A2FAFA7BE7",
-			    "Exponent": "00000003",
-			    "Checksum": "D8E68DA167AB5A85D8C3D55ECB9B0517A1A5B4BB"
+        "A000000004-05": {
+          "RID": "A000000004",
+          "Index": "05",
+          "Modulus": "B8048ABC30C90D976336543E3FD7091C8FE4800DF820ED55E7E94813ED00555B573FECA3D84AF6131A651D66CFF4284FB13B635EDD0EE40176D8BF04B7FD1C7BACF9AC7327DFAA8AA72D10DB3B8E70B2DDD811CB4196525EA386ACC33C0D9D4575916469C4E4F53E8E1C912CC618CB22DDE7C3568E90022E6BBA770202E4522A2DD623D180E215BD1D1507FE3DC90CA310D27B3EFCCD8F83DE3052CAD1E48938C68D095AAC91B5F37E28BB49EC7ED597",
+          "Exponent": "00000003",
+          "Checksum": "EBFA0D5D06D8CE702DA3EAE890701D45E274C845"
         },
         // MasterCard Expires 12312026
-        "A000000004-EF": {
-			    "RID": "A000000004",
-			    "Index": "EF",
-			    "Modulus": "A191CB87473F29349B5D60A88B3EAEE0973AA6F1A082F358D849FDDFF9C091F899EDA9792CAF09EF28F5D22404B88A2293EEBBC1949C43BEA4D60CFD879A1539544E09E0F09F60F065B2BF2A13ECC705F3D468B9D33AE77AD9D3F19CA40F23DCF5EB7C04DC8F69EBA565B1EBCB4686CD274785530FF6F6E9EE43AA43FDB02CE00DAEC15C7B8FD6A9B394BABA419D3F6DC85E16569BE8E76989688EFEA2DF22FF7D35C043338DEAA982A02B866DE5328519EBBCD6F03CDD686673847F84DB651AB86C28CF1462562C577B853564A290C8556D818531268D25CC98A4CC6A0BDFFFDA2DCCA3A94C998559E307FDDF915006D9A987B07DDAEB3B",
-			    "Exponent": "00000003",
-			    "Checksum": "21766EBB0EE122AFB65D7845B73DB46BAB65427A"
+        "A000000004-06": {
+          "RID": "A000000004",
+          "Index": "06",
+          "Modulus": "CB26FC830B43785B2BCE37C81ED334622F9622F4C89AAE641046B2353433883F307FB7C974162DA72F7A4EC75D9D657336865B8D3023D3D645667625C9A07A6B7A137CF0C64198AE38FC238006FB2603F41F4F3BB9DA1347270F2F5D8C606E420958C5F7D50A71DE30142F70DE468889B5E3A08695B938A50FC980393A9CBCE44AD2D64F630BB33AD3F5F5FD495D31F37818C1D94071342E07F1BEC2194F6035BA5DED3936500EB82DFDA6E8AFB655B1EF3D0D7EBF86B66DD9F29F6B1D324FE8B26CE38AB2013DD13F611E7A594D675C4432350EA244CC34F3873CBA06592987A1D7E852ADC22EF5A2EE28132031E48F74037E3B34AB747F",
+          "Exponent": "00000003",
+          "Checksum": "F910A1504D5FFB793D94F3B500765E1ABCAD72D9"
+        },
+
+        // Discover & Diners
+        "A000000152-03": {
+          "RID": "A000000152",
+          "Index": "03",
+          "Modulus": "BF321241BDBF3585FFF2ACB89772EBD18F2C872159EAA4BC179FB03A1B850A1A758FA2C6849F48D4C4FF47E02A575FC13E8EB77AC37135030C5600369B5567D3A7AAF02015115E987E6BE566B4B4CC03A4E2B16CD9051667C2CD0EEF4D76D27A6F745E8BBEB45498ED8C30E2616DB4DBDA4BAF8D71990CDC22A8A387ACB21DD88E2CC27962B31FBD786BBB55F9E0B041",
+          "Exponent": "00000003",
+          "Checksum": "CA1E9099327F0B786D8583EC2F27E57189503A57"
+        },
+        // Discover & Diners Expires 12312024
+        "A000000152-04": {
+          "RID": "A000000152",
+          "Index": "04",
+          "Modulus": "8EEEC0D6D3857FD558285E49B623B109E6774E06E9476FE1B2FB273685B5A235E955810ADDB5CDCC2CB6E1A97A07089D7FDE0A548BDC622145CA2DE3C73D6B14F284B3DC1FA056FC0FB2818BCD7C852F0C97963169F01483CE1A63F0BF899D412AB67C5BBDC8B4F6FB9ABB57E95125363DBD8F5EBAA9B74ADB93202050341833DEE8E38D28BD175C83A6EA720C262682BEABEA8E955FE67BD9C2EFF7CB9A9F45DD5BDA4A1EEFB148BC44FFF68D9329FD",
+          "Exponent": "00000003",
+          "Checksum": "17F971CAF6B708E5B9165331FBA91593D0C0BF66"
+        },
+        // Discover & Diners Expires 12312026
+        "A000000152-05": {
+          "RID": "A000000152",
+          "Index": "05",
+          "Modulus": "E1200E9F4428EB71A526D6BB44C957F18F27B20BACE978061CCEF23532DBEBFAF654A149701C14E6A2A7C2ECAC4C92135BE3E9258331DDB0967C3D1D375B996F25B77811CCCC06A153B4CE6990A51A0258EA8437EDBEB701CB1F335993E3F48458BC1194BAD29BF683D5F3ECB984E31B7B9D2F6D947B39DEDE0279EE45B47F2F3D4EEEF93F9261F8F5A571AFBFB569C150370A78F6683D687CB677777B2E7ABEFCFC8F5F93501736997E8310EE0FD87AFAC5DA772BA277F88B44459FCA563555017CD0D66771437F8B6608AA1A665F88D846403E4C41AFEEDB9729C2B2511CFE228B50C1B152B2A60BBF61D8913E086210023A3AA499E423",
+          "Exponent": "00000003",
+          "Checksum": "12BCD407B6E627A750FDF629EE8C2C9CC7BA636A"
+        },
+
+        // AMEX
+        "A000000025-0E": {
+          "RID": "A000000025",
+          "Index": "0E",
+          "Modulus": "AA94A8C6DAD24F9BA56A27C09B01020819568B81A026BE9FD0A3416CA9A71166ED5084ED91CED47DD457DB7E6CBCD53E560BC5DF48ABC380993B6D549F5196CFA77DFB20A0296188E969A2772E8C4141665F8BB2516BA2C7B5FC91F8DA04E8D512EB0F6411516FB86FC021CE7E969DA94D33937909A53A57F907C40C22009DA7532CB3BE509AE173B39AD6A01BA5BB85",
+          "Exponent": "00000003",
+          "Checksum": "A7266ABAE64B42A3668851191D49856E17F8FBCD"
+        },
+        // AMEX Expires 12312024
+        "A000000025-0F": {
+          "RID": "A000000025",
+          "Index": "0F",
+          "Modulus": "C8D5AC27A5E1FB89978C7C6479AF993AB3800EB243996FBB2AE26B67B23AC482C4B746005A51AFA7D2D83E894F591A2357B30F85B85627FF15DA12290F70F05766552BA11AD34B7109FA49DE29DCB0109670875A17EA95549E92347B948AA1F045756DE56B707E3863E59A6CBE99C1272EF65FB66CBB4CFF070F36029DD76218B21242645B51CA752AF37E70BE1A84FF31079DC0048E928883EC4FADD497A719385C2BBBEBC5A66AA5E5655D18034EC5",
+          "Exponent": "00000003",
+          "Checksum": "A73472B3AB557493A9BC2179CC8014053B12BAB4"
+        },
+        // AMEX Expires 1231202
+        "A000000025-10": {
+          "RID": "A000000025",
+          "Index": "10",
+          "Modulus": "CF98DFEDB3D3727965EE7797723355E0751C81D2D3DF4D18EBAB9FB9D49F38C8C4A826B99DC9DEA3F01043D4BF22AC3550E2962A59639B1332156422F788B9C16D40135EFD1BA94147750575E636B6EBC618734C91C1D1BF3EDC2A46A43901668E0FFC136774080E888044F6A1E65DC9AAA8928DACBEB0DB55EA3514686C6A732CEF55EE27CF877F110652694A0E3484C855D882AE191674E25C296205BBB599455176FDD7BBC549F27BA5FE35336F7E29E68D783973199436633C67EE5A680F05160ED12D1665EC83D1997F10FD05BBDBF9433E8F797AEE3E9F02A34228ACE927ABE62B8B9281AD08D3DF5C7379685045D7BA5FCDE58637",
+          "Exponent": "00000003",
+          "Checksum": "C729CF2FD262394ABC4CC173506502446AA9B9FD"
         }
       },
 
@@ -253,7 +253,7 @@
       },
 
       "TerminalSettings": {
-        "MajorConfiguration": "2C",
+        "MajorConfiguration": "5C",
         "MajorConfigurationChecksum": [			            // Note: can differ by Kernel version
           "DAD6AED81E9375043A1DBEF84C193FE863B2ED7F"		// 5C checksum for EMV Common L2 Version V1.10.037  (can use value to determine if current MajorConfiguration is correct)
         ],
@@ -261,8 +261,8 @@
         "KernelVersionTag": "9F1C",		// Data length = 8; last whitespace separated group from emv_getEMVKernelVersion()
         "TerminalData": {
           // Tags for QuickChip KB-mode
-          "9F02": "000000001000",		        // Default amount (10.00)
-          //"DFEE1E": "008420F0C20E0400",		// Contact Terminal Configuration (Ingenico equiv F0DC3CF0C2D28400)	// Non-KB 5C value "D09C20D0C41E1400"
+          "9F02": "000000001000",		      // Default amount (10.00)
+          //"DFEE1E": "008420F0C20E0400",		// Contact Terminal Configuration (Ingenico equiv F0DC3CF0C2D28400)	// Non-KB 5C value "D09C20D0C41E1400"          
           "DFEE1E": "108420D0C41E0600",		// Contact Terminal Configuration (Ingenico equiv F0DC3CF0C2D28400)	// Non-KB 5C value "D09C20D0C41E1400"
           //"DFEE1E": "D09C20F0C20E1400",		// Contact Terminal Configuration (Ingenico equiv F0DC3CF0C2D28400)	// Non-KB 5C value "D09C20D0C41E1400"
           //   Byte 1:
@@ -339,9 +339,6 @@
           //     RFU (b1) - False
           "DFEE1B": "3030303130353030",	// Authorization Request Data elements		// Non-KB 5C value "3030303130353030"
           "DFEF4B": "7F0000",			      // Track selection (enable PAN, T1, T2, T3, T1/T2/T3 sentinels) // NOT FOR VP3300
-			    //"DFEF4B": "F60000",			    // Track selection (enable PAN, T1, T2, T3, T1/T2/T3 sentinels) // NOT FOR VP3300
-			    "DFEF4B": "760000",			      // Track selection (enable PAN, T1, T2, T3, T1/T2/T3 sentinels) // NOT FOR VP3300
-			    //"DFEF4B": "120000",			    // Track selection (enable PAN, T1, T2, T3, T1/T2/T3 sentinels) // NOT FOR VP3300
           // Disable the following five tags VP5300
           "DFED0A": "01",			          // Output Fallback Reason (1 = enabled)
           "DFEF65": "01",			          // Control Output Errors (1 = enabled)
@@ -384,10 +381,10 @@
           //     RFU (b1) - False
           "9F40": "F000F0A001",		// Additional Terminal Capability (Ingenico value 6000F05001)
           //   Byte 1 : Transaction Type Capability
-          //     Cash (b8) [Major] - False
+          //     Cash (b8) [Major] - True
           //     Goods (b7) [Major] - True
           //     Services (b6) [Major] - True
-          //     Cashback (b5) [Major] - False
+          //     Cashback (b5) [Major] - True
           //     Inquiry (b4) - False
           //     Transfer (b3) - False
           //     Payment (b2) - False
@@ -411,10 +408,10 @@
           //     RFU (b2) - False
           //     RFU (b1) - False
           //   Terminal Data Output Capability (byte 4) :
-          //     Print, Attendant (b8) - False
-          //     Print, Cardholder (b7) - True
-          //     Display, Attendant (b6) - False
-          //     Display, Cardholder (b5) - True
+          //     Print, Attendant (b8) - True
+          //     Print, Cardholder (b7) - False
+          //     Display, Attendant (b6) - True
+          //     Display, Cardholder (b5) - False
           //     RFU (b4) - False
           //     RFU (b3) - False
           //     Code Table 10 (b2) - False
@@ -444,17 +441,12 @@
           "DFEE16": "00",		            // Terminal Encrypt Mode
           "DFEE17": "05",		            // Terminal Entry Mode for ICC
           "DFEE18": "80",		            // Terminal Encrypt Mode for MSR
-		      //"DFEE1D": "06042A0C31",	      // Masked Data Output Parameter (PrePAN=6, PosPAN=4, MaskASCII=2A, MaskHex=0C, Expire=NotMask)
           "DFEE1F": "80",		            // Issuer Script Limit
           "DFEE20": "3C",		            // ICC Power on detect waiting time
           "DFEE21": "0A",		            // ICC L1 waiting time
           "DFEE22": "323C3C",		        // Driver waiting time
           // Tag 9F1E (Interface Device Serial Number) is set from live value; tag defined in element "SerialNumberTag"	// IDTech default value "5465726D696E616C" (Terminal)
 
-          // Contactless
-          //"9F66": "30004000",           // Terminal Transaction Qualifier (TTQ)
-          //"9F66": "30008000",           // Terminal Transaction Qualifier (TTQ)
-          
           // TC tags (from Ingenico EMVCONTACT.XML)
           //"5F2A": "0840",		// Terminal Currency Code : 0840 for US
           //"9F39": "80",			// Point-of-Service (POS) Entry Mode.  --  (Ingenico value '81' = Manually keyed e-commerce (MasterCard only). -- IDTech has no equivalent to manually keyed)
@@ -511,7 +503,7 @@
           "9F11",		// Issuer Code Table Index
           "9F12",		// Application Preferred Name
           "9F16",		// Merchant Identifier
-		      //"9F17",   // Pin Try Counter
+          //"9F17",   // Pin Try Counter
           "9F1C",		// Terminal Identification
           "9F1A",		// Terminal Country Code
           "9F1E",		// Interface Device (IFD) Serial Number	// End disable for VP300
@@ -528,7 +520,7 @@
           "9F3C",		// Transaction Reference Currency Code
           "9F40",		// Additional Terminal Capabilities
           "9F41",		// Transaction Sequence Counter
-		      //"9F4C",	  // ICC Dynamic Number  // ??
+          //"9F4C",	  // ICC Dynamic Number  // ??
           "9F4E",		// Merchant Name and Location
           "9F53",		// Transaction Category Code
           "9F6E",		// Terminal Transaction Capabilities
@@ -551,49 +543,49 @@
       "TransactionStartTags": [	        // Tag values to return from emv_startTransaction(), assembled as single value for IDTech tag DFEE1A
       ],
       "TransactionAuthenticateTags": [	// Tag values to return from emv_authenticateTransaction(), assembled as single value for IDTech tag DFEE1A
-        "57",		//		Track 2 Data Equivalent
-        "5A",		//		Application Primary Account Number
-        "82",		//		Application Interchange Profile
-        "4F",		//		Application Identifier ICC
-        "50",		//		Application Label
-        "84",		//		Dedicated Filename
-        "5F20",		//		Cardholder Name
-        "5F24",		//		Application Expiration Date
-        "5F28",		//		Issuer Country Code
-        "5F2A",		//		Transaction Currency Code
-        "5F34",		//		Card Sequence Terminal Number
-        "9F02",		//		Amount Authorized
-        "9F03",		//		Amount Other
-        "9F06",		//		Application Identifier (AID)
-        "9F07",		//		Application Usage Control
-        "9F09",		//		Application Version Number (Reader)
-        "9F10",		//		Issuer Application Data
-        "9F11",		//		Issuer Code Table Index
-        "9F12",		//		Application Preferred Name
-        //"9F16",		//		Merchant Identifier
-        //"9F1C",		//		Terminal Identification
-        "9F4E",		//		Merchant Name and Location
-        //"DFEE54",	//		Kernel ID Transaction Type Group List
-        "9F1A",		//		Terminal Country Code
-        "9F1E",		//		Interface Device Serial Number
-        "9F21",		//		Transaction Time
-        "9F26",		//		Application Cryptogram
-        "9F27",		//		Cryptogram Information Data
-        "9F33",		//		Terminal Capabilities
-        "9F34",		//		Cardholder Verification Method Results
-        "9F35",		//		Terminal Type
-        "9F36",		//		Application Transaction Counter
-        "9F37",		//		Unpredictable Number
-        "9F39",		//		POS Entry Mode (*)
-        "9F40",		//		Additional Terminal Capabilities
-        "9F41",		//		Transaction Sequence Counter
-        "95",		  //		Terminal Verification Results
-        "9A",		  //		Transaction Date
-        "9B",		  //		Processing Code
-        "9C",		  //		Transaction Type
-        //"DFEE25",	//		EMV Result Codes
-        //"DFEE26",	//		TLV Encrypt Information
-        "FFEE01"		//		ViVOpay Group Tag
+              "57",		//		Track 2 Data Equivalent
+              "5A",		//		Application Primary Account Number
+              "82",		//		Application Interchange Profile
+              "4F",		//		Application Identifier ICC
+              "50",		//		Application Label
+              "84",		//		Dedicated Filename
+              "5F20",		//		Cardholder Name
+              "5F24",		//		Application Expiration Date
+              "5F28",		//		Issuer Country Code
+              "5F2A",		//		Transaction Currency Code
+              "5F34",		//		Card Sequence Terminal Number
+              "9F02",		//		Amount Authorized
+              "9F03",		//		Amount Other
+              "9F06",		//		Application Identifier (AID)
+              "9F07",		//		Application Usage Control
+              "9F09",		//		Application Version Number (Reader)
+              "9F10",		//		Issuer Application Data
+              "9F11",		//		Issuer Code Table Index
+              "9F12",		//		Application Preferred Name
+              //"9F16",		//		Merchant Identifier
+              //"9F1C",		//		Terminal Identification
+              "9F4E",		//		Merchant Name and Location
+              //"DFEE54",	//		Kernel ID Transaction Type Group List
+              "9F1A",		//		Terminal Country Code
+              "9F1E",		//		Interface Device Serial Number
+              "9F21",		//		Transaction Time
+              "9F26",		//		Application Cryptogram
+              "9F27",		//		Cryptogram Information Data
+              "9F33",		//		Terminal Capabilities
+              "9F34",		//		Cardholder Verification Method Results
+              "9F35",		//		Terminal Type
+              "9F36",		//		Application Transaction Counter
+              "9F37",		//		Unpredictable Number
+              "9F39",		//		POS Entry Mode (*)
+              "9F40",		//		Additional Terminal Capabilities
+              "9F41",		//		Transaction Sequence Counter
+              "95",		  //		Terminal Verification Results
+              "9A",		  //		Transaction Date
+              "9B",		  //		Processing Code
+              "9C",		  //		Transaction Type
+              //"DFEE25",	//		EMV Result Codes
+              //"DFEE26",	//		TLV Encrypt Information
+              "FFEE01"		//		ViVOpay Group Tag
       ],
       "TransactionCompleteTags": [	    // Tag values to return from emv_completeTransaction(), assembled as single value for IDTech tag DFEE1A
         "4F",		    //		Application Identifier ICC
@@ -626,12 +618,7 @@
       },
       "GroupTags": {
         "0": [
-              "9F06",
-	      "9F53",
-	      "9F66",
-	      "DFEE1D",
-	      "DFEE2D",
-	      "DFEF4B",
+          "9F53"
         ]
       },
       "DoNotSendTags": [
@@ -653,7 +640,7 @@
         "IDEM-85XX": [ "1.02.013.S" ]
       }
     }    
-    ]    
+    ]
   }
   ]
 }

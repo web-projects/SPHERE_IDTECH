@@ -239,7 +239,8 @@ namespace IPA.MainApp
 
         void SetupLogging()
         {
-            try
+            // 20190508: REVIEW WITH CHANGES TO LOGGER AND DELETE
+            /*try
             {
                 var logLevels = ConfigurationManager.AppSettings["IPA.DAL.Application.Client.LogLevel"]?.Split('|') ?? new string[0];
                 if(logLevels.Length > 0)
@@ -264,7 +265,9 @@ namespace IPA.MainApp
             catch(Exception e)
             {
                 Logger.error("main: SetupLogging() - exception={0}", (object) e.Message);
-            }
+            }*/
+            string fullName = Assembly.GetEntryAssembly().Location;
+            Logger.info( "{0} VERSION {1}.", System.IO.Path.GetFileNameWithoutExtension(fullName).ToUpper(), Assembly.GetEntryAssembly().GetName().Version);
         }
 
         private void UpdateAppSetting(string key, string value)
@@ -1303,10 +1306,11 @@ namespace IPA.MainApp
                         if(!MaintabControl.Contains(ConfigurationtabPage))
                         {
                             MaintabControl.TabPages.Add(ConfigurationtabPage);
-                            this.ConfigurationCollapseButton.Visible = false;
-                            this.ConfigurationPanel2.Visible = false;
-                            ConfigurationResetLoadFromButtons();
                         }
+                        this.ConfigurationIDgrpBox.Visible = false;
+                        this.ConfigurationCollapseButton.Visible = false;
+                        this.ConfigurationPanel2.Visible = false;
+                        ConfigurationResetLoadFromButtons();
                         if(!MaintabControl.Contains(SettingstabPage) && tc_show_settings_tab)
                         {
                             MaintabControl.TabPages.Add(SettingstabPage);
@@ -2137,10 +2141,7 @@ namespace IPA.MainApp
                     {
                         try 
                         {
-                            TerminalSettings termsettings = devicePlugin?.GetConfigSphereSerializer()?.GetTerminalSettings();
-                            string workerstr = termsettings?.MajorConfiguration ?? "5C";
-                            string majorcfgstr = Regex.Replace(workerstr, "[^0-9.]", string.Empty);
-                            int majorcfgint = Convert.ToUInt16(majorcfgstr);
+                            int majorcfgint = devicePlugin?.GetConfigSphereSerializer()?.GetTerminalMajorConfiguration() ?? 2;
                             Thread.CurrentThread.IsBackground = true; devicePlugin. GetSphereTerminalData(majorcfgint); 
                         }
                         catch(Exception)
@@ -2292,10 +2293,7 @@ namespace IPA.MainApp
             {
                 Thread.CurrentThread.IsBackground = true;
 
-                TerminalSettings termsettings = devicePlugin?.GetConfigSphereSerializer()?.GetTerminalSettings();
-                string workerstr = termsettings?.MajorConfiguration ?? "5C";
-                string majorcfgstr = Regex.Replace(workerstr, "[^0-9.]", string.Empty);
-                int majorcfgint = Convert.ToUInt16(majorcfgstr);
+                int majorcfgint = devicePlugin?.GetConfigSphereSerializer()?.GetTerminalMajorConfiguration() ?? 2;
                 devicePlugin.FactoryReset(majorcfgint);
 
                 // Load Configuration from DEVICE

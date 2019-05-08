@@ -1,7 +1,11 @@
-﻿using System;
+﻿using IPA.CommonInterface.Helpers;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +21,42 @@ namespace IPA.LoggerManager
         private static LogBase dbLogger = null;
         public static LogBase fileLogger = null;
         private static LogBase eventLogger = null;
+
+        static Logger()
+        {
+            try
+            {
+                var logLevels = ConfigurationManager.AppSettings["IPA.DAL.Application.Client.LogLevel"]?.Split('|') ?? new string[0];
+                if(logLevels.Length > 0)
+                {
+                    string fullName;
+                    Assembly assembly = Assembly.GetEntryAssembly();
+                    if(assembly != null)
+                    {
+                        fullName = assembly.Location;
+                    }
+                    else
+                    {
+                        fullName = new MainAssemblyInfo().Description;
+                    }
+                    string logname = System.IO.Path.GetFileNameWithoutExtension(fullName) + ".log";
+                    string path = System.IO.Directory.GetCurrentDirectory(); 
+                    fileLoggerPath = path + "\\" + logname;
+
+                    foreach(var item in logLevels)
+                    {
+                        foreach(var level in LogLevels.LogLevelsDictonary.Where(x => x.Value.Equals(item)).Select(x => x.Key))
+                        {
+                            logLevel += (int)level;
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine("Logger: instantiate exception={0}", (object)ex.Message);
+            }
+        }
 
         public static void SetFileLoggerConfiguration(string filepath, int level)
         {

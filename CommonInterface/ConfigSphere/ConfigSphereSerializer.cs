@@ -6,6 +6,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using IPA.CommonInterface.Helpers;
 using IPA.CommonInterface.ConfigSphere.Configuration;
+using System.Text.RegularExpressions;
 
 namespace IPA.CommonInterface.ConfigSphere
 {
@@ -185,6 +186,14 @@ namespace IPA.CommonInterface.ConfigSphere
         public TerminalSettings GetTerminalSettings()
         {
             return termSettings;
+        }
+
+        public int GetTerminalMajorConfiguration()
+        {
+            string workerstr = termSettings?.MajorConfiguration ?? "5C";
+            string majorcfgstr = Regex.Replace(workerstr, "[^0-9.]", string.Empty);
+            int majorcfgint = Convert.ToUInt16(majorcfgstr);
+            return majorcfgint;
         }
 
         public EMVGroupTags GetConfigGroup(int group)

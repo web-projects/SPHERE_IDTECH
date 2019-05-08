@@ -281,6 +281,17 @@ namespace IPA.DAL.RBADAL.Services
         #endregion
 
         #region --- SPHERE SERIALIZER ---
+        
+        public virtual int SetTerminalConfiguration(int majorcfg)
+        {
+            return 0;
+        }
+
+        public virtual int SetTerminalConfiguration(ConfigSphereSerializer serializer)
+        {
+            return 0;
+        }
+
         public virtual string [] GetTerminalData(int majorcfgint)
         {
             return null;
