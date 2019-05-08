@@ -29,12 +29,13 @@ namespace IPA.CommonInterface.ConfigSphere
         private string[] md = new string[0];
         private AIDList aid = new AIDList();
         private CAPKList capk = new CAPKList();
-        private EMVConfiguration emvConfiguration = new EMVConfiguration();
+        private ContactEMVConfiguration contactEMVConfiguration = new ContactEMVConfiguration();
         private TerminalSettings termSettings = new TerminalSettings();
-        private EMVTransactionData emvTransactionData = new EMVTransactionData();
+        private TransactionData transactionData = new TransactionData();
         private List<EMVDeviceSettings> emvDeviceSettings = new List<EMVDeviceSettings>();
         private List<EMVGroupTags> emvGroupTags = new List<EMVGroupTags>();
         //private ModelFirmware modelFirmware = new ModelFirmware();
+        private ContactlessConfiguration contactlessConfiguration = new ContactlessConfiguration();
         #endregion
 
         private void DisplayCollection(List<string> collection, string name)
@@ -277,12 +278,12 @@ namespace IPA.CommonInterface.ConfigSphere
             }
             return matched;
         }
-        public bool DoNotSendTagsMatch(string tag)
+        public bool ContactDoNotSendTagsMatch(string tag)
         {
             bool matched = false;
             try
             {
-                foreach(var version in emvDeviceSettings.Where(x => x.DoNotSendTags.Any(y => y.Contains(tag))).SelectMany(z => z.DoNotSendTags.ToList()))
+                foreach(var version in emvDeviceSettings.Where(x => x.ContactDoNotSendTags.Any(y => y.Contains(tag))).SelectMany(z => z.ContactDoNotSendTags.ToList()))
                 {
                     matched = true;
                     break;
@@ -290,7 +291,7 @@ namespace IPA.CommonInterface.ConfigSphere
             }
             catch(Exception ex)
             {
-                Debug.WriteLine("ConfigSphereSerializer: DoNotSendTagsMatch() - exception={0}", (object)ex.Message);
+                Debug.WriteLine("ConfigSphereSerializer: ContactDoNotSendTagsMatch() - exception={0}", (object)ex.Message);
             }
             return matched;
         }
@@ -309,6 +310,10 @@ namespace IPA.CommonInterface.ConfigSphere
                 //var Json = JsonConvert.DeserializeObject<EMVGroupTags>(s);
                 //string s = @"{ ""GroupTags"": { ""0"": [ ""9F53"" ], ""1"": [ ""DFED0A"" ] } }";
                 //EMVGroupTags Json = JsonConvert.DeserializeObject<EMVGroupTags>(s);
+                //string s = @"{ ""GroupModelFirmware"": { ""NEO2"": [ ""*"" ] } }";
+                //var Json = JsonConvert.DeserializeObject<ContactlessConfiguration>(s);
+                //string s = @"{ ""GroupList"": { ""VisaSetA"": { ""Group"": { ""NEO_1.10"": ""00"", ""NEO_1.20"": ""04"" } } } }";
+                //var Json = JsonConvert.DeserializeObject<ContactlessConfiguration>(s);
 
                 terminalCfg = JsonConvert.DeserializeObject<TerminalConfiguration>(FILE_CFG);
 
@@ -323,16 +328,16 @@ namespace IPA.CommonInterface.ConfigSphere
                     // Models
                     md = configurationID.Models;
                     //DisplayCollection(mf.modelFirmware, "modelFirmware");
-                    // EMVConfiguration
-                    emvConfiguration = DeviceConfig.EMVConfiguration;
+                    // ContactEMVConfiguration
+                    contactEMVConfiguration = DeviceConfig.ContactEMVConfiguration;
                     // AID List
-                    aid.Aid = emvConfiguration.AIDList;
+                    aid.Aid = contactEMVConfiguration.AIDList;
                     //DisplayCollection(aid.Aid, "AIDList");
                     // CAPK List
-                    capk.CAPK = emvConfiguration.CAPKList;
+                    capk.CAPK = DeviceConfig.CAPKList;
                     //DisplayCollection(capk.Capk, "CapkList");
                     // Terminal Settings
-                    termSettings = emvConfiguration.TerminalSettings;
+                    termSettings = contactEMVConfiguration.TerminalSettings;
                     //Debug.WriteLine("device configuration: Terminal Settings --------------");
                     //Debug.WriteLine("MajorConfiguration        : {0}", (object) termSettings.MajorConfiguration);
                     //Debug.WriteLine("MajorConfigurationChecksum: {0}", (object) termSettings.MajorConfigurationChecksum[0]);
@@ -343,7 +348,7 @@ namespace IPA.CommonInterface.ConfigSphere
                     // TransactionTagsRequested
                     //DisplayCollection(termSettings.TransactionTags, "TransactionTagsRequested");
                     // TransactionValues
-                    emvTransactionData = DeviceConfig.EMVTransactionData;
+                    transactionData = DeviceConfig.TransactionData;
                     //DisplayCollection(transactionValues.EMVKernelMapping, "EMVKernelMapping");
                     //DisplayCollection(transactionValues.TransactionStartTags, "TransactionStartTags");
                     //DisplayCollection(transactionValues.TransactionAuthenticateTags, "TransactionAuthenticateTags");
@@ -354,6 +359,8 @@ namespace IPA.CommonInterface.ConfigSphere
                         EMVGroupTags item = new EMVGroupTags(devSettings.GroupTags);
                         emvGroupTags.Add(item);
                     }
+
+                    contactlessConfiguration = DeviceConfig.ContactlessConfiguration;
                 }
             }
             catch(Exception ex)

@@ -45,3 +45,4 @@ This an application to Configure IDTech Devices.
            - Improved keyboard mode workflow.
 * 20190507 - Streamlined device specific methods.
 * 20190508 - Fixes to JSON file processing.
+           - Removed offending TAG "9F40": "6000F05001" from configuration file.

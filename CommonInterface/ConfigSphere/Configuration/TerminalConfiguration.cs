@@ -24,24 +24,26 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
     {
         [JsonProperty(PropertyName = "ConfigurationID", Order = 1)]
         public ConfigurationID ConfigurationID { get; set; }
-        [JsonProperty(PropertyName = "EMVConfiguration", Order = 2)]
-        public EMVConfiguration EMVConfiguration { get; set; }
-        [JsonProperty(PropertyName = "EMVTransactionData", Order = 3)]
-        public EMVTransactionData EMVTransactionData { get; set; }
-        [JsonProperty(PropertyName = "EMVDeviceSettings", Order = 4)]
+        [JsonProperty(PropertyName = "ContactEMVConfiguration", Order = 2)]
+        public ContactEMVConfiguration ContactEMVConfiguration { get; set; }
+        [JsonProperty(PropertyName = "CAPKList", Order = 3)]
+        public Dictionary<string, CAPK> CAPKList { get; set; }
+        [JsonProperty(PropertyName = "CRLList", Order = 4)]
+        public Dictionary<string, CRL> CRLList { get; set; }
+        [JsonProperty(PropertyName = "TransactionData", Order = 5)]
+        public TransactionData TransactionData { get; set; }
+        [JsonProperty(PropertyName = "EMVDeviceSettings", Order = 6)]
         public List<EMVDeviceSettings> EMVDeviceSettings { get; set; }
+        [JsonProperty(PropertyName = "ContactlessConfiguration", Order = 7)]
+        public ContactlessConfiguration ContactlessConfiguration { get; set; }
     }
 
     [Serializable]
-    public class EMVConfiguration
+    public class ContactEMVConfiguration
     {
         [JsonProperty(PropertyName = "AIDList", Order = 1)]
         public Dictionary<string, Dictionary<string, string>> AIDList { get; set; }
-        [JsonProperty(PropertyName = "CAPKList", Order = 2)]
-        public Dictionary<string, CAPK> CAPKList { get; set; }
-        [JsonProperty(PropertyName = "CRLList", Order = 3)]
-        public Dictionary<string, CRL> CRLList { get; set; }
-        [JsonProperty(PropertyName = "TerminalSettings", Order = 4)]
+        [JsonProperty(PropertyName = "TerminalSettings", Order = 2)]
         public TerminalSettings TerminalSettings { get; set; }
     }
 
@@ -100,7 +102,7 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
     }
 
     [Serializable]
-    public class EMVTransactionData
+    public class TransactionData
     {
         [JsonProperty(PropertyName = "EMVKernelMapping", Order = 1)]
         public Dictionary<string, string> EMVKernelMapping { get; set; }
@@ -119,9 +121,8 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
         public Dictionary<string, List<string>> ModelFirmware { get; set; }
         [JsonProperty(PropertyName = "GroupTags", Order = 2)]
         public Dictionary<string, List<string>> GroupTags { get; set; }
-        //public EMVGroupTags GroupTags { get; set; }
-        [JsonProperty(PropertyName = "DoNotSendTags", Order = 3)]
-        public string[] DoNotSendTags { get; set; }
+        [JsonProperty(PropertyName = "ContactDoNotSendTags", Order = 3)]
+        public string[] ContactDoNotSendTags { get; set; }
     }
 
     [Serializable]
@@ -137,5 +138,26 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
         {
             return ((IEnumerable)Tags).GetEnumerator();
         }
+    }
+
+    [Serializable]
+    public class ContactlessConfiguration
+    {
+        [JsonProperty(PropertyName = "GroupModelFirmware", Order = 1)]
+        public Dictionary<string, Dictionary<string, List<string>>> GroupModelFirmware { get; set; }
+        [JsonProperty(PropertyName = "GroupList", Order = 2)]
+        public Dictionary<string, ContactlessConfigurationGroup> GroupList { get; set; }
+    }
+
+    [Serializable]
+    public class ContactlessConfigurationGroup
+    {
+        [JsonProperty(PropertyName = "Group", Order = 1)]
+        public Dictionary<string, string> Group { get; set; }
+
+        [JsonProperty(PropertyName = "AIDList", Order = 2)]
+        public string [] AIDList { get; set; }
+        [JsonProperty(PropertyName = "TagValues", Order = 3)]
+        public Dictionary<string, string> TagValues { get; set; }
     }
 }

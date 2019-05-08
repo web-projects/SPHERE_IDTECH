@@ -662,7 +662,7 @@ namespace IPA.DAL.RBADAL.Services
                                 {
                                     Debug.WriteLine("emv_setTerminalMajorConfiguration() error: {0}", rt);
                                     Logger.error( "device: ValidateTerminalData() error={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt));
-                                    Logger.error( "device: ValidateTerminalData() DATA={0}", BitConverter.ToString(terminalData).Replace("-", string.Empty));
+                                    Logger.error( "device: ValidateTerminalData() DATA=[{0}]", BitConverter.ToString(terminalData).Replace("-", string.Empty));
                                 }
                             }
                             catch(Exception ex)
@@ -670,6 +670,10 @@ namespace IPA.DAL.RBADAL.Services
                                 Debug.WriteLine("device: ValidateTerminalData() - exception={0}", (object)ex.Message);
                             }
                         }
+                    }
+                    else
+                    {
+                        Logger.error( "device: ValidateTerminalData() error={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt));
                     }
                 }
                 else

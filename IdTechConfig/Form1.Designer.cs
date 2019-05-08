@@ -1006,9 +1006,9 @@
             // 
             this.ConfigurationPanel1pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ConfigurationPanel1pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("ConfigurationPanel1pictureBox1.Image")));
-            this.ConfigurationPanel1pictureBox1.Location = new System.Drawing.Point(0, 1);
+            this.ConfigurationPanel1pictureBox1.Location = new System.Drawing.Point(-8, -2);
             this.ConfigurationPanel1pictureBox1.Name = "ConfigurationPanel1pictureBox1";
-            this.ConfigurationPanel1pictureBox1.Size = new System.Drawing.Size(245, 511);
+            this.ConfigurationPanel1pictureBox1.Size = new System.Drawing.Size(253, 516);
             this.ConfigurationPanel1pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.ConfigurationPanel1pictureBox1.TabIndex = 19;
             this.ConfigurationPanel1pictureBox1.TabStop = false;
@@ -1040,7 +1040,7 @@
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationPlatformlbl);
             this.ConfigurationIDgrpBox.Location = new System.Drawing.Point(7, 292);
             this.ConfigurationIDgrpBox.Name = "ConfigurationIDgrpBox";
-            this.ConfigurationIDgrpBox.Size = new System.Drawing.Size(233, 209);
+            this.ConfigurationIDgrpBox.Size = new System.Drawing.Size(204, 209);
             this.ConfigurationIDgrpBox.TabIndex = 20;
             this.ConfigurationIDgrpBox.TabStop = false;
             this.ConfigurationIDgrpBox.Text = "ConfigurationID";

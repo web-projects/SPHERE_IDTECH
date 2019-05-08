@@ -9,7 +9,7 @@
       "EntryModes": [ "Swipe" ]
     },
 
-    "EMVConfiguration": {
+    "ContactEMVConfiguration": {
       "AIDList": {
         // Note : IDTech does not have AID tags for User-defined name for Application ID (9FFF00) or Application ID (9F06)
         "A0000000031010": {		// AID : for Visa Credit (note: IDTech does not prefix with length)
