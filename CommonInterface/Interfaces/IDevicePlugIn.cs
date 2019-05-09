@@ -25,8 +25,8 @@ namespace IPA.CommonInterface.Interfaces
     // Parse Card Data
     string [] ParseCardData(string data);
     // Settings
+    void SetDeviceControlConfiguration(object data);
     void GetDeviceMsrConfiguration();
-    // Configuration
     void SetDeviceMsrConfiguration(object data);
     void SetDeviceInterfaceType(string mode);
     string DeviceCommand(string command, bool notify);

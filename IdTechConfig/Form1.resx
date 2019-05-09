@@ -416,7 +416,7 @@
         2OYbGkMxKx0i9xobQQA7
 </value>
   </data>
-  <data name="SettingsWIPpictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="SettingsControlpictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhKgAqAPUuACCHxCGIxSKJxy2OxySLySWMyS+PyTCQyzKSzDOTzDSUzT+Zzkmdzmmv2Wqx23W1
         24/D4ZHF5JLF5K3T663U67na7cHBwcfHx8nJyc3NzdPT09jY2Nzc3N7e3sni8tbp9OPj4+Tk5Obm5unp
@@ -544,6 +544,9 @@
         2OYbGkMxKx0i9xobQQA7
 </value>
   </data>
+  <metadata name="ConfigurationErrorgroupBox1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="ConfigurationErrorgroupBox1.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

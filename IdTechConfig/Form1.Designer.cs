@@ -56,9 +56,20 @@
             this.RawModelabel1 = new System.Windows.Forms.Label();
             this.SettingstabPage = new System.Windows.Forms.TabPage();
             this.SettingsMainpanel1 = new System.Windows.Forms.Panel();
-            this.SettingsWIPpanel1 = new System.Windows.Forms.Panel();
-            this.SettingsWIPpictureBox1 = new System.Windows.Forms.PictureBox();
-            this.SettingsWIPgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsControlpanel1 = new System.Windows.Forms.Panel();
+            this.SettingsControlgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsControlErrortextBox1 = new System.Windows.Forms.TextBox();
+            this.SettingsControlpictureBox1 = new System.Windows.Forms.PictureBox();
+            this.SettingsControlConfigureBtn = new System.Windows.Forms.Button();
+            this.SettingsENCControlgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsENCControlcheckBox2 = new System.Windows.Forms.CheckBox();
+            this.SettingsENCControlcheckBox1 = new System.Windows.Forms.CheckBox();
+            this.SettingsLEDControlgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsLEDControlcheckBox2 = new System.Windows.Forms.CheckBox();
+            this.SettingsLEDControlcheckBox1 = new System.Windows.Forms.CheckBox();
+            this.SettingsBeepControlgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsBeepControlradioButton2 = new System.Windows.Forms.RadioButton();
+            this.SettingsBeepControlradioButton1 = new System.Windows.Forms.RadioButton();
             this.SettingsMsrpanel1 = new System.Windows.Forms.Panel();
             this.SettingsMSRgroupBox1 = new System.Windows.Forms.GroupBox();
             this.SettingsMsrpicBoxWait = new System.Windows.Forms.PictureBox();
@@ -75,8 +86,13 @@
             this.SettingsMsrcBxTrack2 = new System.Windows.Forms.CheckBox();
             this.SettingsMsrcBxTrack1 = new System.Windows.Forms.CheckBox();
             this.SettingsMsrlabel3 = new System.Windows.Forms.Label();
-            this.SettingsMsrbtnConfigure = new System.Windows.Forms.Button();
+            this.SettingsMsrConfigureBtn = new System.Windows.Forms.Button();
             this.ConfigurationtabPage = new System.Windows.Forms.TabPage();
+            this.ConfigurationErrorgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.ConfigurationlblWarning1 = new System.Windows.Forms.Label();
+            this.ConfigurationlblError3 = new System.Windows.Forms.Label();
+            this.ConfigurationlblError2 = new System.Windows.Forms.Label();
+            this.ConfigurationlblError1 = new System.Windows.Forms.Label();
             this.ConfigurationPanel2 = new System.Windows.Forms.Panel();
             this.ConfigurationExpandButton = new System.Windows.Forms.Button();
             this.tabControlConfiguration = new System.Windows.Forms.TabControl();
@@ -126,11 +142,6 @@
             this.ConfigurationGroupBox1 = new System.Windows.Forms.GroupBox();
             this.radioLoadFromDevice = new System.Windows.Forms.RadioButton();
             this.radioLoadFromFile = new System.Windows.Forms.RadioButton();
-            this.ConfigurationErrorgroupBox1 = new System.Windows.Forms.GroupBox();
-            this.ConfigurationlblWarning1 = new System.Windows.Forms.Label();
-            this.ConfigurationlblError3 = new System.Windows.Forms.Label();
-            this.ConfigurationlblError2 = new System.Windows.Forms.Label();
-            this.ConfigurationlblError1 = new System.Windows.Forms.Label();
             this.ApplicationtabPage = new System.Windows.Forms.TabPage();
             this.ApplicationpictureBoxWait = new System.Windows.Forms.PictureBox();
             this.ApplicationlistView1 = new System.Windows.Forms.ListView();
@@ -164,12 +175,17 @@
             this.RawModepanel1.SuspendLayout();
             this.SettingstabPage.SuspendLayout();
             this.SettingsMainpanel1.SuspendLayout();
-            this.SettingsWIPpanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.SettingsWIPpictureBox1)).BeginInit();
+            this.SettingsControlpanel1.SuspendLayout();
+            this.SettingsControlgroupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SettingsControlpictureBox1)).BeginInit();
+            this.SettingsENCControlgroupBox1.SuspendLayout();
+            this.SettingsLEDControlgroupBox1.SuspendLayout();
+            this.SettingsBeepControlgroupBox1.SuspendLayout();
             this.SettingsMsrpanel1.SuspendLayout();
             this.SettingsMSRgroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsMsrpicBoxWait)).BeginInit();
             this.ConfigurationtabPage.SuspendLayout();
+            this.ConfigurationErrorgroupBox1.SuspendLayout();
             this.ConfigurationPanel2.SuspendLayout();
             this.tabControlConfiguration.SuspendLayout();
             this.ConfigurationTerminalDatatabPage.SuspendLayout();
@@ -184,7 +200,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).BeginInit();
             this.ConfigurationIDgrpBox.SuspendLayout();
             this.ConfigurationGroupBox1.SuspendLayout();
-            this.ConfigurationErrorgroupBox1.SuspendLayout();
             this.ApplicationtabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpictureBoxWait)).BeginInit();
             this.Applicationpanel1.SuspendLayout();
@@ -470,48 +485,169 @@
             // SettingsMainpanel1
             // 
             this.SettingsMainpanel1.AutoScroll = true;
-            this.SettingsMainpanel1.Controls.Add(this.SettingsWIPpanel1);
+            this.SettingsMainpanel1.Controls.Add(this.SettingsControlpanel1);
             this.SettingsMainpanel1.Controls.Add(this.SettingsMsrpanel1);
             this.SettingsMainpanel1.Location = new System.Drawing.Point(3, 5);
             this.SettingsMainpanel1.Name = "SettingsMainpanel1";
             this.SettingsMainpanel1.Size = new System.Drawing.Size(688, 503);
             this.SettingsMainpanel1.TabIndex = 3;
             // 
-            // SettingsWIPpanel1
+            // SettingsControlpanel1
             // 
-            this.SettingsWIPpanel1.Controls.Add(this.SettingsWIPpictureBox1);
-            this.SettingsWIPpanel1.Controls.Add(this.SettingsWIPgroupBox1);
-            this.SettingsWIPpanel1.Location = new System.Drawing.Point(12, 14);
-            this.SettingsWIPpanel1.Name = "SettingsWIPpanel1";
-            this.SettingsWIPpanel1.Size = new System.Drawing.Size(665, 181);
-            this.SettingsWIPpanel1.TabIndex = 1;
+            this.SettingsControlpanel1.Controls.Add(this.SettingsControlgroupBox1);
+            this.SettingsControlpanel1.Location = new System.Drawing.Point(12, 14);
+            this.SettingsControlpanel1.Name = "SettingsControlpanel1";
+            this.SettingsControlpanel1.Size = new System.Drawing.Size(665, 204);
+            this.SettingsControlpanel1.TabIndex = 1;
             // 
-            // SettingsWIPpictureBox1
+            // SettingsControlgroupBox1
             // 
-            this.SettingsWIPpictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("SettingsWIPpictureBox1.Image")));
-            this.SettingsWIPpictureBox1.Location = new System.Drawing.Point(382, 4);
-            this.SettingsWIPpictureBox1.Name = "SettingsWIPpictureBox1";
-            this.SettingsWIPpictureBox1.Size = new System.Drawing.Size(277, 183);
-            this.SettingsWIPpictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.SettingsWIPpictureBox1.TabIndex = 1;
-            this.SettingsWIPpictureBox1.TabStop = false;
-            this.SettingsWIPpictureBox1.Visible = false;
+            this.SettingsControlgroupBox1.Controls.Add(this.SettingsControlpictureBox1);
+            this.SettingsControlgroupBox1.Controls.Add(this.SettingsControlErrortextBox1);
+            this.SettingsControlgroupBox1.Controls.Add(this.SettingsControlConfigureBtn);
+            this.SettingsControlgroupBox1.Controls.Add(this.SettingsENCControlgroupBox1);
+            this.SettingsControlgroupBox1.Controls.Add(this.SettingsLEDControlgroupBox1);
+            this.SettingsControlgroupBox1.Controls.Add(this.SettingsBeepControlgroupBox1);
+            this.SettingsControlgroupBox1.Location = new System.Drawing.Point(3, 3);
+            this.SettingsControlgroupBox1.Name = "SettingsControlgroupBox1";
+            this.SettingsControlgroupBox1.Size = new System.Drawing.Size(656, 198);
+            this.SettingsControlgroupBox1.TabIndex = 0;
+            this.SettingsControlgroupBox1.TabStop = false;
+            this.SettingsControlgroupBox1.Text = "Control";
             // 
-            // SettingsWIPgroupBox1
+            // SettingsControlErrortextBox1
             // 
-            this.SettingsWIPgroupBox1.Location = new System.Drawing.Point(3, 16);
-            this.SettingsWIPgroupBox1.Name = "SettingsWIPgroupBox1";
-            this.SettingsWIPgroupBox1.Size = new System.Drawing.Size(656, 147);
-            this.SettingsWIPgroupBox1.TabIndex = 0;
-            this.SettingsWIPgroupBox1.TabStop = false;
-            this.SettingsWIPgroupBox1.Text = "Discovery";
+            this.SettingsControlErrortextBox1.Location = new System.Drawing.Point(288, 83);
+            this.SettingsControlErrortextBox1.Multiline = true;
+            this.SettingsControlErrortextBox1.Name = "SettingsControlErrortextBox1";
+            this.SettingsControlErrortextBox1.ReadOnly = true;
+            this.SettingsControlErrortextBox1.Size = new System.Drawing.Size(362, 51);
+            this.SettingsControlErrortextBox1.TabIndex = 6;
+            this.SettingsControlErrortextBox1.Visible = false;
+            // 
+            // SettingsControlpictureBox1
+            // 
+            this.SettingsControlpictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("SettingsControlpictureBox1.Image")));
+            this.SettingsControlpictureBox1.Location = new System.Drawing.Point(-3, 0);
+            this.SettingsControlpictureBox1.Name = "SettingsControlpictureBox1";
+            this.SettingsControlpictureBox1.Size = new System.Drawing.Size(662, 201);
+            this.SettingsControlpictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.SettingsControlpictureBox1.TabIndex = 1;
+            this.SettingsControlpictureBox1.TabStop = false;
+            this.SettingsControlpictureBox1.Visible = false;
+            // 
+            // SettingsControlConfigureBtn
+            // 
+            this.SettingsControlConfigureBtn.Location = new System.Drawing.Point(288, 153);
+            this.SettingsControlConfigureBtn.Name = "SettingsControlConfigureBtn";
+            this.SettingsControlConfigureBtn.Size = new System.Drawing.Size(81, 23);
+            this.SettingsControlConfigureBtn.TabIndex = 4;
+            this.SettingsControlConfigureBtn.Text = "Configure";
+            this.SettingsControlConfigureBtn.UseVisualStyleBackColor = true;
+            this.SettingsControlConfigureBtn.Click += new System.EventHandler(this.OnSettingsControlConfigureClick);
+            // 
+            // SettingsENCControlgroupBox1
+            // 
+            this.SettingsENCControlgroupBox1.Controls.Add(this.SettingsENCControlcheckBox2);
+            this.SettingsENCControlgroupBox1.Controls.Add(this.SettingsENCControlcheckBox1);
+            this.SettingsENCControlgroupBox1.Location = new System.Drawing.Point(30, 83);
+            this.SettingsENCControlgroupBox1.Name = "SettingsENCControlgroupBox1";
+            this.SettingsENCControlgroupBox1.Size = new System.Drawing.Size(243, 51);
+            this.SettingsENCControlgroupBox1.TabIndex = 3;
+            this.SettingsENCControlgroupBox1.TabStop = false;
+            this.SettingsENCControlgroupBox1.Text = "Encryption Control";
+            // 
+            // SettingsENCControlcheckBox2
+            // 
+            this.SettingsENCControlcheckBox2.AutoSize = true;
+            this.SettingsENCControlcheckBox2.Location = new System.Drawing.Point(128, 22);
+            this.SettingsENCControlcheckBox2.Name = "SettingsENCControlcheckBox2";
+            this.SettingsENCControlcheckBox2.Size = new System.Drawing.Size(71, 17);
+            this.SettingsENCControlcheckBox2.TabIndex = 1;
+            this.SettingsENCControlcheckBox2.Text = "ICC/EMV";
+            this.SettingsENCControlcheckBox2.UseVisualStyleBackColor = true;
+            // 
+            // SettingsENCControlcheckBox1
+            // 
+            this.SettingsENCControlcheckBox1.AutoSize = true;
+            this.SettingsENCControlcheckBox1.Location = new System.Drawing.Point(31, 22);
+            this.SettingsENCControlcheckBox1.Name = "SettingsENCControlcheckBox1";
+            this.SettingsENCControlcheckBox1.Size = new System.Drawing.Size(50, 17);
+            this.SettingsENCControlcheckBox1.TabIndex = 0;
+            this.SettingsENCControlcheckBox1.Text = "MSR";
+            this.SettingsENCControlcheckBox1.UseVisualStyleBackColor = true;
+            // 
+            // SettingsLEDControlgroupBox1
+            // 
+            this.SettingsLEDControlgroupBox1.Controls.Add(this.SettingsLEDControlcheckBox2);
+            this.SettingsLEDControlgroupBox1.Controls.Add(this.SettingsLEDControlcheckBox1);
+            this.SettingsLEDControlgroupBox1.Location = new System.Drawing.Point(361, 20);
+            this.SettingsLEDControlgroupBox1.Name = "SettingsLEDControlgroupBox1";
+            this.SettingsLEDControlgroupBox1.Size = new System.Drawing.Size(243, 51);
+            this.SettingsLEDControlgroupBox1.TabIndex = 2;
+            this.SettingsLEDControlgroupBox1.TabStop = false;
+            this.SettingsLEDControlgroupBox1.Text = "LED Control";
+            // 
+            // SettingsLEDControlcheckBox2
+            // 
+            this.SettingsLEDControlcheckBox2.AutoSize = true;
+            this.SettingsLEDControlcheckBox2.Enabled = false;
+            this.SettingsLEDControlcheckBox2.Location = new System.Drawing.Point(139, 22);
+            this.SettingsLEDControlcheckBox2.Name = "SettingsLEDControlcheckBox2";
+            this.SettingsLEDControlcheckBox2.Size = new System.Drawing.Size(71, 17);
+            this.SettingsLEDControlcheckBox2.TabIndex = 3;
+            this.SettingsLEDControlcheckBox2.Text = "ICC/EMV";
+            this.SettingsLEDControlcheckBox2.UseVisualStyleBackColor = true;
+            // 
+            // SettingsLEDControlcheckBox1
+            // 
+            this.SettingsLEDControlcheckBox1.AutoSize = true;
+            this.SettingsLEDControlcheckBox1.Location = new System.Drawing.Point(42, 22);
+            this.SettingsLEDControlcheckBox1.Name = "SettingsLEDControlcheckBox1";
+            this.SettingsLEDControlcheckBox1.Size = new System.Drawing.Size(50, 17);
+            this.SettingsLEDControlcheckBox1.TabIndex = 2;
+            this.SettingsLEDControlcheckBox1.Text = "MSR";
+            this.SettingsLEDControlcheckBox1.UseVisualStyleBackColor = true;
+            // 
+            // SettingsBeepControlgroupBox1
+            // 
+            this.SettingsBeepControlgroupBox1.Controls.Add(this.SettingsBeepControlradioButton2);
+            this.SettingsBeepControlgroupBox1.Controls.Add(this.SettingsBeepControlradioButton1);
+            this.SettingsBeepControlgroupBox1.Location = new System.Drawing.Point(30, 20);
+            this.SettingsBeepControlgroupBox1.Name = "SettingsBeepControlgroupBox1";
+            this.SettingsBeepControlgroupBox1.Size = new System.Drawing.Size(243, 51);
+            this.SettingsBeepControlgroupBox1.TabIndex = 0;
+            this.SettingsBeepControlgroupBox1.TabStop = false;
+            this.SettingsBeepControlgroupBox1.Text = "Beep Control";
+            // 
+            // SettingsBeepControlradioButton2
+            // 
+            this.SettingsBeepControlradioButton2.AutoSize = true;
+            this.SettingsBeepControlradioButton2.Location = new System.Drawing.Point(128, 22);
+            this.SettingsBeepControlradioButton2.Name = "SettingsBeepControlradioButton2";
+            this.SettingsBeepControlradioButton2.Size = new System.Drawing.Size(67, 17);
+            this.SettingsBeepControlradioButton2.TabIndex = 1;
+            this.SettingsBeepControlradioButton2.TabStop = true;
+            this.SettingsBeepControlradioButton2.Text = "Software";
+            this.SettingsBeepControlradioButton2.UseVisualStyleBackColor = true;
+            // 
+            // SettingsBeepControlradioButton1
+            // 
+            this.SettingsBeepControlradioButton1.AutoSize = true;
+            this.SettingsBeepControlradioButton1.Location = new System.Drawing.Point(31, 22);
+            this.SettingsBeepControlradioButton1.Name = "SettingsBeepControlradioButton1";
+            this.SettingsBeepControlradioButton1.Size = new System.Drawing.Size(67, 17);
+            this.SettingsBeepControlradioButton1.TabIndex = 0;
+            this.SettingsBeepControlradioButton1.TabStop = true;
+            this.SettingsBeepControlradioButton1.Text = "Firmware";
+            this.SettingsBeepControlradioButton1.UseVisualStyleBackColor = true;
             // 
             // SettingsMsrpanel1
             // 
             this.SettingsMsrpanel1.Controls.Add(this.SettingsMSRgroupBox1);
-            this.SettingsMsrpanel1.Location = new System.Drawing.Point(12, 201);
+            this.SettingsMsrpanel1.Location = new System.Drawing.Point(12, 224);
             this.SettingsMsrpanel1.Name = "SettingsMsrpanel1";
-            this.SettingsMsrpanel1.Size = new System.Drawing.Size(665, 293);
+            this.SettingsMsrpanel1.Size = new System.Drawing.Size(665, 270);
             this.SettingsMsrpanel1.TabIndex = 0;
             // 
             // SettingsMSRgroupBox1
@@ -530,10 +666,10 @@
             this.SettingsMSRgroupBox1.Controls.Add(this.SettingsMsrcBxTrack2);
             this.SettingsMSRgroupBox1.Controls.Add(this.SettingsMsrcBxTrack1);
             this.SettingsMSRgroupBox1.Controls.Add(this.SettingsMsrlabel3);
-            this.SettingsMSRgroupBox1.Controls.Add(this.SettingsMsrbtnConfigure);
-            this.SettingsMSRgroupBox1.Location = new System.Drawing.Point(3, 8);
+            this.SettingsMSRgroupBox1.Controls.Add(this.SettingsMsrConfigureBtn);
+            this.SettingsMSRgroupBox1.Location = new System.Drawing.Point(3, 3);
             this.SettingsMSRgroupBox1.Name = "SettingsMSRgroupBox1";
-            this.SettingsMSRgroupBox1.Size = new System.Drawing.Size(657, 280);
+            this.SettingsMSRgroupBox1.Size = new System.Drawing.Size(657, 267);
             this.SettingsMSRgroupBox1.TabIndex = 13;
             this.SettingsMSRgroupBox1.TabStop = false;
             this.SettingsMSRgroupBox1.Text = "MSR Settings";
@@ -545,9 +681,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.SettingsMsrpicBoxWait.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.SettingsMsrpicBoxWait.Image = ((System.Drawing.Image)(resources.GetObject("SettingsMsrpicBoxWait.Image")));
-            this.SettingsMsrpicBoxWait.Location = new System.Drawing.Point(-9, -4);
+            this.SettingsMsrpicBoxWait.Location = new System.Drawing.Point(0, 0);
             this.SettingsMsrpicBoxWait.Name = "SettingsMsrpicBoxWait";
-            this.SettingsMsrpicBoxWait.Size = new System.Drawing.Size(680, 305);
+            this.SettingsMsrpicBoxWait.Size = new System.Drawing.Size(662, 267);
             this.SettingsMsrpicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.SettingsMsrpicBoxWait.TabIndex = 2;
             this.SettingsMsrpicBoxWait.TabStop = false;
@@ -557,7 +693,7 @@
             // SettingsMsrcBxSwipeMaskTrack3
             // 
             this.SettingsMsrcBxSwipeMaskTrack3.AutoSize = true;
-            this.SettingsMsrcBxSwipeMaskTrack3.Location = new System.Drawing.Point(270, 155);
+            this.SettingsMsrcBxSwipeMaskTrack3.Location = new System.Drawing.Point(270, 177);
             this.SettingsMsrcBxSwipeMaskTrack3.Name = "SettingsMsrcBxSwipeMaskTrack3";
             this.SettingsMsrcBxSwipeMaskTrack3.Size = new System.Drawing.Size(63, 17);
             this.SettingsMsrcBxSwipeMaskTrack3.TabIndex = 12;
@@ -567,7 +703,7 @@
             // SettingsMsrcBxSwipeMaskTrack2
             // 
             this.SettingsMsrcBxSwipeMaskTrack2.AutoSize = true;
-            this.SettingsMsrcBxSwipeMaskTrack2.Location = new System.Drawing.Point(194, 155);
+            this.SettingsMsrcBxSwipeMaskTrack2.Location = new System.Drawing.Point(194, 177);
             this.SettingsMsrcBxSwipeMaskTrack2.Name = "SettingsMsrcBxSwipeMaskTrack2";
             this.SettingsMsrcBxSwipeMaskTrack2.Size = new System.Drawing.Size(63, 17);
             this.SettingsMsrcBxSwipeMaskTrack2.TabIndex = 11;
@@ -577,7 +713,7 @@
             // SettingsMsrcBxSwipeMaskTrack1
             // 
             this.SettingsMsrcBxSwipeMaskTrack1.AutoSize = true;
-            this.SettingsMsrcBxSwipeMaskTrack1.Location = new System.Drawing.Point(118, 155);
+            this.SettingsMsrcBxSwipeMaskTrack1.Location = new System.Drawing.Point(118, 177);
             this.SettingsMsrcBxSwipeMaskTrack1.Name = "SettingsMsrcBxSwipeMaskTrack1";
             this.SettingsMsrcBxSwipeMaskTrack1.Size = new System.Drawing.Size(63, 17);
             this.SettingsMsrcBxSwipeMaskTrack1.TabIndex = 10;
@@ -586,7 +722,7 @@
             // 
             // SettingsMsrtxtPAN
             // 
-            this.SettingsMsrtxtPAN.Location = new System.Drawing.Point(118, 71);
+            this.SettingsMsrtxtPAN.Location = new System.Drawing.Point(118, 93);
             this.SettingsMsrtxtPAN.MaxLength = 4;
             this.SettingsMsrtxtPAN.Name = "SettingsMsrtxtPAN";
             this.SettingsMsrtxtPAN.Size = new System.Drawing.Size(24, 20);
@@ -596,7 +732,7 @@
             // SettingsMsrcBxExpirationMask
             // 
             this.SettingsMsrcBxExpirationMask.AutoSize = true;
-            this.SettingsMsrcBxExpirationMask.Location = new System.Drawing.Point(118, 37);
+            this.SettingsMsrcBxExpirationMask.Location = new System.Drawing.Point(118, 59);
             this.SettingsMsrcBxExpirationMask.Name = "SettingsMsrcBxExpirationMask";
             this.SettingsMsrcBxExpirationMask.Size = new System.Drawing.Size(65, 17);
             this.SettingsMsrcBxExpirationMask.TabIndex = 8;
@@ -606,7 +742,7 @@
             // SettingsMsrlabel4
             // 
             this.SettingsMsrlabel4.AutoSize = true;
-            this.SettingsMsrlabel4.Location = new System.Drawing.Point(14, 160);
+            this.SettingsMsrlabel4.Location = new System.Drawing.Point(14, 182);
             this.SettingsMsrlabel4.Name = "SettingsMsrlabel4";
             this.SettingsMsrlabel4.Size = new System.Drawing.Size(68, 13);
             this.SettingsMsrlabel4.TabIndex = 7;
@@ -615,7 +751,7 @@
             // SettingsMsrlabel2
             // 
             this.SettingsMsrlabel2.AutoSize = true;
-            this.SettingsMsrlabel2.Location = new System.Drawing.Point(14, 78);
+            this.SettingsMsrlabel2.Location = new System.Drawing.Point(14, 100);
             this.SettingsMsrlabel2.Name = "SettingsMsrlabel2";
             this.SettingsMsrlabel2.Size = new System.Drawing.Size(88, 13);
             this.SettingsMsrlabel2.TabIndex = 6;
@@ -624,7 +760,7 @@
             // SettingsMsrlabel1
             // 
             this.SettingsMsrlabel1.AutoSize = true;
-            this.SettingsMsrlabel1.Location = new System.Drawing.Point(14, 37);
+            this.SettingsMsrlabel1.Location = new System.Drawing.Point(14, 59);
             this.SettingsMsrlabel1.Name = "SettingsMsrlabel1";
             this.SettingsMsrlabel1.Size = new System.Drawing.Size(99, 13);
             this.SettingsMsrlabel1.TabIndex = 5;
@@ -633,7 +769,7 @@
             // SettingsMsrcBxTrack3Card0
             // 
             this.SettingsMsrcBxTrack3Card0.AutoSize = true;
-            this.SettingsMsrcBxTrack3Card0.Location = new System.Drawing.Point(348, 115);
+            this.SettingsMsrcBxTrack3Card0.Location = new System.Drawing.Point(348, 137);
             this.SettingsMsrcBxTrack3Card0.Name = "SettingsMsrcBxTrack3Card0";
             this.SettingsMsrcBxTrack3Card0.Size = new System.Drawing.Size(91, 17);
             this.SettingsMsrcBxTrack3Card0.TabIndex = 4;
@@ -643,7 +779,7 @@
             // SettingsMsrcBxTrack3
             // 
             this.SettingsMsrcBxTrack3.AutoSize = true;
-            this.SettingsMsrcBxTrack3.Location = new System.Drawing.Point(270, 115);
+            this.SettingsMsrcBxTrack3.Location = new System.Drawing.Point(270, 137);
             this.SettingsMsrcBxTrack3.Name = "SettingsMsrcBxTrack3";
             this.SettingsMsrcBxTrack3.Size = new System.Drawing.Size(63, 17);
             this.SettingsMsrcBxTrack3.TabIndex = 3;
@@ -653,7 +789,7 @@
             // SettingsMsrcBxTrack2
             // 
             this.SettingsMsrcBxTrack2.AutoSize = true;
-            this.SettingsMsrcBxTrack2.Location = new System.Drawing.Point(194, 115);
+            this.SettingsMsrcBxTrack2.Location = new System.Drawing.Point(194, 137);
             this.SettingsMsrcBxTrack2.Name = "SettingsMsrcBxTrack2";
             this.SettingsMsrcBxTrack2.Size = new System.Drawing.Size(60, 17);
             this.SettingsMsrcBxTrack2.TabIndex = 2;
@@ -663,7 +799,7 @@
             // SettingsMsrcBxTrack1
             // 
             this.SettingsMsrcBxTrack1.AutoSize = true;
-            this.SettingsMsrcBxTrack1.Location = new System.Drawing.Point(118, 115);
+            this.SettingsMsrcBxTrack1.Location = new System.Drawing.Point(118, 137);
             this.SettingsMsrcBxTrack1.Name = "SettingsMsrcBxTrack1";
             this.SettingsMsrcBxTrack1.Size = new System.Drawing.Size(60, 17);
             this.SettingsMsrcBxTrack1.TabIndex = 1;
@@ -673,21 +809,21 @@
             // SettingsMsrlabel3
             // 
             this.SettingsMsrlabel3.AutoSize = true;
-            this.SettingsMsrlabel3.Location = new System.Drawing.Point(14, 119);
+            this.SettingsMsrlabel3.Location = new System.Drawing.Point(14, 141);
             this.SettingsMsrlabel3.Name = "SettingsMsrlabel3";
             this.SettingsMsrlabel3.Size = new System.Drawing.Size(98, 13);
             this.SettingsMsrlabel3.TabIndex = 0;
             this.SettingsMsrlabel3.Text = "Swipe Force Mask:";
             // 
-            // SettingsMsrbtnConfigure
+            // SettingsMsrConfigureBtn
             // 
-            this.SettingsMsrbtnConfigure.Location = new System.Drawing.Point(294, 227);
-            this.SettingsMsrbtnConfigure.Name = "SettingsMsrbtnConfigure";
-            this.SettingsMsrbtnConfigure.Size = new System.Drawing.Size(75, 23);
-            this.SettingsMsrbtnConfigure.TabIndex = 1;
-            this.SettingsMsrbtnConfigure.Text = "Configure";
-            this.SettingsMsrbtnConfigure.UseVisualStyleBackColor = true;
-            this.SettingsMsrbtnConfigure.Click += new System.EventHandler(this.OnMsrConfigureClick);
+            this.SettingsMsrConfigureBtn.Location = new System.Drawing.Point(294, 232);
+            this.SettingsMsrConfigureBtn.Name = "SettingsMsrConfigureBtn";
+            this.SettingsMsrConfigureBtn.Size = new System.Drawing.Size(75, 23);
+            this.SettingsMsrConfigureBtn.TabIndex = 1;
+            this.SettingsMsrConfigureBtn.Text = "Configure";
+            this.SettingsMsrConfigureBtn.UseVisualStyleBackColor = true;
+            this.SettingsMsrConfigureBtn.Click += new System.EventHandler(this.OnSettingsMsrConfigureClick);
             // 
             // ConfigurationtabPage
             // 
@@ -702,6 +838,61 @@
             this.ConfigurationtabPage.TabIndex = 1;
             this.ConfigurationtabPage.Text = "Configuration";
             this.ConfigurationtabPage.UseVisualStyleBackColor = true;
+            // 
+            // ConfigurationErrorgroupBox1
+            // 
+            this.ConfigurationErrorgroupBox1.BackColor = System.Drawing.Color.Yellow;
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblWarning1);
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError3);
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError2);
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError1);
+            this.ConfigurationErrorgroupBox1.Location = new System.Drawing.Point(0, 0);
+            this.ConfigurationErrorgroupBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.ConfigurationErrorgroupBox1.Name = "ConfigurationErrorgroupBox1";
+            this.ConfigurationErrorgroupBox1.Padding = new System.Windows.Forms.Padding(5);
+            this.ConfigurationErrorgroupBox1.Size = new System.Drawing.Size(696, 522);
+            this.ConfigurationErrorgroupBox1.TabIndex = 2;
+            this.ConfigurationErrorgroupBox1.TabStop = false;
+            this.ConfigurationErrorgroupBox1.Visible = false;
+            // 
+            // ConfigurationlblWarning1
+            // 
+            this.ConfigurationlblWarning1.AutoSize = true;
+            this.ConfigurationlblWarning1.Font = new System.Drawing.Font("Showcard Gothic", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblWarning1.Location = new System.Drawing.Point(17, 114);
+            this.ConfigurationlblWarning1.Name = "ConfigurationlblWarning1";
+            this.ConfigurationlblWarning1.Size = new System.Drawing.Size(35, 44);
+            this.ConfigurationlblWarning1.TabIndex = 4;
+            this.ConfigurationlblWarning1.Text = "!";
+            // 
+            // ConfigurationlblError3
+            // 
+            this.ConfigurationlblError3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblError3.Location = new System.Drawing.Point(56, 339);
+            this.ConfigurationlblError3.Name = "ConfigurationlblError3";
+            this.ConfigurationlblError3.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblError3.TabIndex = 21;
+            this.ConfigurationlblError3.Text = "VALIDATE CONFIGURATION FILE";
+            this.ConfigurationlblError3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ConfigurationlblError2
+            // 
+            this.ConfigurationlblError2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblError2.Location = new System.Drawing.Point(56, 216);
+            this.ConfigurationlblError2.Name = "ConfigurationlblError2";
+            this.ConfigurationlblError2.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblError2.TabIndex = 21;
+            this.ConfigurationlblError2.Text = "[ERROR]";
+            this.ConfigurationlblError2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ConfigurationlblError1
+            // 
+            this.ConfigurationlblError1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblError1.Location = new System.Drawing.Point(56, 112);
+            this.ConfigurationlblError1.Name = "ConfigurationlblError1";
+            this.ConfigurationlblError1.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblError1.TabIndex = 21;
+            this.ConfigurationlblError1.Text = "ERROR CONFIGURING DEVICE";
             // 
             // ConfigurationPanel2
             // 
@@ -1237,61 +1428,6 @@
             this.radioLoadFromFile.UseVisualStyleBackColor = true;
             this.radioLoadFromFile.CheckedChanged += new System.EventHandler(this.OnLoadFromFile);
             // 
-            // ConfigurationErrorgroupBox1
-            // 
-            this.ConfigurationErrorgroupBox1.BackColor = System.Drawing.Color.Yellow;
-            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblWarning1);
-            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError3);
-            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError2);
-            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError1);
-            this.ConfigurationErrorgroupBox1.Location = new System.Drawing.Point(0, 0);
-            this.ConfigurationErrorgroupBox1.Margin = new System.Windows.Forms.Padding(5);
-            this.ConfigurationErrorgroupBox1.Name = "ConfigurationErrorgroupBox1";
-            this.ConfigurationErrorgroupBox1.Padding = new System.Windows.Forms.Padding(5);
-            this.ConfigurationErrorgroupBox1.Size = new System.Drawing.Size(696, 522);
-            this.ConfigurationErrorgroupBox1.TabIndex = 2;
-            this.ConfigurationErrorgroupBox1.TabStop = false;
-            this.ConfigurationErrorgroupBox1.Visible = false;
-            // 
-            // ConfigurationlblWarning1
-            // 
-            this.ConfigurationlblWarning1.AutoSize = true;
-            this.ConfigurationlblWarning1.Font = new System.Drawing.Font("Showcard Gothic", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblWarning1.Location = new System.Drawing.Point(17, 114);
-            this.ConfigurationlblWarning1.Name = "ConfigurationlblWarning1";
-            this.ConfigurationlblWarning1.Size = new System.Drawing.Size(35, 44);
-            this.ConfigurationlblWarning1.TabIndex = 4;
-            this.ConfigurationlblWarning1.Text = "!";
-            // 
-            // ConfigurationlblError3
-            // 
-            this.ConfigurationlblError3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblError3.Location = new System.Drawing.Point(56, 339);
-            this.ConfigurationlblError3.Name = "ConfigurationlblError3";
-            this.ConfigurationlblError3.Size = new System.Drawing.Size(577, 44);
-            this.ConfigurationlblError3.TabIndex = 21;
-            this.ConfigurationlblError3.Text = "VALIDATE CONFIGURATION FILE";
-            this.ConfigurationlblError3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ConfigurationlblError2
-            // 
-            this.ConfigurationlblError2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblError2.Location = new System.Drawing.Point(56, 216);
-            this.ConfigurationlblError2.Name = "ConfigurationlblError2";
-            this.ConfigurationlblError2.Size = new System.Drawing.Size(577, 44);
-            this.ConfigurationlblError2.TabIndex = 21;
-            this.ConfigurationlblError2.Text = "[ERROR]";
-            this.ConfigurationlblError2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ConfigurationlblError1
-            // 
-            this.ConfigurationlblError1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblError1.Location = new System.Drawing.Point(56, 112);
-            this.ConfigurationlblError1.Name = "ConfigurationlblError1";
-            this.ConfigurationlblError1.Size = new System.Drawing.Size(577, 44);
-            this.ConfigurationlblError1.TabIndex = 21;
-            this.ConfigurationlblError1.Text = "ERROR CONFIGURING DEVICE";
-            // 
             // ApplicationtabPage
             // 
             this.ApplicationtabPage.Controls.Add(this.ApplicationpictureBoxWait);
@@ -1541,13 +1677,23 @@
             this.RawModepanel1.PerformLayout();
             this.SettingstabPage.ResumeLayout(false);
             this.SettingsMainpanel1.ResumeLayout(false);
-            this.SettingsWIPpanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.SettingsWIPpictureBox1)).EndInit();
+            this.SettingsControlpanel1.ResumeLayout(false);
+            this.SettingsControlgroupBox1.ResumeLayout(false);
+            this.SettingsControlgroupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.SettingsControlpictureBox1)).EndInit();
+            this.SettingsENCControlgroupBox1.ResumeLayout(false);
+            this.SettingsENCControlgroupBox1.PerformLayout();
+            this.SettingsLEDControlgroupBox1.ResumeLayout(false);
+            this.SettingsLEDControlgroupBox1.PerformLayout();
+            this.SettingsBeepControlgroupBox1.ResumeLayout(false);
+            this.SettingsBeepControlgroupBox1.PerformLayout();
             this.SettingsMsrpanel1.ResumeLayout(false);
             this.SettingsMSRgroupBox1.ResumeLayout(false);
             this.SettingsMSRgroupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsMsrpicBoxWait)).EndInit();
             this.ConfigurationtabPage.ResumeLayout(false);
+            this.ConfigurationErrorgroupBox1.ResumeLayout(false);
+            this.ConfigurationErrorgroupBox1.PerformLayout();
             this.ConfigurationPanel2.ResumeLayout(false);
             this.tabControlConfiguration.ResumeLayout(false);
             this.ConfigurationTerminalDatatabPage.ResumeLayout(false);
@@ -1565,8 +1711,6 @@
             this.ConfigurationIDgrpBox.PerformLayout();
             this.ConfigurationGroupBox1.ResumeLayout(false);
             this.ConfigurationGroupBox1.PerformLayout();
-            this.ConfigurationErrorgroupBox1.ResumeLayout(false);
-            this.ConfigurationErrorgroupBox1.PerformLayout();
             this.ApplicationtabPage.ResumeLayout(false);
             this.ApplicationtabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpictureBoxWait)).EndInit();
@@ -1666,10 +1810,21 @@
     // TAB: SETTINGS
     private System.Windows.Forms.TabPage SettingstabPage;
     private System.Windows.Forms.Panel SettingsMainpanel1;
-    // GROUP: WIPSETTINGS
-    private System.Windows.Forms.Panel SettingsWIPpanel1;
-    private System.Windows.Forms.GroupBox SettingsWIPgroupBox1;
-    private System.Windows.Forms.PictureBox SettingsWIPpictureBox1;
+    // GROUP: CONTROLSETTINGS
+    private System.Windows.Forms.Panel SettingsControlpanel1;
+    private System.Windows.Forms.GroupBox SettingsControlgroupBox1;
+    private System.Windows.Forms.GroupBox SettingsBeepControlgroupBox1;
+    private System.Windows.Forms.RadioButton SettingsBeepControlradioButton2;
+    private System.Windows.Forms.RadioButton SettingsBeepControlradioButton1;
+    private System.Windows.Forms.GroupBox SettingsLEDControlgroupBox1;
+    private System.Windows.Forms.CheckBox SettingsLEDControlcheckBox2;
+    private System.Windows.Forms.CheckBox SettingsLEDControlcheckBox1;
+    private System.Windows.Forms.GroupBox SettingsENCControlgroupBox1;
+    private System.Windows.Forms.CheckBox SettingsENCControlcheckBox2;
+    private System.Windows.Forms.CheckBox SettingsENCControlcheckBox1;
+    private System.Windows.Forms.Button SettingsControlConfigureBtn;
+    private System.Windows.Forms.TextBox SettingsControlErrortextBox1;
+    private System.Windows.Forms.PictureBox SettingsControlpictureBox1;
     // GROUP: MSRSETTINGS
     private System.Windows.Forms.Panel SettingsMsrpanel1;
     private System.Windows.Forms.GroupBox SettingsMSRgroupBox1;
@@ -1686,7 +1841,7 @@
     private System.Windows.Forms.CheckBox SettingsMsrcBxTrack3;
     private System.Windows.Forms.CheckBox SettingsMsrcBxTrack2;
     private System.Windows.Forms.CheckBox SettingsMsrcBxTrack1;
-    private System.Windows.Forms.Button SettingsMsrbtnConfigure;
+    private System.Windows.Forms.Button SettingsMsrConfigureBtn;
     private System.Windows.Forms.PictureBox SettingsMsrpicBoxWait;
     // TAB: RAWMODE
     private System.Windows.Forms.TabPage RawModetabPage;

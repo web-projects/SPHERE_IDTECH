@@ -96,6 +96,13 @@ namespace IPA.CommonInterface.ConfigIDTech.Configuration
     [Serializable]
     public class user_configuration
     {
+        // Control Settings
+        public bool firmware_beep_control { get; set; }
+        public bool firmware_LED_control_msr { get; set; }
+        public bool firmware_LED_control_icc { get; set; }
+        public bool encryption_msr { get; set; }
+        public bool encryption_icc { get; set; }
+        // MSR Settings
         public bool expiration_masking { get; set; }
         public int pan_clear_digits { get; set; }
         public swipe_force_mask swipe_force_mask  { get; set; }

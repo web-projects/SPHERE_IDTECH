@@ -82,24 +82,29 @@ namespace IPA.CommonInterface.ConfigIDTech
                     //Contact
                     //Msr_settings
                     //Terminal_info
-                    Debug.WriteLine("general_configuration: TI->FWVR --------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.firmware_ver);
-                    Debug.WriteLine("general_configuration: TI->KVER --------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_ver);
-                    Debug.WriteLine("general_configuration: TI->KCHK --------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_checksum);
-                    Debug.WriteLine("general_configuration: TI->KCFG --------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_configuration_checksum);
+                    Debug.WriteLine("general_configuration: TI->FWVR ------------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.firmware_ver);
+                    Debug.WriteLine("general_configuration: TI->KVER ------------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_ver);
+                    Debug.WriteLine("general_configuration: TI->KCHK ------------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_checksum);
+                    Debug.WriteLine("general_configuration: TI->KCFG ------------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_configuration_checksum);
                     //Encryption
-                    Debug.WriteLine("general_configuration: EN->TYPE --------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.data_encryption_type);
-                    Debug.WriteLine("general_configuration: EN->MSRE --------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.msr_encryption_enabled);
-                    Debug.WriteLine("general_configuration: EN->ICCE --------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.icc_encryption_enabled);
+                    Debug.WriteLine("general_configuration: EN->TYPE ------------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.data_encryption_type);
+                    Debug.WriteLine("general_configuration: EN->MSRE ------------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.msr_encryption_enabled);
+                    Debug.WriteLine("general_configuration: EN->ICCE ------------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.icc_encryption_enabled);
                     // user_configuration
-                    Debug.WriteLine("user_configuration: expiration_masking -- =[{0}]", (object) terminalCfg.user_configuration.expiration_masking);
-                    Debug.WriteLine("user_configuration: pan_clear_digits ---- =[{0}]", (object) terminalCfg.user_configuration.pan_clear_digits);
-                    Debug.WriteLine("user_configuration: swipe_force_mask:TK1  =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track1);
-                    Debug.WriteLine("user_configuration: swipe_force_mask:TK2  =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track2);
-                    Debug.WriteLine("user_configuration: swipe_force_mask:TK3  =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track3);
-                    Debug.WriteLine("user_configuration: swipe_force_mask:TK0  =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track3card0);
-                    Debug.WriteLine("user_configuration: swipe_mask:TK1 ------ =[{0}]", (object) terminalCfg.user_configuration.swipe_mask.track1);
-                    Debug.WriteLine("user_configuration: swipe_mask:TK2 ------ =[{0}]", (object) terminalCfg.user_configuration.swipe_mask.track2);
-                    Debug.WriteLine("user_configuration: swipe_mask:TK3 ------ =[{0}]", (object) terminalCfg.user_configuration.swipe_mask.track3);
+                    Debug.WriteLine("user_configuration: firmware_beep_control -- =[{0}]", (object) terminalCfg.user_configuration.firmware_beep_control);
+                    Debug.WriteLine("user_configuration: firmware_LED_control_msr =[{0}]", (object) terminalCfg.user_configuration.firmware_LED_control_msr);
+                    Debug.WriteLine("user_configuration: firmware_LED_control_icc =[{0}]", (object) terminalCfg.user_configuration.firmware_LED_control_icc);
+                    Debug.WriteLine("user_configuration: encryption_msr --------- =[{0}]", (object) terminalCfg.user_configuration.encryption_msr);
+                    Debug.WriteLine("user_configuration: encryption_icc --------- =[{0}]", (object) terminalCfg.user_configuration.encryption_icc);
+                    Debug.WriteLine("user_configuration: expiration_masking ----- =[{0}]", (object) terminalCfg.user_configuration.expiration_masking);
+                    Debug.WriteLine("user_configuration: pan_clear_digits ------- =[{0}]", (object) terminalCfg.user_configuration.pan_clear_digits);
+                    Debug.WriteLine("user_configuration: swipe_force_mask:TK1 --- =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track1);
+                    Debug.WriteLine("user_configuration: swipe_force_mask:TK2 --- =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track2);
+                    Debug.WriteLine("user_configuration: swipe_force_mask:TK3 --- =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track3);
+                    Debug.WriteLine("user_configuration: swipe_force_mask:TK0 --- =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track3card0);
+                    Debug.WriteLine("user_configuration: swipe_mask:TK1 --------- =[{0}]", (object) terminalCfg.user_configuration.swipe_mask.track1);
+                    Debug.WriteLine("user_configuration: swipe_mask:TK2 --------- =[{0}]", (object) terminalCfg.user_configuration.swipe_mask.track2);
+                    Debug.WriteLine("user_configuration: swipe_mask:TK3 --------- =[{0}]", (object) terminalCfg.user_configuration.swipe_mask.track3);
                 }
             }
             catch(Exception ex)

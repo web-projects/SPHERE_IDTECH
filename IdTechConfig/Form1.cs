@@ -54,6 +54,7 @@ namespace IPA.MainApp
         public Panel appPnl;
 
         bool formClosing = false;
+        bool loadMSRSettings = false;
 
         // AppDomain Artifacts
         AppDomainCfg appDomainCfg;
@@ -66,6 +67,7 @@ namespace IPA.MainApp
         // Application Configuration
         bool tc_show_settings_tab;
         bool tc_show_msrsettings_group;
+        bool tc_show_controlsettings_group;
         bool tc_show_raw_mode_tab;
         bool tc_show_terminal_data_tab;
         bool tc_show_json_tab;
@@ -112,6 +114,14 @@ namespace IPA.MainApp
             if(!tc_show_settings_tab)
             {
                 MaintabControl.TabPages.Remove(SettingstabPage);
+            }
+
+            // ControlSettings Group
+            string show_controlsettings_group = System.Configuration.ConfigurationManager.AppSettings["tc_show_controlsettings_group"] ?? "false";
+            bool.TryParse(show_controlsettings_group, out tc_show_controlsettings_group);
+            if(!tc_show_controlsettings_group)
+            {
+                this.SettingsControlpanel1.Visible = false;
             }
 
             // MsrSettings Group
@@ -327,13 +337,25 @@ namespace IPA.MainApp
                     break;
                 }
 
-                case NOTIFICATION_TYPE.NT_GET_DEVICE_MSRCONFIGURATION:
+                case NOTIFICATION_TYPE.NT_GET_DEVICE_CONTROL_CONFIGURATION:
+                {
+                    GetDeviceControlConfigurationUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_SET_DEVICE_CONTROL_CONFIGURATION:
+                {
+                    SetDeviceControlConfigurationUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_GET_DEVICE_MSR_CONFIGURATION:
                 {
                     GetDeviceMsrConfigurationUI(sender, args);
                     break;
                 }
 
-                case NOTIFICATION_TYPE.NT_SET_DEVICE_MSRCONFIGURATION:
+                case NOTIFICATION_TYPE.NT_SET_DEVICE_MSR_CONFIGURATION:
                 {
                     SetDeviceMsrConfigurationUI(sender, args);
                     break;
@@ -522,6 +544,16 @@ namespace IPA.MainApp
                 WaitForDeviceToConnect(firmwareIsUpdating);
 
             }).Start();
+        }
+
+        private void GetDeviceControlConfigurationUI(object sender, DeviceNotificationEventArgs e)
+        {
+            GetDeviceControlConfiguration(e.Message);
+        }
+
+        private void SetDeviceControlConfigurationUI(object sender, DeviceNotificationEventArgs e)
+        {
+            SetDeviceControlConfiguration(e.Message);
         }
 
         private void GetDeviceMsrConfigurationUI(object sender, DeviceNotificationEventArgs e)
@@ -1071,6 +1103,152 @@ namespace IPA.MainApp
             }
         }
 
+        private void GetDeviceControlConfiguration(object payload)
+        {
+            // Invoker with Parameter(s)
+            MethodInvoker mi = () =>
+            {
+                try
+                {
+                    string [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
+
+                    //TODO
+                    if(data.Length == 5)
+                    {
+                    }
+
+                    // Enable Tabs
+                    this.ApplicationtabPage.Enabled = true;
+                    this.ConfigurationtabPage.Enabled = true;
+                    this.SettingstabPage.Enabled = tc_show_settings_tab;
+                    this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
+                    this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
+                    this.JsontabPage.Enabled = tc_show_json_tab;
+                    this.AdvancedtabPage.Enabled = tc_show_advanced_tab;
+                    this.SettingsMsrpicBoxWait.Enabled = false;
+                    this.SettingsMsrpicBoxWait.Visible = false;
+                    this.JsonpicBoxWait.Visible = false;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("main: GetDeviceControlConfiguration() - exception={0}", (object)ex.Message);
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
+        private void SetDeviceControlConfiguration(object payload)
+        {
+            // Invoker with Parameter(s)
+            MethodInvoker mi = () =>
+            {
+                try
+                {
+                    // update settings in panel
+                    string [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
+
+                    // Beep Control
+                    this.SettingsBeepControlradioButton1.Checked = data[0].Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+
+                    // LED Control
+                    string [] ledControl = data[1]?.Split(',') ?? null;
+                    if(ledControl != null)
+                    { 
+                        if(ledControl.Length == 2)
+                        { 
+                            this.SettingsLEDControlcheckBox1.Checked = bool.Parse(ledControl[0]);
+                            this.SettingsLEDControlcheckBox2.Checked = bool.Parse(ledControl[1]);
+                        }
+                        else
+                        {
+                            this.SettingsControlErrortextBox1.Visible = true;
+                            this.SettingsControlErrortextBox1.Text = data[1];
+                        }
+                    }
+
+                    // Encryption Control
+                    string [] encryptionControl = data[2]?.Split(',') ?? null;
+                    if(encryptionControl != null)
+                    { 
+                        if(encryptionControl.Length == 2)
+                        { 
+                            this.SettingsENCControlcheckBox1.Checked = bool.Parse(encryptionControl[0]);
+                            this.SettingsENCControlcheckBox2.Checked = bool.Parse(encryptionControl[1]);
+                        }
+                        else
+                        {
+                            this.SettingsControlErrortextBox1.Visible = true;
+                            this.SettingsControlErrortextBox1.Text = data[2];
+                        }
+                    }
+
+                    // Display Error Message
+                    if(this.SettingsControlErrortextBox1.Visible)
+                    {
+                        new Thread(() => 
+                        {
+                            Thread.CurrentThread.IsBackground = true;
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                SoftBlink(this.SettingsControlErrortextBox1, Color.FromArgb(255, 0, 60), Color.Red, 500, true);
+                            });
+                            Thread.Sleep(5000);
+                        }).Start();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("main: SetDeviceControlConfiguration() - exception={0}", (object)ex.Message);
+                }
+                finally
+                {
+                    // Enable Tabs
+                    this.ApplicationtabPage.Enabled = true;
+                    this.ConfigurationtabPage.Enabled = true;
+                    this.SettingstabPage.Enabled = tc_show_settings_tab;
+                    this.RawModetabPage.Enabled = tc_show_raw_mode_tab;
+                    this.TerminalDatatabPage.Enabled = tc_show_terminal_data_tab;
+                    this.JsontabPage.Enabled = tc_show_json_tab;
+                    this.AdvancedtabPage.Enabled = tc_show_advanced_tab;
+
+                    this.SettingsMSRgroupBox1.Enabled = true;
+                    this.SettingsControlpictureBox1.Visible  = false;
+                    this.SettingsControlpictureBox1.Enabled = false;
+
+                    // Load MSR Settings Next
+                    if(loadMSRSettings)
+                    {
+                        loadMSRSettings = false;
+                        this.SettingsControlgroupBox1.Enabled = false;
+                        new Thread(() => 
+                        {
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                LoadMSRSettings();
+                            });
+                        }).Start();
+                    }
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
         private void GetDeviceMsrConfiguration(object payload)
         {
             // Invoker with Parameter(s)
@@ -1080,6 +1258,7 @@ namespace IPA.MainApp
                 {
                     string [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
 
+                    //TODO
                     if(data.Length == 5)
                     {
                         //this.lblExpMask.Text    = data[0];
@@ -1103,7 +1282,7 @@ namespace IPA.MainApp
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("main: GetDeviceConfiguration() - exception={0}", (object)ex.Message);
+                    Debug.WriteLine("main: GetDeviceMsrConfiguration() - exception={0}", (object)ex.Message);
                 }
             };
 
@@ -1211,6 +1390,7 @@ namespace IPA.MainApp
                     this.JsontabPage.Enabled = tc_show_json_tab;
                     this.AdvancedtabPage.Enabled = tc_show_advanced_tab;
 
+                    this.SettingsControlgroupBox1.Enabled = true;
                     this.SettingsMsrpicBoxWait.Visible  = false;
                     this.SettingsMsrpicBoxWait.Enabled = false;
                     this.JsonpicBoxWait.Visible  = false;
@@ -2490,6 +2670,25 @@ namespace IPA.MainApp
         /**************************************************************************/
         #region -- settings tab --
 
+        // SETTINGS: CONTROL
+        public List<CommonInterface.ConfigIDTech.Configuration.ControlConfigItem> configBeepControl;
+        public List<CommonInterface.ConfigIDTech.Configuration.ControlConfigItem> configLEDControl;
+        public List<CommonInterface.ConfigIDTech.Configuration.ControlConfigItem> configEncryptionControl;
+
+        public static void SetDeviceControlConfig(IDevicePlugIn devicePlugin, object payload)
+        {
+            try
+            {
+                // Make call to DeviceCfg
+                devicePlugin.SetDeviceControlConfiguration(payload);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("main: SetDeviceControlConfig() - exception={0}", (object)ex.Message);
+            }
+        }
+
+        // SETTINGS: MSR
         public List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem> configExpirationMask;
         public List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem> configPanDigits;
         public List<CommonInterface.ConfigIDTech.Configuration.MsrConfigItem> configSwipeForceEncryption;
@@ -2508,38 +2707,109 @@ namespace IPA.MainApp
             }
         }
 
+        private void LoadControlSettings()
+        {
+            ConfigIDTechSerializer serializer = devicePlugin.GetConfigIDTechSerializer();
+
+            // Update settings
+            if(serializer != null)
+            {
+                // Beep Control
+                bool firmware_beep_control = serializer?.terminalCfg?.user_configuration?.firmware_beep_control ?? false;
+                if(firmware_beep_control)
+                { 
+                    this.SettingsBeepControlradioButton1.Checked = true;
+                }
+                else
+                { 
+                    this.SettingsBeepControlradioButton2.Checked = true;
+                }
+                // LED Control
+                this.SettingsLEDControlcheckBox1.Checked = serializer?.terminalCfg?.user_configuration?.firmware_LED_control_msr ?? false;
+                this.SettingsLEDControlcheckBox2.Checked = serializer?.terminalCfg?.user_configuration?.firmware_LED_control_icc ?? false;
+                // Encryption
+                this.SettingsENCControlcheckBox1.Checked = serializer?.terminalCfg?.user_configuration?.encryption_msr ?? false;
+                this.SettingsENCControlcheckBox2.Checked = serializer?.terminalCfg?.user_configuration?.encryption_icc ?? false;
+
+                // Invoker without Parameter(s)
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    this.OnSettingsControlConfigureClick(this, null);
+                });
+            }
+
+            loadMSRSettings = tc_show_msrsettings_group;
+        }
+
+        private void LoadMSRSettings()
+        {
+            ConfigIDTechSerializer serializer = devicePlugin.GetConfigIDTechSerializer();
+
+            // Update settings
+            if(serializer != null)
+            {
+                // EXPIRATION MASK
+                this.SettingsMsrcBxExpirationMask.Checked = serializer?.terminalCfg?.user_configuration?.expiration_masking ?? false;
+
+                // PAN DIGITS
+                this.SettingsMsrtxtPAN.Text = serializer?.terminalCfg?.user_configuration?.pan_clear_digits.ToString();
+
+                // SWIPE FORCE
+                this.SettingsMsrcBxTrack1.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track1 ?? false;
+                this.SettingsMsrcBxTrack2.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track2 ?? false;
+                this.SettingsMsrcBxTrack3.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track3 ?? false;
+                this.SettingsMsrcBxTrack3Card0.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track3card0 ?? false;
+
+                // SWIPE MASK
+                this.SettingsMsrcBxSwipeMaskTrack1.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track1 ?? false;
+                this.SettingsMsrcBxSwipeMaskTrack2.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track2 ?? false;
+                this.SettingsMsrcBxSwipeMaskTrack3.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track3 ?? false;
+
+                // Invoker without Parameter(s)
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    this.OnSettingsMsrConfigureClick(this, null);
+                });
+            }
+        }
+
         private void OnSettingsControlActive(object sender, EventArgs e)
         {
-            if(tc_show_msrsettings_group)
+            if(tc_show_controlsettings_group)
+            {
+                LoadControlSettings();
+            }
+            else if(tc_show_msrsettings_group)
+            {
+                LoadMSRSettings();
+            }
+        }
+
+        private void SaveConfigurationControl()
+        {
+            try
             {
                 ConfigIDTechSerializer serializer = devicePlugin.GetConfigIDTechSerializer();
 
-                // Update settings
+                // Update Configuration File
                 if(serializer != null)
                 {
-                    // EXPIRATION MASK
-                    this.SettingsMsrcBxExpirationMask.Checked = serializer?.terminalCfg?.user_configuration?.expiration_masking?? false;
+                    // Update Data: Beep Control
+                    serializer.terminalCfg.user_configuration.firmware_beep_control = this.SettingsBeepControlradioButton1.Checked;
+                    // LED Control
+                    serializer.terminalCfg.user_configuration.firmware_LED_control_msr = this.SettingsLEDControlcheckBox1.Checked;
+                    serializer.terminalCfg.user_configuration.firmware_LED_control_icc = this.SettingsLEDControlcheckBox2.Checked;
+                    // Encryption Control
+                    serializer.terminalCfg.user_configuration.encryption_msr = this.SettingsENCControlcheckBox1.Checked;
+                    serializer.terminalCfg.user_configuration.encryption_icc = this.SettingsENCControlcheckBox2.Checked;
 
-                    // PAN DIGITS
-                    this.SettingsMsrtxtPAN.Text = serializer?.terminalCfg?.user_configuration?.pan_clear_digits.ToString();
-
-                    // SWIPE FORCE
-                    this.SettingsMsrcBxTrack1.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track1?? false;
-                    this.SettingsMsrcBxTrack2.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track2?? false;
-                    this.SettingsMsrcBxTrack3.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track3?? false;
-                    this.SettingsMsrcBxTrack3Card0.Checked = serializer?.terminalCfg?.user_configuration?.swipe_force_mask.track3card0?? false;
-
-                    // SWIPE MASK
-                    this.SettingsMsrcBxSwipeMaskTrack1.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track1?? false;
-                    this.SettingsMsrcBxSwipeMaskTrack2.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track2?? false;
-                    this.SettingsMsrcBxSwipeMaskTrack3.Checked = serializer?.terminalCfg?.user_configuration?.swipe_mask.track3?? false;
-
-                    // Invoker without Parameter(s)
-                    this.Invoke((MethodInvoker)delegate()
-                    {
-                        this.OnMsrConfigureClick(this, null);
-                    });
+                    // WRITE to Config
+                    serializer.WriteConfig();
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("main: SaveConfiguration() - exception={0}", (object)ex.Message);
             }
         }
 
@@ -2634,6 +2904,11 @@ namespace IPA.MainApp
                     {
                         this.SettingstabPage.Enabled = true;
 
+                        if(tc_show_controlsettings_group)
+                        {
+                            this.SettingsControlpictureBox1.Enabled = true;
+                            this.SettingsControlpictureBox1.Visible = true;
+                        }
                         if(tc_show_msrsettings_group)
                         {
                             this.SettingsMsrpicBoxWait.Enabled = true;
@@ -2690,9 +2965,10 @@ namespace IPA.MainApp
 
         private void OnDeselectingMainTabPage(object sender, TabControlCancelEventArgs e)
         {
-            if(this.ApplicationpictureBoxWait.Visible      || this.JsonpicBoxWait.Visible      ||
-               this. SettingsMsrpicBoxWait.Visible         || this.AdvancedFirmwarepicBoxWait.Visible  ||
-               this.ConfigurationPanel1pictureBox1.Visible || !this.ConfigurationPanel1.Enabled)
+            if(this.ApplicationpictureBoxWait.Visible   || this.JsonpicBoxWait.Visible                 ||
+               this. SettingsControlpictureBox1.Visible || this. SettingsMsrpicBoxWait.Visible         ||
+               this.AdvancedFirmwarepicBoxWait.Visible  || this.ConfigurationPanel1pictureBox1.Visible ||
+               !this.ConfigurationPanel1.Enabled)
             {
                 e.Cancel = true;
             }
@@ -2811,7 +3087,7 @@ namespace IPA.MainApp
             this.ApplicationtxtCardData.Text = "";
         }
 
-        private void OnConfigureMsrClick(object sender, EventArgs e)
+        private void OnSettingsControlConfigureClick(object sender, EventArgs e)
         {
             // Disable Tabs
             this.ApplicationtabPage.Enabled = false;
@@ -2819,16 +3095,51 @@ namespace IPA.MainApp
             this.TerminalDatatabPage.Enabled = false;
             this.JsontabPage.Enabled = false;
 
+            this.SettingsControlErrortextBox1.Visible = false;
+
             this.Invoke(new MethodInvoker(() =>
             {
-                this.SettingstabPage.Enabled = true;
-                this.SettingsMsrpicBoxWait.Enabled = true;
-                this.SettingsMsrpicBoxWait.Visible = true;
+                this.SettingsControlpictureBox1.Enabled = true;
+                this.SettingsControlpictureBox1.Visible = true;
+                this.SettingsControlpictureBox1.Refresh();
                 System.Windows.Forms.Application.DoEvents();
             }));
+
+            // BEEP CONTROL
+            configBeepControl = new List<CommonInterface.ConfigIDTech.Configuration.ControlConfigItem>
+            {
+                { new CommonInterface.ConfigIDTech.Configuration.ControlConfigItem() { Name="beepControl", Id=(int)CommonInterface.ConfigIDTech.Configuration.BEEP_CONTROL.HARDWARE, Value=string.Format("{0}", this.SettingsBeepControlradioButton1.Checked.ToString()) }},
+            };
+
+            // LED CONTROL
+            configLEDControl = new List<CommonInterface.ConfigIDTech.Configuration.ControlConfigItem>
+            {
+                { new CommonInterface.ConfigIDTech.Configuration.ControlConfigItem() { Name="ledControl", Id=(int)CommonInterface.ConfigIDTech.Configuration.LED_CONTROL.MSR, Value=string.Format("{0}", this.SettingsLEDControlcheckBox1.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.ControlConfigItem() { Name="ledControl", Id=(int)CommonInterface.ConfigIDTech.Configuration.LED_CONTROL.ICC, Value=string.Format("{0}", this.SettingsLEDControlcheckBox2.Checked.ToString()) }},
+            };
+
+            // ENCRYPTON CONTROL
+            configEncryptionControl = new List<CommonInterface.ConfigIDTech.Configuration.ControlConfigItem>
+            {
+                { new CommonInterface.ConfigIDTech.Configuration.ControlConfigItem() { Name="encryptionMSR", Id=(int)CommonInterface.ConfigIDTech.Configuration.ENCRYPTION_CONTROL.MSR, Value=string.Format("{0}", this.SettingsENCControlcheckBox1.Checked.ToString()) }},
+                { new CommonInterface.ConfigIDTech.Configuration.ControlConfigItem() { Name="encryptionICC", Id=(int)CommonInterface.ConfigIDTech.Configuration.ENCRYPTION_CONTROL.ICC, Value=string.Format("{0}", this.SettingsENCControlcheckBox2.Checked.ToString()) }},
+            };
+
+            // Build Payload Package
+            object payload = new object[] { configBeepControl, configLEDControl, configEncryptionControl };
+
+            // Save to Configuration File
+            if(e != null)
+            {
+                this.SettingsMSRgroupBox1.Enabled = false;
+                SaveConfigurationControl();
+            }
+
+            // Settings Read
+            new Thread(() => SetDeviceControlConfig(devicePlugin, payload)).Start();
         }
 
-        private void OnMsrConfigureClick(object sender, EventArgs e)
+        private void OnSettingsMsrConfigureClick(object sender, EventArgs e)
         {
             // Disable Tabs
             this.ApplicationtabPage.Enabled = false;
@@ -2879,6 +3190,7 @@ namespace IPA.MainApp
             // Save to Configuration File
             if(e != null)
             {
+                this.SettingsControlgroupBox1.Enabled = false;
                 SaveConfigurationMsr();
             }
 

@@ -40,6 +40,13 @@
     }
   },
   "user_configuration": {
+    // Control Settings
+    "firmware_beep_control": true,
+    "firmware_LED_control_msr": true,
+    "firmware_LED_control_icc": false,
+    "encryption_msr": true,
+    "encryption_icc": true,
+    // MSR Settings
     "expiration_masking": true,
     "pan_clear_digits": 4,
     "swipe_force_mask": {

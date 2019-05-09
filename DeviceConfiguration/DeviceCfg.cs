@@ -1539,6 +1539,75 @@ namespace IPA.DAL.RBADAL
     /********************************************************************************************************/
     // CONFIGURATION GETS
     /********************************************************************************************************/
+
+    private string GetBeepControl()
+    {
+      string result = "";
+
+      bool response = false;
+      RETURN_CODE rt = IDT_Augusta.SharedController.config_getBeeperController(ref response);
+
+      if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+      {
+          result = response.ToString();
+          Debug.WriteLine("Beep Control: {0}", (object) (response ? "Firmware" : "Software"));
+      }
+      else
+      {
+          result = String.Format("Fail Error Code=0x{0:X4} : {1}.", (ushort)rt, IDTechSDK.errorCode.getErrorString(rt));
+      }
+
+      return result;
+    }
+
+    private string GetLEDControl()
+    {
+      string result = "";
+
+      bool firmwareControlMSRLED = false;
+      bool firmwareControlICCLED = false;
+
+      RETURN_CODE rt = IDT_Augusta.SharedController.config_getLEDController(ref firmwareControlMSRLED, ref firmwareControlICCLED);
+
+      if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+      {
+          result  = firmwareControlMSRLED.ToString();
+          result += ",";
+          result += firmwareControlICCLED.ToString();
+          Debug.WriteLine("LED Control: MSR Enabled={0}, ICC Enabled={1}", firmwareControlMSRLED, firmwareControlICCLED);
+      }
+      else
+      {
+          result = String.Format("Fail Error Code=0x{0:X4} : {1}.", (ushort)rt, IDTechSDK.errorCode.getErrorString(rt));
+      }
+
+      return result;
+    }
+
+    private string GetEncryptionControl()
+    {
+      string result = "";
+
+      bool msr = false;
+      bool icc = false;
+
+      RETURN_CODE rt = IDT_Augusta.SharedController.config_getEncryptionControl(ref msr, ref icc);
+
+      if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+      {
+          result  = msr.ToString();
+          result += ",";
+          result += icc.ToString();
+          Debug.WriteLine("Encryption Control: MSR Enabled={0}, ICC Enabled={1}", msr, icc);
+      }
+      else
+      {
+          result = String.Format("Fail Error Code=0x{0:X4} : {1}.", (ushort)rt, IDTechSDK.errorCode.getErrorString(rt));
+      }
+
+      return result;
+    }
+
     private string GetExpirationMask()
     {
       string result = "";
@@ -1808,6 +1877,126 @@ namespace IPA.DAL.RBADAL
     /********************************************************************************************************/
     // CONFIGURATION SETS
     /********************************************************************************************************/
+
+    private string SetBeepControl(object payload)
+    {
+      string result = "";
+      bool hardwareControl = false;
+
+      List<ControlConfigItem> data = (List<ControlConfigItem>) payload;
+
+      foreach (ControlConfigItem child in data)  
+      {  
+        switch(child.Id)
+        {
+          case (int) BEEP_CONTROL.HARDWARE:
+          {
+            hardwareControl = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+            break;
+          }
+        }
+      } 
+
+      RETURN_CODE rt = IDT_Augusta.SharedController.config_setBeeperController(hardwareControl);
+
+      if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+      {
+          IDTechSerializer.terminalCfg.user_configuration.firmware_beep_control = hardwareControl;
+          return GetBeepControl();
+      }
+      else
+      {
+          result = String.Format("Fail Error: 0x{0:X4} - {1}", (ushort)rt, IDTechSDK.errorCode.getErrorString(rt));
+          Debug.WriteLine("Set Beep Control {0}", (object)result);
+      }
+
+      return result;
+    }
+
+    private string SetLEDControl(object payload)
+    {
+      string result = "";
+      bool firmwareControlMSRLED = false;
+      bool firmwareControlICCLED = false;
+
+      List<ControlConfigItem> data = (List<ControlConfigItem>) payload;
+
+      foreach (ControlConfigItem child in data)  
+      {  
+        switch(child.Id)
+        {
+          case (int) LED_CONTROL.MSR:
+          {
+            firmwareControlMSRLED = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+            break;
+          }
+          case (int) LED_CONTROL.ICC:
+          {
+            firmwareControlICCLED = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+            break;
+          }
+        }
+      } 
+
+      RETURN_CODE rt = IDT_Augusta.SharedController.config_setLEDController(firmwareControlMSRLED, firmwareControlICCLED);
+
+      if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+      {
+          IDTechSerializer.terminalCfg.user_configuration.firmware_LED_control_msr = firmwareControlMSRLED;
+          IDTechSerializer.terminalCfg.user_configuration.firmware_LED_control_icc = firmwareControlICCLED;
+          return GetLEDControl();
+      }
+      else
+      {
+          result = String.Format("Fail Error: 0x{0:X4} - {1}", (ushort)rt, IDTechSDK.errorCode.getErrorString(rt));
+          Debug.WriteLine("Set LED Control {0}", (object)result);
+      }
+
+      return result;
+    }
+
+    private string SetEncryptionControl(object payload)
+    {
+      string result = "";
+      bool msr = false;
+      bool icc = false;
+
+      List<ControlConfigItem> data = (List<ControlConfigItem>) payload;
+
+      foreach (ControlConfigItem child in data)  
+      {  
+        switch(child.Id)
+        {
+          case (int) ENCRYPTION_CONTROL.MSR:
+          {
+            msr = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+            break;
+          }
+          case (int) ENCRYPTION_CONTROL.ICC:
+          {
+            icc = child.Value.Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+            break;
+          }
+        }
+      } 
+
+      RETURN_CODE rt = IDT_Augusta.SharedController.config_setEncryptionControl(msr, icc);
+
+      if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+      {
+          IDTechSerializer.terminalCfg.user_configuration.encryption_msr = msr;
+          IDTechSerializer.terminalCfg.user_configuration.encryption_icc = icc;
+          return GetEncryptionControl();
+      }
+      else
+      {
+          result = String.Format("Fail Error: 0x{0:X4} - {1}", (ushort)rt, IDTechSDK.errorCode.getErrorString(rt));
+          Debug.WriteLine("Set Encryption Control {0}", (object)result);
+      }
+
+      return result;
+  }
+
    private string SetExpirationMask(object payload)
     {
       string result = "";
@@ -2165,6 +2354,55 @@ namespace IPA.DAL.RBADAL
     // SETTINGS ACTIONS
     /********************************************************************************************************/
     #region -- settings actions --
+
+    public void SetDeviceControlConfiguration(object payload)
+    {
+      try
+      {
+         Array argArray = new object[((Array)payload).Length];
+         argArray = (Array) payload;
+
+         // BEEP CONTROL
+         object paramset1 = (object) argArray.GetValue(0);
+
+         // LED CONTROL
+          object paramset2 = (object) argArray.GetValue(1);
+
+         // ENCRYPTION CONTROL
+         object paramset3 = (object) argArray.GetValue(2);
+
+         // DEBUG: BEGIN
+         List<ControlConfigItem> item = (List<ControlConfigItem>) paramset3;
+
+         foreach (ControlConfigItem child in item)  
+         {  
+           Debug.WriteLine("configuration: {0}={1}", child.Name, child.Value);  
+         }  
+
+         Debug.WriteLine("deviceCfg: SetDeviceControlConfiguration() - Encryption MSR={0}", (object) item.ElementAt(0).Value);
+         // DEBUG: END
+
+         if(useUniversalSDK)
+         {
+            // BEEP CONTROL
+            string beepControl = SetBeepControl(paramset1);
+
+            // LED CONTROL
+            string ledControl = SetLEDControl(paramset2);
+                    
+            // ENCRYPTION CONTROL
+            string encryptionControl = SetEncryptionControl(paramset3);
+
+            // Setup Response
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_CONTROL_CONFIGURATION, Message = new object[] { beepControl, ledControl, encryptionControl } });
+         }
+      }
+      catch(Exception ex)
+      {
+         Debug.WriteLine("DeviceCfg::SetDeviceControlConfiguration(): - exception={0}", (object)ex.Message);
+      }
+    }
+
     public void GetDeviceMsrConfiguration()
     {
       if (!device.IsConnected)
@@ -2193,11 +2431,11 @@ namespace IPA.DAL.RBADAL
               string msrSetting = "WIP";
 
               // Set Configuration
-              NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_GET_DEVICE_MSRCONFIGURATION, Message = new object[] { expMask, panDigits, swipeForce, swipeMask, msrSetting } });
+              NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_GET_DEVICE_MSR_CONFIGURATION, Message = new object[] { expMask, panDigits, swipeForce, swipeMask, msrSetting } });
           }
           catch(Exception ex)
           {
-             Debug.WriteLine("DeviceCfg::GetDeviceMode(): - exception={0}", (object)ex.Message);
+             Debug.WriteLine("DeviceCfg::GetDeviceMsrConfiguration(): - exception={0}", (object)ex.Message);
           }
       }
       else
@@ -2205,13 +2443,6 @@ namespace IPA.DAL.RBADAL
         //TO-DO
       }
     }
-
-    #endregion
-
-    /********************************************************************************************************/
-    // CONFIGURATION ACTIONS
-    /********************************************************************************************************/
-    #region -- configuration actions --
 
     public void SetDeviceMsrConfiguration(object payload)
     {
@@ -2232,7 +2463,7 @@ namespace IPA.DAL.RBADAL
         // SWIPE MASK
         object paramset4 = (object) argArray.GetValue(3);
 
-        // DEBUG
+        // DEBUG: BEGIN
         List<MsrConfigItem> item = (List<MsrConfigItem>) paramset3;
 
         foreach (MsrConfigItem child in item)  
@@ -2240,7 +2471,8 @@ namespace IPA.DAL.RBADAL
           Debug.WriteLine("configuration: {0}={1}", child.Name, child.Value);  
         }  
 
-        Debug.WriteLine("deviceCfg: SetDeviceConfiguration() - track1={0}", (object) item.ElementAt(0).Value);
+        Debug.WriteLine("deviceCfg: SetDeviceMsrConfiguration() - track1={0}", (object) item.ElementAt(0).Value);
+        // DEBUG: END
 
         if(useUniversalSDK)
         {
@@ -2257,7 +2489,7 @@ namespace IPA.DAL.RBADAL
             string swipeMask = SetSwipeMaskOption(paramset4);
 
             // Setup Response
-            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_MSRCONFIGURATION, Message = new object[] { expMask, panDigits, swipeForceEncrypt, swipeMask } });
+            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_DEVICE_MSR_CONFIGURATION, Message = new object[] { expMask, panDigits, swipeForceEncrypt, swipeMask } });
         }
         else
         {
@@ -2266,9 +2498,16 @@ namespace IPA.DAL.RBADAL
       }
       catch(Exception ex)
       {
-         Debug.WriteLine("DeviceCfg::SetDeviceConfiguration(): - exception={0}", (object)ex.Message);
+         Debug.WriteLine("DeviceCfg::SetDeviceMsrConfiguration(): - exception={0}", (object)ex.Message);
       }
     }
+
+    #endregion
+
+    /********************************************************************************************************/
+    // CONFIGURATION ACTIONS
+    /********************************************************************************************************/
+    #region -- configuration actions --
 
     /// <summary>
     /// NOTES: If Interface of device is changed from USB-HID to USB-KB:
