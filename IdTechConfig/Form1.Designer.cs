@@ -126,6 +126,11 @@
             this.ConfigurationGroupBox1 = new System.Windows.Forms.GroupBox();
             this.radioLoadFromDevice = new System.Windows.Forms.RadioButton();
             this.radioLoadFromFile = new System.Windows.Forms.RadioButton();
+            this.ConfigurationErrorgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.ConfigurationlblWarning1 = new System.Windows.Forms.Label();
+            this.ConfigurationlblError3 = new System.Windows.Forms.Label();
+            this.ConfigurationlblError2 = new System.Windows.Forms.Label();
+            this.ConfigurationlblError1 = new System.Windows.Forms.Label();
             this.ApplicationtabPage = new System.Windows.Forms.TabPage();
             this.ApplicationpictureBoxWait = new System.Windows.Forms.PictureBox();
             this.ApplicationlistView1 = new System.Windows.Forms.ListView();
@@ -179,6 +184,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).BeginInit();
             this.ConfigurationIDgrpBox.SuspendLayout();
             this.ConfigurationGroupBox1.SuspendLayout();
+            this.ConfigurationErrorgroupBox1.SuspendLayout();
             this.ApplicationtabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpictureBoxWait)).BeginInit();
             this.Applicationpanel1.SuspendLayout();
@@ -685,6 +691,7 @@
             // 
             // ConfigurationtabPage
             // 
+            this.ConfigurationtabPage.Controls.Add(this.ConfigurationErrorgroupBox1);
             this.ConfigurationtabPage.Controls.Add(this.ConfigurationPanel2);
             this.ConfigurationtabPage.Controls.Add(this.ConfigurationPanel1);
             this.ConfigurationtabPage.Location = new System.Drawing.Point(4, 22);
@@ -1230,6 +1237,61 @@
             this.radioLoadFromFile.UseVisualStyleBackColor = true;
             this.radioLoadFromFile.CheckedChanged += new System.EventHandler(this.OnLoadFromFile);
             // 
+            // ConfigurationErrorgroupBox1
+            // 
+            this.ConfigurationErrorgroupBox1.BackColor = System.Drawing.Color.Yellow;
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblWarning1);
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError3);
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError2);
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError1);
+            this.ConfigurationErrorgroupBox1.Location = new System.Drawing.Point(0, 0);
+            this.ConfigurationErrorgroupBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.ConfigurationErrorgroupBox1.Name = "ConfigurationErrorgroupBox1";
+            this.ConfigurationErrorgroupBox1.Padding = new System.Windows.Forms.Padding(5);
+            this.ConfigurationErrorgroupBox1.Size = new System.Drawing.Size(696, 522);
+            this.ConfigurationErrorgroupBox1.TabIndex = 2;
+            this.ConfigurationErrorgroupBox1.TabStop = false;
+            this.ConfigurationErrorgroupBox1.Visible = false;
+            // 
+            // ConfigurationlblWarning1
+            // 
+            this.ConfigurationlblWarning1.AutoSize = true;
+            this.ConfigurationlblWarning1.Font = new System.Drawing.Font("Showcard Gothic", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblWarning1.Location = new System.Drawing.Point(17, 114);
+            this.ConfigurationlblWarning1.Name = "ConfigurationlblWarning1";
+            this.ConfigurationlblWarning1.Size = new System.Drawing.Size(35, 44);
+            this.ConfigurationlblWarning1.TabIndex = 4;
+            this.ConfigurationlblWarning1.Text = "!";
+            // 
+            // ConfigurationlblError3
+            // 
+            this.ConfigurationlblError3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblError3.Location = new System.Drawing.Point(56, 339);
+            this.ConfigurationlblError3.Name = "ConfigurationlblError3";
+            this.ConfigurationlblError3.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblError3.TabIndex = 21;
+            this.ConfigurationlblError3.Text = "VALIDATE CONFIGURATION FILE";
+            this.ConfigurationlblError3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ConfigurationlblError2
+            // 
+            this.ConfigurationlblError2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblError2.Location = new System.Drawing.Point(56, 216);
+            this.ConfigurationlblError2.Name = "ConfigurationlblError2";
+            this.ConfigurationlblError2.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblError2.TabIndex = 21;
+            this.ConfigurationlblError2.Text = "[ERROR]";
+            this.ConfigurationlblError2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ConfigurationlblError1
+            // 
+            this.ConfigurationlblError1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblError1.Location = new System.Drawing.Point(56, 112);
+            this.ConfigurationlblError1.Name = "ConfigurationlblError1";
+            this.ConfigurationlblError1.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblError1.TabIndex = 21;
+            this.ConfigurationlblError1.Text = "ERROR CONFIGURING DEVICE";
+            // 
             // ApplicationtabPage
             // 
             this.ApplicationtabPage.Controls.Add(this.ApplicationpictureBoxWait);
@@ -1503,6 +1565,8 @@
             this.ConfigurationIDgrpBox.PerformLayout();
             this.ConfigurationGroupBox1.ResumeLayout(false);
             this.ConfigurationGroupBox1.PerformLayout();
+            this.ConfigurationErrorgroupBox1.ResumeLayout(false);
+            this.ConfigurationErrorgroupBox1.PerformLayout();
             this.ApplicationtabPage.ResumeLayout(false);
             this.ApplicationtabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpictureBoxWait)).EndInit();
@@ -1567,6 +1631,11 @@
     private System.Windows.Forms.Label ConfigurationEntryModelbl;
     private System.Windows.Forms.Label ConfigurationEnvironmentlbl;
     private System.Windows.Forms.Label ConfigurationPlatformlbl;
+    private System.Windows.Forms.GroupBox ConfigurationErrorgroupBox1;
+    private System.Windows.Forms.Label ConfigurationlblWarning1;
+    private System.Windows.Forms.Label ConfigurationlblError1;
+    private System.Windows.Forms.Label ConfigurationlblError2;
+    private System.Windows.Forms.Label ConfigurationlblError3;
     // SUB-TAB: TERMINAL DATA
     private System.Windows.Forms.TabPage ConfigurationTerminalDatatabPage;
     private System.Windows.Forms.ListView ConfigurationTerminalDatalistView;

@@ -78,7 +78,7 @@ namespace IPA.DAL.RBADAL.Interfaces
         int SetTerminalConfiguration(ConfigSphereSerializer serializer);
 
         string[] GetTerminalData(int majorcfg);
-        void ValidateTerminalData(ref ConfigSphereSerializer serializer);
+        string [] ValidateTerminalData(ref ConfigSphereSerializer serializer);
         string [] GetAidList();
         void ValidateAidList(ref ConfigSphereSerializer serializer);
         string [] GetCapKList();

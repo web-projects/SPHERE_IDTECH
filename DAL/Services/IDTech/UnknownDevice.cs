@@ -296,8 +296,9 @@ namespace IPA.DAL.RBADAL.Services
         {
             return null;
         }
-        public virtual void ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        public virtual string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
         {
+            return null;
         }
         public virtual string [] GetAidList()
         {

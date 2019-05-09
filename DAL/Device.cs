@@ -333,9 +333,9 @@ if (deviceID.ToLower().Contains("usb\\") && ((deviceID.Contains($"VID_{IDTECH}")
             return deviceInterface?.GetTerminalData(majorcfg);
         }
 
-        public void ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        public string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
         {
-            deviceInterface?.ValidateTerminalData(ref serializer);
+            return deviceInterface?.ValidateTerminalData(ref serializer) ?? null;
         }
 
         public string [] GetAidList()

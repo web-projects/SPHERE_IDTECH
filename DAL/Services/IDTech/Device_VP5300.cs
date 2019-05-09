@@ -480,8 +480,9 @@ namespace IPA.DAL.RBADAL.Services
             return data;
         }
 
-        public override void ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        public override string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
         {
+            string [] result = null;
             try
             {
                 if(serializer != null)
@@ -592,10 +593,15 @@ namespace IPA.DAL.RBADAL.Services
                                 byte [] terminalData = flattenedList.ToArray();
 
                                 rt = IDT_SpectrumPro.SharedController.emv_setTerminalData(terminalData);
-                                if(rt != RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+                                if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+                                {
+                                    Logger.debug( "device: ValidateTerminalData() DATA=[{0}]", BitConverter.ToString(terminalData).Replace("-", string.Empty));
+                                }
+                                else
                                 {
                                     Debug.WriteLine("emv_setTerminalMajorConfiguration() error: {0}", rt);
                                     Logger.error( "device: ValidateTerminalData() error={0} DATA={1}", rt, BitConverter.ToString(terminalData).Replace("-", string.Empty));
+                                    result = new [] { string.Format("TERMINAL DATA ERROR={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt)) };
                                 }
                             }
                             catch(Exception ex)
@@ -618,6 +624,8 @@ namespace IPA.DAL.RBADAL.Services
             {
                 Debug.WriteLine("device: ValidateTerminalData() - exception={0}", (object)ex.Message);
             }
+
+            return result;
         }
         
         public override string [] GetAidList()

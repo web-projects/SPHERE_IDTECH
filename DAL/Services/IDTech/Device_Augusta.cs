@@ -543,8 +543,9 @@ namespace IPA.DAL.RBADAL.Services
         /// NOTE: MAY REQUIRE TO SET TERMINAL MAJOR CONFIGURATION BEFORE SAVING TERMINAL DATA
         /// </summary>
         /// <param name="serializer"></param>
-        public override void ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        public override string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
         {
+            string [] result = null;
             try
             {
                 if(serializer != null)
@@ -663,6 +664,7 @@ namespace IPA.DAL.RBADAL.Services
                                     Debug.WriteLine("emv_setTerminalMajorConfiguration() error: {0}", rt);
                                     Logger.error( "device: ValidateTerminalData() error={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt));
                                     Logger.error( "device: ValidateTerminalData() DATA=[{0}]", BitConverter.ToString(terminalData).Replace("-", string.Empty));
+                                    result = new [] { string.Format("TERMINAL DATA ERROR={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt)) };
                                 }
                             }
                             catch(Exception ex)
@@ -674,6 +676,7 @@ namespace IPA.DAL.RBADAL.Services
                     else
                     {
                         Logger.error( "device: ValidateTerminalData() error={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt));
+                        result = new [] { string.Format("TERMINAL DATA ERROR={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt)) };
                     }
                 }
                 else
@@ -685,6 +688,8 @@ namespace IPA.DAL.RBADAL.Services
             {
                 Debug.WriteLine("device: ValidateTerminalData() - exception={0}", (object)ex.Message);
             }
+
+            return result;
         }
         
         public override string [] GetAidList()

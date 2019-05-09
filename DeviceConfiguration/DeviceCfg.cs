@@ -2637,7 +2637,12 @@ namespace IPA.DAL.RBADAL
                     
                     if((RETURN_CODE)(Device?.SetTerminalConfiguration(SphereSerializer) ??  (int)RETURN_CODE.RETURN_CODE_FAILED) == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
                     { 
-                        Device.ValidateTerminalData(ref SphereSerializer);
+                        string [] result = Device.ValidateTerminalData(ref SphereSerializer);
+                        if(result != null)
+                        {
+                            NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_TERMINAL_DATA_ERROR, Message = result });
+                            return;
+                        }
                     }
                     message = SphereSerializer.GetTerminalDataString(deviceInformation.SerialNumber, deviceInformation.EMVKernelVersion);
                 }

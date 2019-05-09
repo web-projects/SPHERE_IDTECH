@@ -17,6 +17,7 @@ namespace IPA.CommonInterface.Helpers
         NT_SET_DEVICE_INTERFACE_TYPE,
         NT_SET_EXECUTE_RESULT,
         NT_SHOW_TERMINAL_DATA,
+        NT_SET_TERMINAL_DATA_ERROR,
         NT_SHOW_JSON_CONFIG,
         NT_SHOW_AID_LIST,
         NT_SHOW_CAPK_LIST,

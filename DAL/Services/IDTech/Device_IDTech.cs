@@ -1830,8 +1830,9 @@ if(empty)
         {
             return null;
         }
-        public virtual void ValidateTerminalData(ref ConfigIDTechSerializer serializer)
+        public virtual string [] ValidateTerminalData(ref ConfigIDTechSerializer serializer)
         {
+            return null;
         }
         public virtual string [] GetAidList(ref ConfigIDTechSerializer serializer)
         {
@@ -1854,8 +1855,9 @@ if(empty)
         {
             return null;
         }
-        public virtual void ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        public virtual string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
         {
+            return null;
         }
         public virtual string [] GetAidList()
         {

@@ -46,3 +46,4 @@ This an application to Configure IDTech Devices.
 * 20190507 - Streamlined device specific methods.
 * 20190508 - Fixes to JSON file processing.
            - Changed offending TAG "9F40" value "6000F05001" to "F000F0A001".
+* 20190509 - Implemented error states for error on Set Terminal Data.

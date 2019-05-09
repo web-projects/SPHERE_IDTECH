@@ -26,6 +26,7 @@ using System.Reflection;
 using IPA.DAL.RBADAL;
 using IPA.CommonInterface.ConfigSphere.Configuration;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace IPA.MainApp
 {
@@ -79,7 +80,7 @@ namespace IPA.MainApp
         bool isNonAugusta;
 
         DEV_USB_MODE dev_usb_mode;
-        int loggingLevels;
+        //int loggingLevels;            // 20190508: REVIEW WITH CHANGES TO LOGGER AND DELETE
 
         // Timers
         Stopwatch stopWatch;
@@ -279,6 +280,23 @@ namespace IPA.MainApp
             ConfigurationManager.RefreshSection("appSettings");
         }
 
+        private async void SoftBlink(Control ctrl, Color c1, Color c2, short CycleTime_ms, bool BkClr)
+        {
+            var sw = new Stopwatch(); sw.Start();
+            short halfCycle = (short)Math.Round(CycleTime_ms * 0.5);
+            while (true)
+            {
+                await Task.Delay(1);
+                var n = sw.ElapsedMilliseconds % CycleTime_ms;
+                var per = (double)Math.Abs(n - halfCycle) / halfCycle;
+                var red = (short)Math.Round((c2.R - c1.R) * per) + c1.R;
+                var grn = (short)Math.Round((c2.G - c1.G) * per) + c1.G;
+                var blw = (short)Math.Round((c2.B - c1.B) * per) + c1.B;
+                var clr = Color.FromArgb(red, grn, blw);
+                if (BkClr) ctrl.BackColor = clr; else ctrl.ForeColor = clr;
+            }
+        }
+
         #endregion
 
         /********************************************************************************************************/
@@ -309,18 +327,6 @@ namespace IPA.MainApp
                     break;
                 }
 
-                case NOTIFICATION_TYPE.NT_PROCESS_CARDDATA:
-                {
-                    ProcessCardDataUI(sender, args);
-                    break;
-                }
-
-                case NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR:
-                {
-                    ProcessCardDataErrorUI(sender, args);
-                    break;
-                }
-
                 case NOTIFICATION_TYPE.NT_GET_DEVICE_MSRCONFIGURATION:
                 {
                     GetDeviceMsrConfigurationUI(sender, args);
@@ -348,6 +354,12 @@ namespace IPA.MainApp
                 case NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA:
                 {
                     ShowTerminalDataUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_SET_TERMINAL_DATA_ERROR:
+                {
+                    ShowTerminalDataErrorUI(sender, args);
                     break;
                 }
 
@@ -414,6 +426,18 @@ namespace IPA.MainApp
                 case NOTIFICATION_TYPE.NT_FIRMWARE_UPDATE_COMPLETE:
                 {
                     EnableMainFormUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_PROCESS_CARDDATA:
+                {
+                    ProcessCardDataUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_PROCESS_CARDDATA_ERROR:
+                {
+                    ProcessCardDataErrorUI(sender, args);
                     break;
                 }
             }
@@ -528,6 +552,11 @@ namespace IPA.MainApp
         private void ShowTerminalDataUI(object sender, DeviceNotificationEventArgs e)
         {
             ShowTerminalData(e.Message);
+        }
+
+        private void ShowTerminalDataErrorUI(object sender, DeviceNotificationEventArgs e)
+        {
+            ShowTerminalDataError(e.Message);
         }
 
         private void ShowAidListUI(object sender, DeviceNotificationEventArgs e)
@@ -1506,6 +1535,59 @@ namespace IPA.MainApp
                 {
                     Invoke(mi);
                 }
+            }
+        }
+
+        private void ShowTerminalDataError(object payload)
+        {
+            MethodInvoker mi = () =>
+            {
+                this.ConfigurationIDgrpBox.Visible = false;
+
+                try
+                {
+                    string [] data = ((IEnumerable) payload)?.Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray() ?? null;
+
+                    if(data != null)
+                    {
+                        StopConfigLoaderTimer();
+                        
+                        this.ConfigurationTerminalDatapicBoxWait.Enabled = false;
+                        this.ConfigurationTerminalDatapicBoxWait.Visible  = false;
+                        this.ConfigurationPanel1pictureBox1.Enabled = false;
+                        this.ConfigurationPanel1pictureBox1.Visible = false;
+                        this.ConfigurationPanel1.Visible = false;
+                        this.ConfigurationPanel2.Visible = false;
+
+                        this.ConfigurationErrorgroupBox1.Visible = true;
+                        this.ConfigurationlblError2.Text = data[0];
+
+                        new Thread(() => 
+                        {
+                            SoftBlink(this.ConfigurationlblWarning1, Color.FromArgb(255, 0, 60), Color.Red, 5000, true);
+                            SoftBlink(this.ConfigurationlblError1, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblError2, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblError3, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
+                            Thread.Sleep(15000);
+                            // Exit the App
+                            System.Diagnostics.Process.GetCurrentProcess().Kill();
+                        }).Start();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.error("main: ShowTerminalDataError() - exception={0}", (object) ex.Message);
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
             }
         }
 
