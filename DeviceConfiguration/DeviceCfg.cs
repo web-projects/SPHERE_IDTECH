@@ -2448,7 +2448,7 @@ namespace IPA.DAL.RBADAL
     {
       try
       {
-        Array argArray = new object[4];
+        Array argArray = new object[((Array)payload).Length];
         argArray = (Array) payload;
 
         // EXPIRATION MASK

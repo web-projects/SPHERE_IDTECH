@@ -27,6 +27,7 @@ using IPA.DAL.RBADAL;
 using IPA.CommonInterface.ConfigSphere.Configuration;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace IPA.MainApp
 {
@@ -91,6 +92,9 @@ namespace IPA.MainApp
         internal static System.Timers.Timer ConfigLoaderTimer { get; set; }
 
         Color TEXTBOX_FORE_COLOR;
+
+        System.Timers.Timer FadeTimer;
+        List<object> formElements;
 
         // Always on TOP
         private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
@@ -303,7 +307,55 @@ namespace IPA.MainApp
                 var grn = (short)Math.Round((c2.G - c1.G) * per) + c1.G;
                 var blw = (short)Math.Round((c2.B - c1.B) * per) + c1.B;
                 var clr = Color.FromArgb(red, grn, blw);
-                if (BkClr) ctrl.BackColor = clr; else ctrl.ForeColor = clr;
+                if (BkClr)
+                {
+                    ctrl.BackColor = clr;
+                }
+                else
+                {
+                    ctrl.ForeColor = clr;
+                }
+            }
+        }
+
+        private void OnFadeTimerEvent(object sender, ElapsedEventArgs e)
+        {
+            this.Invoke(new Action(() => FadeOutLabel(sender)));
+        }
+
+        private void FadeOutLabel(object sender)
+        {
+            foreach(var element in formElements)
+            {
+                System.Windows.Forms.Label label = (System.Windows.Forms.Label) element;
+                Debug.WriteLine("main: FadeOutLabel() : brightness={0:0.00}", (object) label.ForeColor.GetBrightness());
+                //if (label.ForeColor.GetBrightness() <= 0.01)
+                if (label.ForeColor.GetBrightness() >= 1.0)
+                {
+                    FadeTimer.Enabled = false;
+                    label.Visible = false;
+                    return;
+                }
+                //IdTechConfig.HSLColor hsl = new IdTechConfig.HSLColor(label.ForeColor);
+                //hsl.SetRGB(label.ForeColor.R, label.ForeColor.G, label.ForeColor.B);
+                //hsl.Luminosity -= 0.002;
+                //hsl.Luminosity += 0.2;
+                //label.ForeColor = (System.Drawing.Color)hsl.ToRgbColor();
+                Color fadeColor = label.ForeColor;
+                if(fadeColor.R < 250)
+                { 
+                    fadeColor = Color.FromArgb(fadeColor.R + 50, fadeColor.G + 50, fadeColor.B + 50);
+                }
+                else
+                {
+                    fadeColor = Color.FromArgb(255, 255, 255);
+                }
+                Debug.WriteLine("main: FadeOutLabel() : FADE COLOR={0},{1},{2}", label.ForeColor.R, label.ForeColor.G, label.ForeColor.B);
+                this.Invoke((MethodInvoker)delegate()
+                {
+                    label.ForeColor = fadeColor;
+                    //label.BackColor = fadeColor;
+                });
             }
         }
 
@@ -1156,7 +1208,16 @@ namespace IPA.MainApp
                     string [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
 
                     // Beep Control
-                    this.SettingsBeepControlradioButton1.Checked = data[0].Equals("True", StringComparison.CurrentCultureIgnoreCase) ? true : false;
+                    try
+                    { 
+                        this.SettingsBeepControlradioButton1.Checked = bool.Parse(data[0]);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("main: SetDeviceControlConfiguration() : Beep Control - exception={0}", (object)ex.Message);
+                        this.SettingsBeepControlErrorlabel1.Visible = true;
+                        this.SettingsBeepControlErrorlabel1.Text = data[0];
+                    }
 
                     // LED Control
                     string [] ledControl = data[1]?.Split(',') ?? null;
@@ -1164,13 +1225,22 @@ namespace IPA.MainApp
                     { 
                         if(ledControl.Length == 2)
                         { 
-                            this.SettingsLEDControlcheckBox1.Checked = bool.Parse(ledControl[0]);
-                            this.SettingsLEDControlcheckBox2.Checked = bool.Parse(ledControl[1]);
+                            try
+                            { 
+                                this.SettingsLEDControlcheckBox1.Checked = bool.Parse(ledControl[0]);
+                                this.SettingsLEDControlcheckBox2.Checked = bool.Parse(ledControl[1]);
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine("main: SetDeviceControlConfiguration() : LED Control - exception={0}", (object)ex.Message);
+                                this.SettingsLEDControlErrorlabel1.Visible = true;
+                                this.SettingsLEDControlErrorlabel1.Text = data[1];
+                            }
                         }
                         else
                         {
-                            this.SettingsControlErrortextBox1.Visible = true;
-                            this.SettingsControlErrortextBox1.Text = data[1];
+                            this.SettingsLEDControlErrorlabel1.Text = data[1];
+                            this.SettingsLEDControlErrorlabel1.Visible = true;
                         }
                     }
 
@@ -1179,28 +1249,62 @@ namespace IPA.MainApp
                     if(encryptionControl != null)
                     { 
                         if(encryptionControl.Length == 2)
-                        { 
-                            this.SettingsENCControlcheckBox1.Checked = bool.Parse(encryptionControl[0]);
-                            this.SettingsENCControlcheckBox2.Checked = bool.Parse(encryptionControl[1]);
+                        {
+                            try 
+                            { 
+                                this.SettingsENCControlcheckBox1.Checked = bool.Parse(encryptionControl[0]);
+                                this.SettingsENCControlcheckBox2.Checked = bool.Parse(encryptionControl[1]);
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine("main: SetDeviceControlConfiguration() : Encryption Control - exception={0}", (object)ex.Message);
+                                this.SettingsEncryptionControlErrorlabel1.Text = data[2];
+                                this.SettingsEncryptionControlErrorlabel1.Visible = true;
+                            }
                         }
                         else
                         {
-                            this.SettingsControlErrortextBox1.Visible = true;
-                            this.SettingsControlErrortextBox1.Text = data[2];
+                            this.SettingsEncryptionControlErrorlabel1.Text = data[2];
+                            this.SettingsEncryptionControlErrorlabel1.Visible = true;
                         }
                     }
 
                     // Display Error Message
-                    if(this.SettingsControlErrortextBox1.Visible)
+                    if(this.SettingsBeepControlErrorlabel1.Visible || this.SettingsLEDControlErrorlabel1.Visible || this.SettingsEncryptionControlErrorlabel1.Visible)
                     {
+                        formElements = new List<object>();
+
                         new Thread(() => 
                         {
                             Thread.CurrentThread.IsBackground = true;
                             this.Invoke((MethodInvoker)delegate()
                             {
-                                SoftBlink(this.SettingsControlErrortextBox1, Color.FromArgb(255, 0, 60), Color.Red, 500, true);
+                                if(this.SettingsBeepControlErrorlabel1.Visible)
+                                {
+                                    formElements.Add(this.SettingsBeepControlErrorlabel1);
+                                    SoftBlink(this.SettingsBeepControlErrorlabel1, Color.FromArgb(255, 0, 60), Color.Red, 1000, true);
+                                }
+                                if(this.SettingsLEDControlErrorlabel1.Visible)
+                                {
+                                    formElements.Add(this.SettingsLEDControlErrorlabel1);
+                                    SoftBlink(this.SettingsLEDControlErrorlabel1, Color.FromArgb(255, 0, 60), Color.Red, 1000, true);
+                                }
+                                if(this.SettingsEncryptionControlErrorlabel1.Visible)
+                                {
+                                    formElements.Add(this.SettingsEncryptionControlErrorlabel1);
+                                    SoftBlink(this.SettingsEncryptionControlErrorlabel1, Color.FromArgb(255, 0, 60), Color.Red, 1000, true);
+                                }
                             });
-                            Thread.Sleep(5000);
+
+                            // Fade Items Away
+                            if(formElements.Count > 0)
+                            {
+                                FadeTimer = new  System.Timers.Timer();
+                                FadeTimer.Elapsed+=new ElapsedEventHandler(OnFadeTimerEvent);
+                                FadeTimer.Interval = 2500;
+                                FadeTimer.Enabled = true;
+                            }
+
                         }).Start();
                     }
                 }
@@ -1222,6 +1326,11 @@ namespace IPA.MainApp
                     this.SettingsMSRgroupBox1.Enabled = true;
                     this.SettingsControlpictureBox1.Visible  = false;
                     this.SettingsControlpictureBox1.Enabled = false;
+
+                    if(!this.SettingsBeepControlErrorlabel1.Visible && !this.SettingsLEDControlErrorlabel1.Visible && !this.SettingsEncryptionControlErrorlabel1.Visible)
+                    {
+                        this.SettingsControlConfigureBtn.Enabled = true;
+                    }
 
                     // Load MSR Settings Next
                     if(loadMSRSettings)
@@ -3095,7 +3204,10 @@ namespace IPA.MainApp
             this.TerminalDatatabPage.Enabled = false;
             this.JsontabPage.Enabled = false;
 
-            this.SettingsControlErrortextBox1.Visible = false;
+            this.SettingsControlConfigureBtn.Enabled = false;
+            this.SettingsBeepControlErrorlabel1.Visible = false;
+            this.SettingsLEDControlErrorlabel1.Visible = false;
+            this.SettingsEncryptionControlErrorlabel1.Visible = false;
 
             this.Invoke(new MethodInvoker(() =>
             {

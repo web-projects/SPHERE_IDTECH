@@ -58,18 +58,20 @@
             this.SettingsMainpanel1 = new System.Windows.Forms.Panel();
             this.SettingsControlpanel1 = new System.Windows.Forms.Panel();
             this.SettingsControlgroupBox1 = new System.Windows.Forms.GroupBox();
-            this.SettingsControlErrortextBox1 = new System.Windows.Forms.TextBox();
             this.SettingsControlpictureBox1 = new System.Windows.Forms.PictureBox();
             this.SettingsControlConfigureBtn = new System.Windows.Forms.Button();
-            this.SettingsENCControlgroupBox1 = new System.Windows.Forms.GroupBox();
-            this.SettingsENCControlcheckBox2 = new System.Windows.Forms.CheckBox();
-            this.SettingsENCControlcheckBox1 = new System.Windows.Forms.CheckBox();
-            this.SettingsLEDControlgroupBox1 = new System.Windows.Forms.GroupBox();
-            this.SettingsLEDControlcheckBox2 = new System.Windows.Forms.CheckBox();
-            this.SettingsLEDControlcheckBox1 = new System.Windows.Forms.CheckBox();
             this.SettingsBeepControlgroupBox1 = new System.Windows.Forms.GroupBox();
             this.SettingsBeepControlradioButton2 = new System.Windows.Forms.RadioButton();
             this.SettingsBeepControlradioButton1 = new System.Windows.Forms.RadioButton();
+            this.SettingsLEDControlgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsLEDControlcheckBox2 = new System.Windows.Forms.CheckBox();
+            this.SettingsLEDControlcheckBox1 = new System.Windows.Forms.CheckBox();
+            this.SettingsENCControlgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsENCControlcheckBox2 = new System.Windows.Forms.CheckBox();
+            this.SettingsENCControlcheckBox1 = new System.Windows.Forms.CheckBox();
+            this.SettingsBeepControlErrorlabel1 = new System.Windows.Forms.Label();
+            this.SettingsLEDControlErrorlabel1 = new System.Windows.Forms.Label();
+            this.SettingsEncryptionControlErrorlabel1 = new System.Windows.Forms.Label();
             this.SettingsMsrpanel1 = new System.Windows.Forms.Panel();
             this.SettingsMSRgroupBox1 = new System.Windows.Forms.GroupBox();
             this.SettingsMsrpicBoxWait = new System.Windows.Forms.PictureBox();
@@ -178,9 +180,9 @@
             this.SettingsControlpanel1.SuspendLayout();
             this.SettingsControlgroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsControlpictureBox1)).BeginInit();
-            this.SettingsENCControlgroupBox1.SuspendLayout();
-            this.SettingsLEDControlgroupBox1.SuspendLayout();
             this.SettingsBeepControlgroupBox1.SuspendLayout();
+            this.SettingsLEDControlgroupBox1.SuspendLayout();
+            this.SettingsENCControlgroupBox1.SuspendLayout();
             this.SettingsMsrpanel1.SuspendLayout();
             this.SettingsMSRgroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsMsrpicBoxWait)).BeginInit();
@@ -503,11 +505,10 @@
             // SettingsControlgroupBox1
             // 
             this.SettingsControlgroupBox1.Controls.Add(this.SettingsControlpictureBox1);
-            this.SettingsControlgroupBox1.Controls.Add(this.SettingsControlErrortextBox1);
             this.SettingsControlgroupBox1.Controls.Add(this.SettingsControlConfigureBtn);
-            this.SettingsControlgroupBox1.Controls.Add(this.SettingsENCControlgroupBox1);
-            this.SettingsControlgroupBox1.Controls.Add(this.SettingsLEDControlgroupBox1);
             this.SettingsControlgroupBox1.Controls.Add(this.SettingsBeepControlgroupBox1);
+            this.SettingsControlgroupBox1.Controls.Add(this.SettingsLEDControlgroupBox1);
+            this.SettingsControlgroupBox1.Controls.Add(this.SettingsENCControlgroupBox1);
             this.SettingsControlgroupBox1.Location = new System.Drawing.Point(3, 3);
             this.SettingsControlgroupBox1.Name = "SettingsControlgroupBox1";
             this.SettingsControlgroupBox1.Size = new System.Drawing.Size(656, 198);
@@ -515,22 +516,12 @@
             this.SettingsControlgroupBox1.TabStop = false;
             this.SettingsControlgroupBox1.Text = "Control";
             // 
-            // SettingsControlErrortextBox1
-            // 
-            this.SettingsControlErrortextBox1.Location = new System.Drawing.Point(288, 83);
-            this.SettingsControlErrortextBox1.Multiline = true;
-            this.SettingsControlErrortextBox1.Name = "SettingsControlErrortextBox1";
-            this.SettingsControlErrortextBox1.ReadOnly = true;
-            this.SettingsControlErrortextBox1.Size = new System.Drawing.Size(362, 51);
-            this.SettingsControlErrortextBox1.TabIndex = 6;
-            this.SettingsControlErrortextBox1.Visible = false;
-            // 
             // SettingsControlpictureBox1
             // 
             this.SettingsControlpictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("SettingsControlpictureBox1.Image")));
-            this.SettingsControlpictureBox1.Location = new System.Drawing.Point(-3, 0);
+            this.SettingsControlpictureBox1.Location = new System.Drawing.Point(-3, -3);
             this.SettingsControlpictureBox1.Name = "SettingsControlpictureBox1";
-            this.SettingsControlpictureBox1.Size = new System.Drawing.Size(662, 201);
+            this.SettingsControlpictureBox1.Size = new System.Drawing.Size(662, 204);
             this.SettingsControlpictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.SettingsControlpictureBox1.TabIndex = 1;
             this.SettingsControlpictureBox1.TabStop = false;
@@ -538,7 +529,7 @@
             // 
             // SettingsControlConfigureBtn
             // 
-            this.SettingsControlConfigureBtn.Location = new System.Drawing.Point(288, 153);
+            this.SettingsControlConfigureBtn.Location = new System.Drawing.Point(288, 160);
             this.SettingsControlConfigureBtn.Name = "SettingsControlConfigureBtn";
             this.SettingsControlConfigureBtn.Size = new System.Drawing.Size(81, 23);
             this.SettingsControlConfigureBtn.TabIndex = 4;
@@ -546,76 +537,14 @@
             this.SettingsControlConfigureBtn.UseVisualStyleBackColor = true;
             this.SettingsControlConfigureBtn.Click += new System.EventHandler(this.OnSettingsControlConfigureClick);
             // 
-            // SettingsENCControlgroupBox1
-            // 
-            this.SettingsENCControlgroupBox1.Controls.Add(this.SettingsENCControlcheckBox2);
-            this.SettingsENCControlgroupBox1.Controls.Add(this.SettingsENCControlcheckBox1);
-            this.SettingsENCControlgroupBox1.Location = new System.Drawing.Point(30, 83);
-            this.SettingsENCControlgroupBox1.Name = "SettingsENCControlgroupBox1";
-            this.SettingsENCControlgroupBox1.Size = new System.Drawing.Size(243, 51);
-            this.SettingsENCControlgroupBox1.TabIndex = 3;
-            this.SettingsENCControlgroupBox1.TabStop = false;
-            this.SettingsENCControlgroupBox1.Text = "Encryption Control";
-            // 
-            // SettingsENCControlcheckBox2
-            // 
-            this.SettingsENCControlcheckBox2.AutoSize = true;
-            this.SettingsENCControlcheckBox2.Location = new System.Drawing.Point(128, 22);
-            this.SettingsENCControlcheckBox2.Name = "SettingsENCControlcheckBox2";
-            this.SettingsENCControlcheckBox2.Size = new System.Drawing.Size(71, 17);
-            this.SettingsENCControlcheckBox2.TabIndex = 1;
-            this.SettingsENCControlcheckBox2.Text = "ICC/EMV";
-            this.SettingsENCControlcheckBox2.UseVisualStyleBackColor = true;
-            // 
-            // SettingsENCControlcheckBox1
-            // 
-            this.SettingsENCControlcheckBox1.AutoSize = true;
-            this.SettingsENCControlcheckBox1.Location = new System.Drawing.Point(31, 22);
-            this.SettingsENCControlcheckBox1.Name = "SettingsENCControlcheckBox1";
-            this.SettingsENCControlcheckBox1.Size = new System.Drawing.Size(50, 17);
-            this.SettingsENCControlcheckBox1.TabIndex = 0;
-            this.SettingsENCControlcheckBox1.Text = "MSR";
-            this.SettingsENCControlcheckBox1.UseVisualStyleBackColor = true;
-            // 
-            // SettingsLEDControlgroupBox1
-            // 
-            this.SettingsLEDControlgroupBox1.Controls.Add(this.SettingsLEDControlcheckBox2);
-            this.SettingsLEDControlgroupBox1.Controls.Add(this.SettingsLEDControlcheckBox1);
-            this.SettingsLEDControlgroupBox1.Location = new System.Drawing.Point(361, 20);
-            this.SettingsLEDControlgroupBox1.Name = "SettingsLEDControlgroupBox1";
-            this.SettingsLEDControlgroupBox1.Size = new System.Drawing.Size(243, 51);
-            this.SettingsLEDControlgroupBox1.TabIndex = 2;
-            this.SettingsLEDControlgroupBox1.TabStop = false;
-            this.SettingsLEDControlgroupBox1.Text = "LED Control";
-            // 
-            // SettingsLEDControlcheckBox2
-            // 
-            this.SettingsLEDControlcheckBox2.AutoSize = true;
-            this.SettingsLEDControlcheckBox2.Enabled = false;
-            this.SettingsLEDControlcheckBox2.Location = new System.Drawing.Point(139, 22);
-            this.SettingsLEDControlcheckBox2.Name = "SettingsLEDControlcheckBox2";
-            this.SettingsLEDControlcheckBox2.Size = new System.Drawing.Size(71, 17);
-            this.SettingsLEDControlcheckBox2.TabIndex = 3;
-            this.SettingsLEDControlcheckBox2.Text = "ICC/EMV";
-            this.SettingsLEDControlcheckBox2.UseVisualStyleBackColor = true;
-            // 
-            // SettingsLEDControlcheckBox1
-            // 
-            this.SettingsLEDControlcheckBox1.AutoSize = true;
-            this.SettingsLEDControlcheckBox1.Location = new System.Drawing.Point(42, 22);
-            this.SettingsLEDControlcheckBox1.Name = "SettingsLEDControlcheckBox1";
-            this.SettingsLEDControlcheckBox1.Size = new System.Drawing.Size(50, 17);
-            this.SettingsLEDControlcheckBox1.TabIndex = 2;
-            this.SettingsLEDControlcheckBox1.Text = "MSR";
-            this.SettingsLEDControlcheckBox1.UseVisualStyleBackColor = true;
-            // 
             // SettingsBeepControlgroupBox1
             // 
+            this.SettingsBeepControlgroupBox1.Controls.Add(this.SettingsBeepControlErrorlabel1);
             this.SettingsBeepControlgroupBox1.Controls.Add(this.SettingsBeepControlradioButton2);
             this.SettingsBeepControlgroupBox1.Controls.Add(this.SettingsBeepControlradioButton1);
-            this.SettingsBeepControlgroupBox1.Location = new System.Drawing.Point(30, 20);
+            this.SettingsBeepControlgroupBox1.Location = new System.Drawing.Point(16, 31);
             this.SettingsBeepControlgroupBox1.Name = "SettingsBeepControlgroupBox1";
-            this.SettingsBeepControlgroupBox1.Size = new System.Drawing.Size(243, 51);
+            this.SettingsBeepControlgroupBox1.Size = new System.Drawing.Size(301, 51);
             this.SettingsBeepControlgroupBox1.TabIndex = 0;
             this.SettingsBeepControlgroupBox1.TabStop = false;
             this.SettingsBeepControlgroupBox1.Text = "Beep Control";
@@ -641,6 +570,104 @@
             this.SettingsBeepControlradioButton1.TabStop = true;
             this.SettingsBeepControlradioButton1.Text = "Firmware";
             this.SettingsBeepControlradioButton1.UseVisualStyleBackColor = true;
+            // 
+            // SettingsLEDControlgroupBox1
+            // 
+            this.SettingsLEDControlgroupBox1.Controls.Add(this.SettingsLEDControlErrorlabel1);
+            this.SettingsLEDControlgroupBox1.Controls.Add(this.SettingsLEDControlcheckBox2);
+            this.SettingsLEDControlgroupBox1.Controls.Add(this.SettingsLEDControlcheckBox1);
+            this.SettingsLEDControlgroupBox1.Location = new System.Drawing.Point(333, 32);
+            this.SettingsLEDControlgroupBox1.Name = "SettingsLEDControlgroupBox1";
+            this.SettingsLEDControlgroupBox1.Size = new System.Drawing.Size(301, 51);
+            this.SettingsLEDControlgroupBox1.TabIndex = 2;
+            this.SettingsLEDControlgroupBox1.TabStop = false;
+            this.SettingsLEDControlgroupBox1.Text = "LED Control";
+            // 
+            // SettingsLEDControlcheckBox2
+            // 
+            this.SettingsLEDControlcheckBox2.AutoSize = true;
+            this.SettingsLEDControlcheckBox2.Enabled = false;
+            this.SettingsLEDControlcheckBox2.Location = new System.Drawing.Point(139, 22);
+            this.SettingsLEDControlcheckBox2.Name = "SettingsLEDControlcheckBox2";
+            this.SettingsLEDControlcheckBox2.Size = new System.Drawing.Size(71, 17);
+            this.SettingsLEDControlcheckBox2.TabIndex = 3;
+            this.SettingsLEDControlcheckBox2.Text = "ICC/EMV";
+            this.SettingsLEDControlcheckBox2.UseVisualStyleBackColor = true;
+            // 
+            // SettingsLEDControlcheckBox1
+            // 
+            this.SettingsLEDControlcheckBox1.AutoSize = true;
+            this.SettingsLEDControlcheckBox1.Location = new System.Drawing.Point(42, 22);
+            this.SettingsLEDControlcheckBox1.Name = "SettingsLEDControlcheckBox1";
+            this.SettingsLEDControlcheckBox1.Size = new System.Drawing.Size(50, 17);
+            this.SettingsLEDControlcheckBox1.TabIndex = 2;
+            this.SettingsLEDControlcheckBox1.Text = "MSR";
+            this.SettingsLEDControlcheckBox1.UseVisualStyleBackColor = true;
+            // 
+            // SettingsENCControlgroupBox1
+            // 
+            this.SettingsENCControlgroupBox1.Controls.Add(this.SettingsEncryptionControlErrorlabel1);
+            this.SettingsENCControlgroupBox1.Controls.Add(this.SettingsENCControlcheckBox2);
+            this.SettingsENCControlgroupBox1.Controls.Add(this.SettingsENCControlcheckBox1);
+            this.SettingsENCControlgroupBox1.Location = new System.Drawing.Point(16, 96);
+            this.SettingsENCControlgroupBox1.Name = "SettingsENCControlgroupBox1";
+            this.SettingsENCControlgroupBox1.Size = new System.Drawing.Size(301, 51);
+            this.SettingsENCControlgroupBox1.TabIndex = 3;
+            this.SettingsENCControlgroupBox1.TabStop = false;
+            this.SettingsENCControlgroupBox1.Text = "Encryption Control";
+            // 
+            // SettingsENCControlcheckBox2
+            // 
+            this.SettingsENCControlcheckBox2.AutoSize = true;
+            this.SettingsENCControlcheckBox2.Location = new System.Drawing.Point(128, 22);
+            this.SettingsENCControlcheckBox2.Name = "SettingsENCControlcheckBox2";
+            this.SettingsENCControlcheckBox2.Size = new System.Drawing.Size(71, 17);
+            this.SettingsENCControlcheckBox2.TabIndex = 1;
+            this.SettingsENCControlcheckBox2.Text = "ICC/EMV";
+            this.SettingsENCControlcheckBox2.UseVisualStyleBackColor = true;
+            // 
+            // SettingsENCControlcheckBox1
+            // 
+            this.SettingsENCControlcheckBox1.AutoSize = true;
+            this.SettingsENCControlcheckBox1.Location = new System.Drawing.Point(31, 22);
+            this.SettingsENCControlcheckBox1.Name = "SettingsENCControlcheckBox1";
+            this.SettingsENCControlcheckBox1.Size = new System.Drawing.Size(50, 17);
+            this.SettingsENCControlcheckBox1.TabIndex = 0;
+            this.SettingsENCControlcheckBox1.Text = "MSR";
+            this.SettingsENCControlcheckBox1.UseVisualStyleBackColor = true;
+            // 
+            // SettingsBeepControlErrorlabel1
+            // 
+            this.SettingsBeepControlErrorlabel1.BackColor = System.Drawing.Color.Red;
+            this.SettingsBeepControlErrorlabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SettingsBeepControlErrorlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SettingsBeepControlErrorlabel1.Location = new System.Drawing.Point(1, 0);
+            this.SettingsBeepControlErrorlabel1.Name = "SettingsBeepControlErrorlabel1";
+            this.SettingsBeepControlErrorlabel1.Size = new System.Drawing.Size(302, 51);
+            this.SettingsBeepControlErrorlabel1.TabIndex = 8;
+            this.SettingsBeepControlErrorlabel1.Text = "[MESSAGE]";
+            // 
+            // SettingsLEDControlErrorlabel1
+            // 
+            this.SettingsLEDControlErrorlabel1.BackColor = System.Drawing.Color.Red;
+            this.SettingsLEDControlErrorlabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SettingsLEDControlErrorlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SettingsLEDControlErrorlabel1.Location = new System.Drawing.Point(1, 0);
+            this.SettingsLEDControlErrorlabel1.Name = "SettingsLEDControlErrorlabel1";
+            this.SettingsLEDControlErrorlabel1.Size = new System.Drawing.Size(301, 51);
+            this.SettingsLEDControlErrorlabel1.TabIndex = 7;
+            this.SettingsLEDControlErrorlabel1.Text = "[MESSAGE]";
+            // 
+            // SettingsEncryptionControlErrorlabel1
+            // 
+            this.SettingsEncryptionControlErrorlabel1.BackColor = System.Drawing.Color.Red;
+            this.SettingsEncryptionControlErrorlabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SettingsEncryptionControlErrorlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SettingsEncryptionControlErrorlabel1.Location = new System.Drawing.Point(1, 0);
+            this.SettingsEncryptionControlErrorlabel1.Name = "SettingsEncryptionControlErrorlabel1";
+            this.SettingsEncryptionControlErrorlabel1.Size = new System.Drawing.Size(301, 51);
+            this.SettingsEncryptionControlErrorlabel1.TabIndex = 8;
+            this.SettingsEncryptionControlErrorlabel1.Text = "[MESSAGE]";
             // 
             // SettingsMsrpanel1
             // 
@@ -1679,14 +1706,13 @@
             this.SettingsMainpanel1.ResumeLayout(false);
             this.SettingsControlpanel1.ResumeLayout(false);
             this.SettingsControlgroupBox1.ResumeLayout(false);
-            this.SettingsControlgroupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsControlpictureBox1)).EndInit();
-            this.SettingsENCControlgroupBox1.ResumeLayout(false);
-            this.SettingsENCControlgroupBox1.PerformLayout();
-            this.SettingsLEDControlgroupBox1.ResumeLayout(false);
-            this.SettingsLEDControlgroupBox1.PerformLayout();
             this.SettingsBeepControlgroupBox1.ResumeLayout(false);
             this.SettingsBeepControlgroupBox1.PerformLayout();
+            this.SettingsLEDControlgroupBox1.ResumeLayout(false);
+            this.SettingsLEDControlgroupBox1.PerformLayout();
+            this.SettingsENCControlgroupBox1.ResumeLayout(false);
+            this.SettingsENCControlgroupBox1.PerformLayout();
             this.SettingsMsrpanel1.ResumeLayout(false);
             this.SettingsMSRgroupBox1.ResumeLayout(false);
             this.SettingsMSRgroupBox1.PerformLayout();
@@ -1823,7 +1849,9 @@
     private System.Windows.Forms.CheckBox SettingsENCControlcheckBox2;
     private System.Windows.Forms.CheckBox SettingsENCControlcheckBox1;
     private System.Windows.Forms.Button SettingsControlConfigureBtn;
-    private System.Windows.Forms.TextBox SettingsControlErrortextBox1;
+    private System.Windows.Forms.Label SettingsBeepControlErrorlabel1;
+    private System.Windows.Forms.Label SettingsLEDControlErrorlabel1;
+    private System.Windows.Forms.Label SettingsEncryptionControlErrorlabel1;
     private System.Windows.Forms.PictureBox SettingsControlpictureBox1;
     // GROUP: MSRSETTINGS
     private System.Windows.Forms.Panel SettingsMsrpanel1;
