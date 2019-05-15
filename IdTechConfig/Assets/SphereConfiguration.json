@@ -178,7 +178,7 @@
           //     RFU (b2) - False
           //     RFU (b1) - False
           "DFEE1B": "3030303130353030",	// Authorization Request Data elements		// Non-KB 5C value "3030303130353030"
-          "DFEF4B": "7F0000",			      // Track selection (enable PAN, T1, T2, T3, T1/T2/T3 sentinels) // NOT FOR VP3300
+          //"DFEF4B": "7F0000",			      // Track selection (enable PAN, T1, T2, T3, T1/T2/T3 sentinels) // NOT FOR VP3300
           //"DFEF4B": "760000",			// Track selection (enable PAN, T1, T2, T1/T2 sentinels) // NOT FOR VP3300
           "DFEF4B": "F60000",			// Track selection (enable PAN, T1, T2, T1/T2 sentinels) // NOT FOR VP3300
           // Disable the following five tags VP5300; used for VP3300
@@ -271,7 +271,6 @@
 
           //"9F16": "303030303030303030303030303030",			    // Merchant Identifier (len 15)
           //"9F1C": "3837363534333231",								        // Terminal Identification (len 8) - replace with last Serial#?
-          //"9F4E": "31303732312057616c6b65722053742e20437970726573732c204341202c5553412e",	// Merchant Name and Location (len 30)
           "9F4E": "54323031395F312E302E305F53706865726554435F41",				// Merchant Name and Location (len 30); T2019_1.0.0_SphereTC_A
           //"9F7C": "54323031395F312E302E305F53706865726554435F41",			// Data length = 20; T2019_1.0.0_SphereTC_A
 
@@ -586,6 +585,7 @@
             "A0000000031010",
             "A0000000032010"
           ],
+          "ApplicationFlow": "06",
           "TagValues": {
             "9F33": "6008C8",			    // Terminal Capability (Ingenico value 6098C8)
             "9F66": "F0800000",	      // Terminal Transaction Qualifier (TTQ)
@@ -596,7 +596,10 @@
             "DF8121": "0010000000",	  // TAC Denial
             "DF8122": "584004F800",	  // TAC Online
             "DF8120": "584000A800"	  // TAC Default
-          }
+          },
+          "SuppressTagList": [
+            "9F6E"
+          ]
         },
         "MasterSetA": {
           "Group": {
@@ -607,6 +610,7 @@
           "AIDList": [
             "A0000000041010"
           ],
+          "ApplicationFlow": "03",
           "TagValues": {
             "9F33": "0008C8",            // Terminal Capability (Ingenico value 6098C8)
             "9F1D": "08FF000000000000",	 // Terminal Risk Management
@@ -616,7 +620,7 @@
             "DF8123": "000000000000",	   // Reader Contactless Floor Limit
             "DF8124": "000100000000",	   // Reader Contactless Limit - No On-device CVM
             "DF8125": "000100000000",	   // Reader Contactless Limit - On-device CVM
-            "DF8126": "000000000000",	   // CVM Required Limit
+            "DF8126": "000100000000",	   // CVM Required Limit
             "9F35": "25",		             // Terminal Type
             "DFEE4D": "54",		           // Selection Features
             "DFEE4B": "01",		           // Partial Selection
@@ -632,16 +636,20 @@
           "AIDList": [
             "A00000002501"
           ],
+          "ApplicationFlow": "02",
           "TagValues": {
             "9F35": "25",		           // Terminal Type
             "DFEE34": "000100000000",	 // Terminal Contactless Transaction Limit
-            "DF8126": "000000000000",	 // CVM Required Limit
+            "DF8126": "000100000000",	 // CVM Required Limit
             "DF8123": "000000000000",	 // Reader Contactless Floor Limit
             "9F33": "6008C8",			     // Terminal Capability (Ingenico value 6098C8)
             "DF8120": "C800000000",		 // TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8121": "0000000000",		 // TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8122": "C800000000"		 // TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          }
+         },
+         "SuppressTagList": [
+           "9F6E"
+         ]
         },
         "AmexSetB": {
           "Group": {
@@ -650,11 +658,15 @@
           "AIDList": [
             "A00000002501"
           ],
+          "ApplicationFlow": "02",
           "TagValues": {
             "9F1B": "000000000000",	   // Terminal Floor Limit
             "DFEE34": "000100000000",	 // Terminal Contactless Transaction Limit
-            "DF8126": "000000000000"	 // CVM Required Limit
-          }
+            "DF8126": "000100000000"	 // CVM Required Limit
+          },
+          "SuppressTagList": [
+            "9F6E"
+          ]
         },
         "DiscoverSetA": {
           "Group": {
@@ -666,10 +678,11 @@
             "A0000001523010",
             "A0000003241010"
           ],
+          "ApplicationFlow": "0D",
           "TagValues": {
             "DF8123": "000000000000",	// Reader Contactless Floor Limit
             "DF8124": "000100000000",	// Terminal Contactless Transaction Limit
-            "DF8126": "000000000000",	// CVM Required Limit
+            "DF8126": "000100000000",	// CVM Required Limit
             "DF8120": "FC50BCA000",		// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8121": "0000000000",		// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8122": "FC50BCF800",		// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
@@ -677,7 +690,10 @@
             "9F66": "F0800000",	      // Terminal Transaction Qualifier (TTQ)
             "9F1B": "00000000",	      // Terminal Floor limit
             "DFEF4B": "F60000"	      // MSR Equivalent Data Option
-          }
+          },
+          "SuppressTagList": [
+            "9F6E"
+          ]
         },
         "JCBSetA": {
           "Group": {
@@ -688,10 +704,11 @@
           "AIDList": [
             "A0000000651010"
           ],
+          "ApplicationFlow": "0E",
           "TagValues": {
             "DF8123": "000000000000",	// Reader Contactless Floor Limit
             "DFEE34": "000100000000",	// Terminal Contactless Transaction Limit
-            "DF8126": "000000000000",	// CVM Required Limit
+            "DF8126": "000100000000",	// CVM Required Limit
             "DF8120": "FC50BCA000",		// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8121": "0000000000",		// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8122": "FC50BCF800",		// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
@@ -699,7 +716,10 @@
             "9F66": "F0800000",	      // Terminal Transaction Qualifier (TTQ)
             "9F1B": "00000000",	      // Terminal Floor limit
             "DFEF4B": "F60000"	      // MSR Equivalent Data Option
-          }
+          },
+          "SuppressTagList": [
+            "9F6E"
+          ]
         }
       }      
     }

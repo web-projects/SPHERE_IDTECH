@@ -49,3 +49,4 @@ This an application to Configure IDTech Devices.
 * 20190509 - Implemented error states for error on Set Terminal Data.
 * 20190510 - Implemented Beep and LED controls configuration.
            - Enhanced user error reporting in Settings.
+* 20190515 - Updated SphereConfiguration.json with Contactless ApplicationFlow.

@@ -157,7 +157,11 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
 
         [JsonProperty(PropertyName = "AIDList", Order = 2)]
         public string [] AIDList { get; set; }
-        [JsonProperty(PropertyName = "TagValues", Order = 3)]
+        [JsonProperty(PropertyName = "ApplicationFlow", Order = 3)]
+        public string ApplicationFlow {  get; set; }
+        [JsonProperty(PropertyName = "TagValues", Order = 4)]
         public Dictionary<string, string> TagValues { get; set; }
+        [JsonProperty(PropertyName = "SuppressTagList", Order = 5)]
+        public string [] SuppressTagList { get; set; }
     }
 }
