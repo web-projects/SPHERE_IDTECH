@@ -17,7 +17,7 @@ namespace IPA.CommonInterface.ConfigSphere
         // ATTRIBUTES
         /********************************************************************************************************/
         #region -- attributes --
-        private const string JSON_CONFIG = "SphereConfiguration.json";
+        private const string JSON_CONFIG = "IDTech_EMV_Config.json";
         private const string TERMINAL_CONFIG = "TerminalData";
 
         public TerminalConfiguration terminalCfg;
@@ -104,6 +104,8 @@ namespace IPA.CommonInterface.ConfigSphere
             allTerminalTags["9F1C"] = EMVKernelVer?.Substring(Math.Max(0, EMVKernelVer.Length - 8)) ?? "";
             string [] tagsRequested = termSettings.TransactionTagsRequested;
             allTerminalTags["DFEF5A"] = string.Join("", tagsRequested);
+            // Configuration File Name
+            allTerminalTags["9F4E"] = IDTechSDK.Common.stringToHexString(DeviceConfig.ConfigurationID.Version).ToUpper();
 
             return allTerminalTags;
         }

@@ -1776,12 +1776,16 @@ namespace IPA.MainApp
                                     {
                                         this.ConfigurationPlatform.Text = configurationID.Platform;
                                         this.ConfigurationEnvironment.Text = configurationID.CardEnvironment;
-                                        this.ConfigurationEntryMode.Text = configurationID.EntryModes.FirstOrDefault();
+                                        this.ConfigurationVersion.Text = configurationID.Version;
+                                        ToolTip tp = new ToolTip();
+                                        tp.IsBalloon = true;
+                                        tp.ToolTipTitle = "Configuration Version";
+                                        tp.SetToolTip(this.ConfigurationVersion, configurationID.Version);
                                         this.ConfigurationIDgrpBox.Visible = true;
                                     }
 
                                     this.ConfigurationModel.Text = this.ApplicationlblModelNumber.Text;
-                                    this.ConfigurationVersion.Text = this.ApplicationAdvancedFirmwarelblVersion.Text;
+                                    this.ConfigurationFirmwareVersion.Text = this.ApplicationAdvancedFirmwarelblVersion.Text;
                                 }
                             }
                             else

@@ -50,3 +50,4 @@ This an application to Configure IDTech Devices.
 * 20190510 - Implemented Beep and LED controls configuration.
            - Enhanced user error reporting in Settings.
 * 20190515 - Updated SphereConfiguration.json with Contactless ApplicationFlow.
+* 20190603 - Renamed configuration file and coded tag 9F4E to process value from ConfigurationID.Version.

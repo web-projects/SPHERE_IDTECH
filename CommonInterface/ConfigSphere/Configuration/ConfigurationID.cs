@@ -10,16 +10,16 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
     [Serializable]
     public class ConfigurationID
     {
-        [JsonProperty(PropertyName = "Manufacturer", Order = 1)]
+        [JsonProperty(PropertyName = "Version", Order = 1)]
+        public string Version { get; set; }
+        [JsonProperty(PropertyName = "Manufacturer", Order = 2)]
         public string Manufacturer { get; set; }
-        [JsonProperty(PropertyName = "Models", Order = 2)]
+        [JsonProperty(PropertyName = "Models", Order = 3)]
         public string[] Models { get; set; }
-        [JsonProperty(PropertyName = "Platform", Order = 3)]
+        [JsonProperty(PropertyName = "Platform", Order = 4)]
         public string Platform { get; set; }
-        [JsonProperty(PropertyName = "CardEnvironment", Order = 4)]
+        [JsonProperty(PropertyName = "CardEnvironment", Order = 5)]
         public string CardEnvironment { get; set; }
-        [JsonProperty(PropertyName = "EntryModes", Order = 5)]
-        public string[] EntryModes { get; set; }
     }
 
 }

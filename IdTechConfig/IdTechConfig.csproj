@@ -199,7 +199,7 @@
     <None Include="Assets\IDTechConfiguration.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\SphereConfiguration.json">
+    <None Include="Assets\IDTech_EMV_Config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\VP5300 v1.00.029.0193.S.fm">

@@ -125,12 +125,12 @@
             this.ConfigurationPanel1pictureBox1 = new System.Windows.Forms.PictureBox();
             this.ConfigurationCollapseButton = new System.Windows.Forms.Button();
             this.ConfigurationIDgrpBox = new System.Windows.Forms.GroupBox();
-            this.ConfigurationVersion = new System.Windows.Forms.Label();
+            this.ConfigurationFirmwareVersion = new System.Windows.Forms.Label();
             this.ConfigurationModel = new System.Windows.Forms.Label();
             this.ConfigurationVerlbl = new System.Windows.Forms.Label();
             this.ConfigurationModellbl = new System.Windows.Forms.Label();
-            this.ConfigurationEntryMode = new System.Windows.Forms.Label();
-            this.ConfigurationEntryModelbl = new System.Windows.Forms.Label();
+            this.ConfigurationVersion = new System.Windows.Forms.Label();
+            this.ConfigurationVersionlbl = new System.Windows.Forms.Label();
             this.ConfigurationEnvironment = new System.Windows.Forms.Label();
             this.ConfigurationEnvironmentlbl = new System.Windows.Forms.Label();
             this.ConfigurationPlatform = new System.Windows.Forms.Label();
@@ -1253,12 +1253,12 @@
             // 
             // ConfigurationIDgrpBox
             // 
-            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationVersion);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationFirmwareVersion);
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationModel);
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationVerlbl);
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationModellbl);
-            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEntryMode);
-            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEntryModelbl);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationVersion);
+            this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationVersionlbl);
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEnvironment);
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationEnvironmentlbl);
             this.ConfigurationIDgrpBox.Controls.Add(this.ConfigurationPlatform);
@@ -1271,14 +1271,14 @@
             this.ConfigurationIDgrpBox.Text = "ConfigurationID";
             this.ConfigurationIDgrpBox.Visible = false;
             // 
-            // ConfigurationVersion
+            // ConfigurationFirmwareVersion
             // 
-            this.ConfigurationVersion.AutoSize = true;
-            this.ConfigurationVersion.Location = new System.Drawing.Point(112, 64);
-            this.ConfigurationVersion.Name = "ConfigurationVersion";
-            this.ConfigurationVersion.Size = new System.Drawing.Size(37, 13);
-            this.ConfigurationVersion.TabIndex = 9;
-            this.ConfigurationVersion.Text = "12345";
+            this.ConfigurationFirmwareVersion.AutoSize = true;
+            this.ConfigurationFirmwareVersion.Location = new System.Drawing.Point(112, 64);
+            this.ConfigurationFirmwareVersion.Name = "ConfigurationFirmwareVersion";
+            this.ConfigurationFirmwareVersion.Size = new System.Drawing.Size(37, 13);
+            this.ConfigurationFirmwareVersion.TabIndex = 9;
+            this.ConfigurationFirmwareVersion.Text = "12345";
             // 
             // ConfigurationModel
             // 
@@ -1307,23 +1307,23 @@
             this.ConfigurationModellbl.TabIndex = 6;
             this.ConfigurationModellbl.Text = "Model:";
             // 
-            // ConfigurationEntryMode
+            // ConfigurationVersion
             // 
-            this.ConfigurationEntryMode.AutoSize = true;
-            this.ConfigurationEntryMode.Location = new System.Drawing.Point(112, 166);
-            this.ConfigurationEntryMode.Name = "ConfigurationEntryMode";
-            this.ConfigurationEntryMode.Size = new System.Drawing.Size(37, 13);
-            this.ConfigurationEntryMode.TabIndex = 5;
-            this.ConfigurationEntryMode.Text = "12345";
+            this.ConfigurationVersion.AutoSize = true;
+            this.ConfigurationVersion.Location = new System.Drawing.Point(112, 166);
+            this.ConfigurationVersion.Name = "ConfigurationVersion";
+            this.ConfigurationVersion.Size = new System.Drawing.Size(37, 13);
+            this.ConfigurationVersion.TabIndex = 5;
+            this.ConfigurationVersion.Text = "12345";
             // 
-            // ConfigurationEntryModelbl
+            // ConfigurationVersionlbl
             // 
-            this.ConfigurationEntryModelbl.AutoSize = true;
-            this.ConfigurationEntryModelbl.Location = new System.Drawing.Point(13, 166);
-            this.ConfigurationEntryModelbl.Name = "ConfigurationEntryModelbl";
-            this.ConfigurationEntryModelbl.Size = new System.Drawing.Size(64, 13);
-            this.ConfigurationEntryModelbl.TabIndex = 2;
-            this.ConfigurationEntryModelbl.Text = "Entry Mode:";
+            this.ConfigurationVersionlbl.AutoSize = true;
+            this.ConfigurationVersionlbl.Location = new System.Drawing.Point(13, 166);
+            this.ConfigurationVersionlbl.Name = "ConfigurationVersionlbl";
+            this.ConfigurationVersionlbl.Size = new System.Drawing.Size(64, 13);
+            this.ConfigurationVersionlbl.TabIndex = 2;
+            this.ConfigurationVersionlbl.Text = "Config Version:";
             // 
             // ConfigurationEnvironment
             // 
@@ -1795,10 +1795,10 @@
     private System.Windows.Forms.Label ConfigurationModellbl;
     private System.Windows.Forms.Label ConfigurationVersion;
     private System.Windows.Forms.Label ConfigurationVerlbl;
-    private System.Windows.Forms.Label ConfigurationEntryMode;
+    private System.Windows.Forms.Label ConfigurationFirmwareVersion;
     private System.Windows.Forms.Label ConfigurationEnvironment;
     private System.Windows.Forms.Label ConfigurationPlatform;
-    private System.Windows.Forms.Label ConfigurationEntryModelbl;
+    private System.Windows.Forms.Label ConfigurationVersionlbl;
     private System.Windows.Forms.Label ConfigurationEnvironmentlbl;
     private System.Windows.Forms.Label ConfigurationPlatformlbl;
     private System.Windows.Forms.GroupBox ConfigurationErrorgroupBox1;
