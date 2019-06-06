@@ -18,7 +18,7 @@
           "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "DC4000A800",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "DC4000A000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF15": "DC4004F800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "008C",			  // Terminal application version number  -- note : unsure what value to use here
@@ -31,9 +31,9 @@
           "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "FC50B8A000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "FE5080A000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF14": "0000000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF15": "FC50B8F800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF15": "FE5080F800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "0002",			  // Terminal application version number  -- note : unsure what value to use here
           "9F1B": "00000000",   // Terminal Floor Limit
           "9F53": "52"			    // Transaction Category Code: 'R' = 52  -- note : tag in NEO 2 IDG manual
@@ -45,7 +45,7 @@
           "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "DC4000A800",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "DC4000A000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF15": "DC4004F800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "008C",			  // Terminal application version number  -- note : unsure what value to use here
@@ -58,9 +58,9 @@
           "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "C800000000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF14": "0000000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-          "DF15": "C800000000",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "DC50FC9000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF15": "DE00FC9800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "0001",			  // Terminal application version number  -- note : unsure what value to use here
           "9F1B": "00000000",		// Terminal Floor Limit
           "DFEE15": "01"			  // ASI (Ingenico 9F841D)
@@ -71,7 +71,7 @@
           "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "DC0000A000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "DC00002000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF15": "FCE09CF800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "0001",			  // Terminal application version number  -- note : unsure what value to use here
@@ -85,7 +85,7 @@
           //"DF28": "9F020695055F2A029A039C019F3704",			// Default TDOL (Ingenico 9F8125)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "FC6024A800",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "FC6024A000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF15": "FC60ACF800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "0200",			  // Terminal application version number  -- note : unsure what value to use here
@@ -99,8 +99,8 @@
         "MajorConfigurationChecksum": [			            // Note: can differ by Kernel version
           "DAD6AED81E9375043A1DBEF84C193FE863B2ED7F"		// 5C checksum for EMV Common L2 Version V1.10.037  (can use value to determine if current MajorConfiguration is correct)
         ],
-        "SerialNumberTag": "9F1E",		// Data length = 8; last 8 characters returned from config_getSerialNumber()
-        "VersionTag": "9F4E",		      // Data length = 30; first 30 characters from ConfigurationID.Version        
+        "SerialNumberTag": "9F1E",		// Data length = 8; compressed string returned from config_getSerialNumber()
+        "VersionTag": "9F4E",		      // Data length = 30; first 30 characters from ConfigurationID.Version
         "KernelVersionTag": "9F1C",		// Data length = 8; last whitespace separated group from emv_getEMVKernelVersion()
         "TerminalData": {
           // Tags for QuickChip KB-mode
@@ -287,7 +287,7 @@
           "DFEE1F": "80",		            // Issuer Script Limit
           "DFEE20": "3C",		            // ICC Power on detect waiting time
           "DFEE21": "0A",		            // ICC L1 waiting time
-          "DFEE22": "323C3C",		        // Driver waiting time
+          "DFEE22": "323C3C"		        // Driver waiting time
           // Tag 9F1E (Interface Device Serial Number) is set from live value; tag defined in element "SerialNumberTag"	// IDTech default value "5465726D696E616C" (Terminal)
         },
         "TransactionTagsRequested": [	// Tag values to return, assembled as single value for IDTech tag DFEF5A and included in TerminalData values
@@ -597,9 +597,9 @@
             "DFEE35": "010503",	      // Visa Reader Risk Flags
             "DFEF4B": "F60000",	      // MSR Equivalent Data Option
             "DFEE34": "000100000000",	// Terminal Contactless Transaction Limit
-	          "DF8120": "584000A800",	  // TAC Default
+	          "DF8120": "DC4000A000",	  // TAC Default
             "DF8121": "0010000000",	  // TAC Denial
-            "DF8122": "584004F800"	  // TAC Online
+            "DF8122": "DC4004F800"	  // TAC Online
           },
           "VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
           "SerialNumberTag": "9F1E"		// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
@@ -616,10 +616,10 @@
           "ApplicationFlow": "03",
           "TagValues": {
             "9F33": "0008C8",            // Terminal Capability (Ingenico value 6098C8)
-            "9F1D": "08FF000000000000",	 // Terminal Risk Management
-            "DF8120": "FC50B8A000",		   // TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+            "9F1D": "6CFF000000000000",	 // Terminal Risk Management
+            "DF8120": "F45080800C",		   // TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8121": "0000000000",		   // TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-            "DF8122": "FC50B8F800",		   // TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+            "DF8122": "F45080800C",		   // TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8123": "000000000000",	   // Reader Contactless Floor Limit
             "DF8124": "000100000000",	   // Reader Contactless Limit - No On-device CVM
             "DF8125": "000100000000",	   // Reader Contactless Limit - On-device CVM
@@ -646,28 +646,12 @@
             "DF8126": "000100000000",	 // CVM Required Limit
             "DF8123": "000000000000",	 // Reader Contactless Floor Limit
             "9F33": "6008C8",			     // Terminal Capability (Ingenico value 6098C8)
-            "DF8120": "C800000000",		 // TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-            "DF8121": "0000000000",		 // TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-            "DF8122": "C800000000"		 // TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+            "DF8120": "DC50FC9000",		 // TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+            "DF8121": "0010000000",		 // TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+            "DF8122": "DE00FC9800"		 // TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
          },
          "VersionTag": "9F4E",		     // Data length = 30; first 30 characters from ConfigurationID.Version
          "SerialNumberTag": "9F1E"		 // Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
-        },
-        "AmexSetB": {
-          "Group": {
-            "NEO_1.10": "02"
-          },
-          "AIDList": [
-            "A00000002501"
-          ],
-          "ApplicationFlow": "02",
-          "TagValues": {
-            "9F1B": "000000000000",	   // Terminal Floor Limit
-            "DFEE34": "000100000000",	 // Terminal Contactless Transaction Limit
-            "DF8126": "000100000000"	 // CVM Required Limit
-          },
-          "VersionTag": "9F4E",		     // Data length = 30; first 30 characters from ConfigurationID.Version
-          "SerialNumberTag": "9F1E"		 // Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
         },
         "DiscoverSetA": {
           "Group": {
@@ -684,9 +668,9 @@
             "DF8123": "000000000000",	// Reader Contactless Floor Limit
             "DF8124": "000100000000",	// Terminal Contactless Transaction Limit
             "DF8126": "000100000000",	// CVM Required Limit
-            "DF8120": "FC50BCA000",		// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-            "DF8121": "0000000000",		// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-            "DF8122": "FC50BCF800",		// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+            "DF8120": "DC00002000",		// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+            "DF8121": "0010000000",		// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+            "DF8122": "FCE09CF800",		// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "9F33": "6008C8",			    // Terminal Capability (Ingenico value 6098C8)
             "9F66": "F0800000",	      // Terminal Transaction Qualifier (TTQ)
             "9F1B": "00000000",	      // Terminal Floor limit
@@ -694,38 +678,9 @@
           },
           "VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
           "SerialNumberTag": "9F1E"		// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
-        },
-        "JCBSetA": {
-          "Group": {
-            "NEO_1.10": "03",
-            "NEO_1.20": "08",
-            "NEO2": "D0"
-          },
-          "AIDList": [
-            "A0000000651010"
-          ],
-          "ApplicationFlow": "0E",
-          "TagValues": {
-            "DF8123": "000000000000",	// Reader Contactless Floor Limit
-            "DFEE34": "000100000000",	// Terminal Contactless Transaction Limit
-            "DF8126": "000100000000",	// CVM Required Limit
-            "DFEE2A": "000000000000",	// Threshold Value for Biased Random Selection
-            "DFEE2B": "99",		        // Maximum Target Percentage for Biased Random Selection
-            "DFEE2C": "99",		        // Target Percentage for Biased Random Selection
-            "DF8120": "FC50BCA000",		// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-            "DF8121": "0000000000",		// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-            "DF8122": "FC50BCF800",		// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
-            "9F33": "6008C8",			    // Terminal Capability (Ingenico value 6098C8)
-            "9F1A": "0840",			      // Terminal Country Code
-            "5F2A": "0840",			      // Transaction Currency Code
-            "9F15": "5999",			      // Merchant Category Code
-            "9F66": "F0800000",	      // Terminal Transaction Qualifier (TTQ)
-            "9F1B": "00000000",	      // Terminal Floor limit
-            "DFEF4B": "F60000"	      // MSR Equivalent Data Option
           }
         }
       }      
     }
-  }
   ]
 }

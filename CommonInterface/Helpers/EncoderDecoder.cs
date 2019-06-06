@@ -107,7 +107,7 @@ namespace IPA.CommonInterface.Helpers
                 for (int col = 0; col <= 15; col++)
                 {
                     char cc = list[row].Substring(col, 1).ToCharArray()[0];
-                    ReferenceTableValue rf = new ReferenceTableValue( String.Format("{0:X}", row), String.Format("{0:X}", col), cc);
+                    ReferenceTableValue rf = new ReferenceTableValue(String.Format("{0:X}", row), String.Format("{0:X}", col), cc);
                     t.ReferenceTableValues.Add(rf);
                 }
             }
