@@ -252,6 +252,11 @@ namespace IPA.DAL.RBADAL.Services
         /********************************************************************************************************/
         #region -- device configuration --
 
+        public virtual string GetConfigurationFileVersion(int majorcfg)
+        {
+            return null;
+        }
+
         public virtual void GetTerminalInfo(ref ConfigIDTechSerializer serializer)
         {
         }

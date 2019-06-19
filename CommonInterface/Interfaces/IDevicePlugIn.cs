@@ -38,6 +38,7 @@ namespace IPA.CommonInterface.Interfaces
     void SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes mode);
     // TERMINAL DATA
     void  GetSphereTerminalData(int majorcfg);
+    bool ConfigFileMatches(int majorcfg);
     // AID
     void GetAIDList();
     // CAPK

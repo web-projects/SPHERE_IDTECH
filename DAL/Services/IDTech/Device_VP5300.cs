@@ -371,6 +371,11 @@ namespace IPA.DAL.RBADAL.Services
 
         #region --- SPHERE SERIALIZER ---
 
+        public override string GetConfigurationFileVersion(int majorcfg)
+        {
+            return null;
+        }
+
         public override int SetTerminalConfiguration(int majorcfg)
         {
             RETURN_CODE rt = RETURN_CODE.RETURN_CODE_DO_SUCCESS;

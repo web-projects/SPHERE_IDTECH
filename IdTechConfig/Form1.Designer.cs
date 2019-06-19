@@ -61,17 +61,17 @@
             this.SettingsControlpictureBox1 = new System.Windows.Forms.PictureBox();
             this.SettingsControlConfigureBtn = new System.Windows.Forms.Button();
             this.SettingsBeepControlgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsBeepControlErrorlabel1 = new System.Windows.Forms.Label();
             this.SettingsBeepControlradioButton2 = new System.Windows.Forms.RadioButton();
             this.SettingsBeepControlradioButton1 = new System.Windows.Forms.RadioButton();
             this.SettingsLEDControlgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsLEDControlErrorlabel1 = new System.Windows.Forms.Label();
             this.SettingsLEDControlcheckBox2 = new System.Windows.Forms.CheckBox();
             this.SettingsLEDControlcheckBox1 = new System.Windows.Forms.CheckBox();
             this.SettingsENCControlgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.SettingsEncryptionControlErrorlabel1 = new System.Windows.Forms.Label();
             this.SettingsENCControlcheckBox2 = new System.Windows.Forms.CheckBox();
             this.SettingsENCControlcheckBox1 = new System.Windows.Forms.CheckBox();
-            this.SettingsBeepControlErrorlabel1 = new System.Windows.Forms.Label();
-            this.SettingsLEDControlErrorlabel1 = new System.Windows.Forms.Label();
-            this.SettingsEncryptionControlErrorlabel1 = new System.Windows.Forms.Label();
             this.SettingsMsrpanel1 = new System.Windows.Forms.Panel();
             this.SettingsMSRgroupBox1 = new System.Windows.Forms.GroupBox();
             this.SettingsMsrpicBoxWait = new System.Windows.Forms.PictureBox();
@@ -90,6 +90,10 @@
             this.SettingsMsrlabel3 = new System.Windows.Forms.Label();
             this.SettingsMsrConfigureBtn = new System.Windows.Forms.Button();
             this.ConfigurationtabPage = new System.Windows.Forms.TabPage();
+            this.ConfigurationInfogroupBox1 = new System.Windows.Forms.GroupBox();
+            this.ConfigurationlblInfo3 = new System.Windows.Forms.Label();
+            this.ConfigurationlblInfo2 = new System.Windows.Forms.Label();
+            this.ConfigurationlblInfo1 = new System.Windows.Forms.Label();
             this.ConfigurationErrorgroupBox1 = new System.Windows.Forms.GroupBox();
             this.ConfigurationlblWarning1 = new System.Windows.Forms.Label();
             this.ConfigurationlblError3 = new System.Windows.Forms.Label();
@@ -187,6 +191,7 @@
             this.SettingsMSRgroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsMsrpicBoxWait)).BeginInit();
             this.ConfigurationtabPage.SuspendLayout();
+            this.ConfigurationInfogroupBox1.SuspendLayout();
             this.ConfigurationErrorgroupBox1.SuspendLayout();
             this.ConfigurationPanel2.SuspendLayout();
             this.tabControlConfiguration.SuspendLayout();
@@ -549,6 +554,17 @@
             this.SettingsBeepControlgroupBox1.TabStop = false;
             this.SettingsBeepControlgroupBox1.Text = "Beep Control";
             // 
+            // SettingsBeepControlErrorlabel1
+            // 
+            this.SettingsBeepControlErrorlabel1.BackColor = System.Drawing.Color.Red;
+            this.SettingsBeepControlErrorlabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SettingsBeepControlErrorlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SettingsBeepControlErrorlabel1.Location = new System.Drawing.Point(1, 0);
+            this.SettingsBeepControlErrorlabel1.Name = "SettingsBeepControlErrorlabel1";
+            this.SettingsBeepControlErrorlabel1.Size = new System.Drawing.Size(302, 51);
+            this.SettingsBeepControlErrorlabel1.TabIndex = 8;
+            this.SettingsBeepControlErrorlabel1.Text = "[MESSAGE]";
+            // 
             // SettingsBeepControlradioButton2
             // 
             this.SettingsBeepControlradioButton2.AutoSize = true;
@@ -583,6 +599,17 @@
             this.SettingsLEDControlgroupBox1.TabStop = false;
             this.SettingsLEDControlgroupBox1.Text = "LED Control";
             // 
+            // SettingsLEDControlErrorlabel1
+            // 
+            this.SettingsLEDControlErrorlabel1.BackColor = System.Drawing.Color.Red;
+            this.SettingsLEDControlErrorlabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SettingsLEDControlErrorlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SettingsLEDControlErrorlabel1.Location = new System.Drawing.Point(1, 0);
+            this.SettingsLEDControlErrorlabel1.Name = "SettingsLEDControlErrorlabel1";
+            this.SettingsLEDControlErrorlabel1.Size = new System.Drawing.Size(301, 51);
+            this.SettingsLEDControlErrorlabel1.TabIndex = 7;
+            this.SettingsLEDControlErrorlabel1.Text = "[MESSAGE]";
+            // 
             // SettingsLEDControlcheckBox2
             // 
             this.SettingsLEDControlcheckBox2.AutoSize = true;
@@ -616,6 +643,17 @@
             this.SettingsENCControlgroupBox1.TabStop = false;
             this.SettingsENCControlgroupBox1.Text = "Encryption Control";
             // 
+            // SettingsEncryptionControlErrorlabel1
+            // 
+            this.SettingsEncryptionControlErrorlabel1.BackColor = System.Drawing.Color.Red;
+            this.SettingsEncryptionControlErrorlabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SettingsEncryptionControlErrorlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SettingsEncryptionControlErrorlabel1.Location = new System.Drawing.Point(1, 0);
+            this.SettingsEncryptionControlErrorlabel1.Name = "SettingsEncryptionControlErrorlabel1";
+            this.SettingsEncryptionControlErrorlabel1.Size = new System.Drawing.Size(301, 51);
+            this.SettingsEncryptionControlErrorlabel1.TabIndex = 8;
+            this.SettingsEncryptionControlErrorlabel1.Text = "[MESSAGE]";
+            // 
             // SettingsENCControlcheckBox2
             // 
             this.SettingsENCControlcheckBox2.AutoSize = true;
@@ -635,39 +673,6 @@
             this.SettingsENCControlcheckBox1.TabIndex = 0;
             this.SettingsENCControlcheckBox1.Text = "MSR";
             this.SettingsENCControlcheckBox1.UseVisualStyleBackColor = true;
-            // 
-            // SettingsBeepControlErrorlabel1
-            // 
-            this.SettingsBeepControlErrorlabel1.BackColor = System.Drawing.Color.Red;
-            this.SettingsBeepControlErrorlabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SettingsBeepControlErrorlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SettingsBeepControlErrorlabel1.Location = new System.Drawing.Point(1, 0);
-            this.SettingsBeepControlErrorlabel1.Name = "SettingsBeepControlErrorlabel1";
-            this.SettingsBeepControlErrorlabel1.Size = new System.Drawing.Size(302, 51);
-            this.SettingsBeepControlErrorlabel1.TabIndex = 8;
-            this.SettingsBeepControlErrorlabel1.Text = "[MESSAGE]";
-            // 
-            // SettingsLEDControlErrorlabel1
-            // 
-            this.SettingsLEDControlErrorlabel1.BackColor = System.Drawing.Color.Red;
-            this.SettingsLEDControlErrorlabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SettingsLEDControlErrorlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SettingsLEDControlErrorlabel1.Location = new System.Drawing.Point(1, 0);
-            this.SettingsLEDControlErrorlabel1.Name = "SettingsLEDControlErrorlabel1";
-            this.SettingsLEDControlErrorlabel1.Size = new System.Drawing.Size(301, 51);
-            this.SettingsLEDControlErrorlabel1.TabIndex = 7;
-            this.SettingsLEDControlErrorlabel1.Text = "[MESSAGE]";
-            // 
-            // SettingsEncryptionControlErrorlabel1
-            // 
-            this.SettingsEncryptionControlErrorlabel1.BackColor = System.Drawing.Color.Red;
-            this.SettingsEncryptionControlErrorlabel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SettingsEncryptionControlErrorlabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SettingsEncryptionControlErrorlabel1.Location = new System.Drawing.Point(1, 0);
-            this.SettingsEncryptionControlErrorlabel1.Name = "SettingsEncryptionControlErrorlabel1";
-            this.SettingsEncryptionControlErrorlabel1.Size = new System.Drawing.Size(301, 51);
-            this.SettingsEncryptionControlErrorlabel1.TabIndex = 8;
-            this.SettingsEncryptionControlErrorlabel1.Text = "[MESSAGE]";
             // 
             // SettingsMsrpanel1
             // 
@@ -854,6 +859,7 @@
             // 
             // ConfigurationtabPage
             // 
+            this.ConfigurationtabPage.Controls.Add(this.ConfigurationInfogroupBox1);
             this.ConfigurationtabPage.Controls.Add(this.ConfigurationErrorgroupBox1);
             this.ConfigurationtabPage.Controls.Add(this.ConfigurationPanel2);
             this.ConfigurationtabPage.Controls.Add(this.ConfigurationPanel1);
@@ -865,6 +871,51 @@
             this.ConfigurationtabPage.TabIndex = 1;
             this.ConfigurationtabPage.Text = "Configuration";
             this.ConfigurationtabPage.UseVisualStyleBackColor = true;
+            // 
+            // ConfigurationInfogroupBox1
+            // 
+            this.ConfigurationInfogroupBox1.BackColor = System.Drawing.Color.Yellow;
+            this.ConfigurationInfogroupBox1.Controls.Add(this.ConfigurationlblInfo3);
+            this.ConfigurationInfogroupBox1.Controls.Add(this.ConfigurationlblInfo2);
+            this.ConfigurationInfogroupBox1.Controls.Add(this.ConfigurationlblInfo1);
+            this.ConfigurationInfogroupBox1.Location = new System.Drawing.Point(0, 0);
+            this.ConfigurationInfogroupBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.ConfigurationInfogroupBox1.Name = "ConfigurationInfogroupBox1";
+            this.ConfigurationInfogroupBox1.Padding = new System.Windows.Forms.Padding(5);
+            this.ConfigurationInfogroupBox1.Size = new System.Drawing.Size(696, 522);
+            this.ConfigurationInfogroupBox1.TabIndex = 2;
+            this.ConfigurationInfogroupBox1.TabStop = false;
+            this.ConfigurationInfogroupBox1.Visible = false;
+            // 
+            // ConfigurationlblInfo3
+            // 
+            this.ConfigurationlblInfo3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblInfo3.Location = new System.Drawing.Point(3, 339);
+            this.ConfigurationlblInfo3.Name = "ConfigurationlblInfo3";
+            this.ConfigurationlblInfo3.Size = new System.Drawing.Size(683, 44);
+            this.ConfigurationlblInfo3.TabIndex = 21;
+            this.ConfigurationlblInfo3.Text = "[INFO]";
+            this.ConfigurationlblInfo3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ConfigurationlblInfo2
+            // 
+            this.ConfigurationlblInfo2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblInfo2.Location = new System.Drawing.Point(56, 216);
+            this.ConfigurationlblInfo2.Name = "ConfigurationlblInfo2";
+            this.ConfigurationlblInfo2.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblInfo2.TabIndex = 21;
+            this.ConfigurationlblInfo2.Text = "IS UP TO DATE";
+            this.ConfigurationlblInfo2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ConfigurationlblInfo1
+            // 
+            this.ConfigurationlblInfo1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblInfo1.Location = new System.Drawing.Point(20, 112);
+            this.ConfigurationlblInfo1.Name = "ConfigurationlblInfo1";
+            this.ConfigurationlblInfo1.Size = new System.Drawing.Size(639, 44);
+            this.ConfigurationlblInfo1.TabIndex = 21;
+            this.ConfigurationlblInfo1.Text = "DEVICE CONFIGURATION";
+            this.ConfigurationlblInfo1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ConfigurationErrorgroupBox1
             // 
@@ -1321,7 +1372,7 @@
             this.ConfigurationVersionlbl.AutoSize = true;
             this.ConfigurationVersionlbl.Location = new System.Drawing.Point(13, 166);
             this.ConfigurationVersionlbl.Name = "ConfigurationVersionlbl";
-            this.ConfigurationVersionlbl.Size = new System.Drawing.Size(64, 13);
+            this.ConfigurationVersionlbl.Size = new System.Drawing.Size(78, 13);
             this.ConfigurationVersionlbl.TabIndex = 2;
             this.ConfigurationVersionlbl.Text = "Config Version:";
             // 
@@ -1718,6 +1769,7 @@
             this.SettingsMSRgroupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsMsrpicBoxWait)).EndInit();
             this.ConfigurationtabPage.ResumeLayout(false);
+            this.ConfigurationInfogroupBox1.ResumeLayout(false);
             this.ConfigurationErrorgroupBox1.ResumeLayout(false);
             this.ConfigurationErrorgroupBox1.PerformLayout();
             this.ConfigurationPanel2.ResumeLayout(false);
@@ -1801,11 +1853,17 @@
     private System.Windows.Forms.Label ConfigurationVersionlbl;
     private System.Windows.Forms.Label ConfigurationEnvironmentlbl;
     private System.Windows.Forms.Label ConfigurationPlatformlbl;
+    // TAB: CONFIGURATION - ERROR MESSAGE
     private System.Windows.Forms.GroupBox ConfigurationErrorgroupBox1;
     private System.Windows.Forms.Label ConfigurationlblWarning1;
     private System.Windows.Forms.Label ConfigurationlblError1;
     private System.Windows.Forms.Label ConfigurationlblError2;
     private System.Windows.Forms.Label ConfigurationlblError3;
+    // TAB: CONFIGURATION - INFO MESSAGE
+    private System.Windows.Forms.GroupBox ConfigurationInfogroupBox1;
+    private System.Windows.Forms.Label ConfigurationlblInfo1;
+    private System.Windows.Forms.Label ConfigurationlblInfo2;
+    private System.Windows.Forms.Label ConfigurationlblInfo3;
     // SUB-TAB: TERMINAL DATA
     private System.Windows.Forms.TabPage ConfigurationTerminalDatatabPage;
     private System.Windows.Forms.ListView ConfigurationTerminalDatalistView;

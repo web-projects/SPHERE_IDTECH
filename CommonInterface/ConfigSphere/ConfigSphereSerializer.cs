@@ -280,6 +280,10 @@ namespace IPA.CommonInterface.ConfigSphere
             }
             return matched;
         }
+        public bool DeviceConfigVersionMatches(string version)
+        {
+            return version.Equals(DeviceConfig.ConfigurationID.Version, StringComparison.CurrentCultureIgnoreCase);
+        }
         public bool ContactDoNotSendTagsMatch(string tag)
         {
             bool matched = false;

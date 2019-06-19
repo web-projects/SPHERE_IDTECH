@@ -73,10 +73,10 @@ namespace IPA.DAL.RBADAL.Interfaces
 
         #region --- SPHERE SERIALIZER ---
 
+        string GetConfigurationFileVersion(int majorcfg);
+
         int SetTerminalConfiguration(int majorcfg);
-
         int SetTerminalConfiguration(ConfigSphereSerializer serializer);
-
         string[] GetTerminalData(int majorcfg);
         string [] ValidateTerminalData(ref ConfigSphereSerializer serializer);
         string [] GetAidList();

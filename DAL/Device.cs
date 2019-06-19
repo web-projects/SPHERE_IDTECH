@@ -318,6 +318,11 @@ if (deviceID.ToLower().Contains("usb\\") && ((deviceID.Contains($"VID_{IDTECH}")
 
         #region --- SPHERE SERIALIZER ---
 
+        public string GetConfigurationFileVersion(int majorcfg)
+        {
+            return deviceInterface?.GetConfigurationFileVersion(majorcfg);
+        }
+
         public int SetTerminalConfiguration(int majorcfg)
         {
             return deviceInterface?.SetTerminalConfiguration(majorcfg) ?? 0;

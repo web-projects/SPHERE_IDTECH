@@ -1852,7 +1852,7 @@ namespace IPA.DAL.RBADAL
         IDTechSerializer.WriteConfig();
 
         // Display JSON Config to User
-        if(deviceInformation.deviceMode == IDTECH_DEVICE_PID.AUGUSTA_KYB)
+        if(deviceInformation.deviceMode == IDTECH_DEVICE_PID.AUGUSTA_KYB || deviceInformation.deviceMode == IDTECH_DEVICE_PID.AUGUSTAS_KYB)
         {
             NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_DEVICE_UPDATE_CONFIG, Message = new object[] { "COMPLETED" } });
         }
@@ -2591,8 +2591,7 @@ namespace IPA.DAL.RBADAL
             }
             else if(mode.Equals(USK_DEVICE_MODE.USB_KYB))
             {
-               if(deviceInformation.deviceMode == IDTECH_DEVICE_PID.AUGUSTA_HID  ||
-                  deviceInformation.deviceMode == IDTECH_DEVICE_PID.AUGUSTAS_HID)
+               if(deviceInformation.deviceMode == IDTECH_DEVICE_PID.AUGUSTA_HID || deviceInformation.deviceMode == IDTECH_DEVICE_PID.AUGUSTAS_HID)
                {
                     // TURN ON QUICK CHIP MODE
                     byte [] response = null;
@@ -2858,6 +2857,17 @@ namespace IPA.DAL.RBADAL
     #endregion
 
     #region --- SPHERE SERIALIZER ---
+
+    public bool ConfigFileMatches(int majorcfg)
+    {
+        // Get Current TAGS and Find TAG: 9F4E
+        string tag9F4E = Device.GetConfigurationFileVersion(majorcfg);
+        if(tag9F4E != null)
+        {
+            return SphereSerializer.DeviceConfigVersionMatches(tag9F4E);
+        }
+        return false;
+    }
 
     public void GetSphereTerminalData(int majorcfg)
     {

@@ -56,6 +56,11 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
             return text;
         }
 
+        public  string GetAidNameStr()
+        { 
+            return name;
+        }
+
         public  byte [] GetAidName()
         { 
             return aidName;

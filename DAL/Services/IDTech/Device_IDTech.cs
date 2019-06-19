@@ -539,6 +539,7 @@ namespace IPA.DAL.RBADAL.Services
         {
             var configStatus = new IDTSetStatus { Success = true };
             if(deviceMode == IDTECH_DEVICE_PID.AUGUSTA_KYB   ||
+               deviceMode == IDTECH_DEVICE_PID.AUGUSTAS_KYB  ||
                deviceMode == IDTECH_DEVICE_PID.MAGSTRIPE_KYB ||
                deviceMode == IDTECH_DEVICE_PID.SECUREKEY_KYB ||
                deviceMode == IDTECH_DEVICE_PID.SECUREMAG_KYB)
@@ -1726,7 +1727,6 @@ if(empty)
 
         private void DeviceRemovedHandler()
         {
-            //TODO: When device is rmoved raise an user message?
             System.Diagnostics.Debug.WriteLine("device: removed.");
             NotificationRaise(new NotificationEventArgs { NotificationType = NotificationType.DeviceEvent, DeviceEvent = DeviceEvent.DeviceDisconnected });
         }
@@ -1809,6 +1809,11 @@ if(empty)
         // DEVICE CONFIGURATION
         /********************************************************************************************************/
         #region -- device configuration --
+
+        public virtual string GetConfigurationFileVersion(int majorcfg)
+        {
+            return null;
+        }
 
         public virtual int SetTerminalConfiguration(int majorcfg)
         {

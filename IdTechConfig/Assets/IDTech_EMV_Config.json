@@ -18,7 +18,7 @@
           "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "DC4000A000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "DC4000A800",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF15": "DC4004F800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "008C",			  // Terminal application version number  -- note : unsure what value to use here
@@ -45,7 +45,7 @@
           "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "DC4000A000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "DC4000A800",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF15": "DC4004F800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "008C",			  // Terminal application version number  -- note : unsure what value to use here
@@ -58,7 +58,7 @@
           "DF25": "9F3704",			// Default DDOL (Ingenico 9F8124)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "DC50FC9000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "DC50FC9800",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF15": "DE00FC9800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "0001",			  // Terminal application version number  -- note : unsure what value to use here
@@ -85,7 +85,7 @@
           //"DF28": "9F020695055F2A029A039C019F3704",			// Default TDOL (Ingenico 9F8125)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF19": "99",			    // Max percentage for biased random selection (Ingenico 9F8126)  -- note : tag in NEO 2 IDG manual
           "DF18": "99",			    // Target percentage for biased random selection (Ingenico 9F8127)  -- note : tag in NEO 2 IDG manual
-          "DF13": "FC6024A000",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+          "DF13": "FC6024A800",	// TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF14": "0010000000",	// TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "DF15": "FC60ACF800",	// TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
           "9F09": "0200",			  // Terminal application version number  -- note : unsure what value to use here
@@ -95,9 +95,9 @@
       },
 
       "TerminalSettings": {
-        "MajorConfiguration": "5C",
+        "MajorConfiguration": "2C",
         "MajorConfigurationChecksum": [			            // Note: can differ by Kernel version
-          "DAD6AED81E9375043A1DBEF84C193FE863B2ED7F"		// 5C checksum for EMV Common L2 Version V1.10.037  (can use value to determine if current MajorConfiguration is correct)
+          "8D9395C588F2DEC9AE9DC8BB7B9841A3525711C6"		// 2C checksum for EMV Common L2 Version V1.10.037  (can use value to determine if current MajorConfiguration is correct)
         ],
         "SerialNumberTag": "9F1E",		// Data length = 8; compressed string returned from config_getSerialNumber()
         "VersionTag": "9F4E",		      // Data length = 30; first 30 characters from ConfigurationID.Version
@@ -162,7 +162,7 @@
           //     RFU (b1) - False
           //   Byte 7:
           //     Amount and pin entered on the same keypad (b8) - False
-          //     ICC/Magstripe reader combined (b7) - False
+          //     ICC/Magstripe reader combined (b7) - True
           //     Magstripe read first (b6) - False
           //     Support account type selection (b5) - False  (equivalent to Ingenico 9F8459 = 01?)
           //     On fly script processing (b4) - False
@@ -181,7 +181,7 @@
           "DFEE1B": "3030303130353030",	// Authorization Request Data elements		// Non-KB 5C value "3030303130353030"
           //"DFEF4B": "7F0000",			      // Track selection (enable PAN, T1, T2, T3, T1/T2/T3 sentinels) // NOT FOR VP3300
           //"DFEF4B": "760000",			// Track selection (enable PAN, T1, T2, T1/T2 sentinels) // NOT FOR VP3300
-          "DFEF4B": "F60000",			// Track selection (enable PAN, T1, T2, T1/T2 sentinels) // NOT FOR VP3300
+          "DFEF4B": "F60000",			// Track selection (1st data elements found, enable PAN, T1, T2, T1/T2 sentinels) // NOT FOR VP3300
           // Disable the following five tags VP5300; used for VP3300
           "DFED0A": "01",			          // Output Fallback Reason (1 = enabled)
           "DFEF65": "01",			          // Control Output Errors (1 = enabled)
@@ -270,9 +270,7 @@
           //     Code Table 1 (b1)
           "9F15": "5999",		// Merchant Category code				  // IDTech default value "1234"
 
-          //"9F16": "303030303030303030303030303030",			    // Merchant Identifier (len 15)
           //"9F1C": "3837363534333231",								        // Terminal Identification (len 8) - replace with last Serial#?
-          //"9F4E": "54323031395F312E302E305F53706865726554435F41",			// Merchant Name and Location (len 30); T2019_1.0.0_SphereTC_A
           //"9F7C": "54323031395F312E302E305F53706865726554435F41",			// Data length = 20; T2019_1.0.0_SphereTC_A
 
           "DF26": "01",			            // Enable/Disable Certificate Revocation List  (equivalent to Ingenico 9F8442 = 01?)
@@ -283,7 +281,6 @@
           "DFEE16": "00",		            // Terminal Encrypt Mode
           "DFEE17": "05",		            // Terminal Entry Mode for ICC
           "DFEE18": "80",		            // Terminal Encrypt Mode for MSR
-          //"DFEE1D": "06042A0C33",	      // Masked Data Output Parameter (PrePAN=6, PosPAN=4, MaskASCII=2A, MaskHex=0C, Expire=NotMask, ServiceCode=NotMask)
           "DFEE1F": "80",		            // Issuer Script Limit
           "DFEE20": "3C",		            // ICC Power on detect waiting time
           "DFEE21": "0A",		            // ICC L1 waiting time
@@ -481,8 +478,6 @@
               "9F10",		//		Issuer Application Data
               "9F11",		//		Issuer Code Table Index
               "9F12",		//		Application Preferred Name
-              //"9F16",		//		Merchant Identifier
-              //"9F1C",		//		Terminal Identification
               "9F4E",		//		Merchant Name and Location
               "9F1A",		//		Terminal Country Code
               "9F1E",		//		Interface Device Serial Number
@@ -528,13 +523,11 @@
       },
       "ContactDoNotSendTags": [
         "9F53",			  // Transaction Category Code
-        "DFEE1D",			// Masked Output Data Parameter
         "DFED0A",			// Output Fallback Reason (1 = enabled)
         "DFEF65",			// Control Output Errors (1 = enabled)
         "DFEF62",			// Allow MSR Swipe data from ICC card - disabled (01)
         "DFEF7D",			// Re-power on times
         "DFEF7E"			// Fallback response code list (list of response codes that trigger fallback)
-        //"FFEE01"			// ViVOtech TLV Group Tag
       ]
     },
     {
@@ -546,7 +539,7 @@
     },
     {
       "ModelFirmware": {
-        "IDEM-85XX": [ "1.02.013.S" ]
+        "IDEM-85XX": [ "1.02.013.S", "1.02.021.S" ]
       },
       "ContactDoNotSendTags": [
       ]
@@ -558,10 +551,6 @@
         "NEO2": {
           "VP5300": [ "*" ]
         }
-        // ,
-        // "NEO_1.10": {
-        //   "VP3300": [ "*" ]
-        // }
       },
       "GroupList": {
         "GeneralA": {
@@ -576,7 +565,7 @@
             "DFEE1D": "06042A0C33",	  // Masked Data Output Parameter (PrePAN=6, PosPAN=4, MaskASCII=2A, MaskHex=0C, Expire=NotMask, ServiceCode=NotMask)
             "DFEF4B": "F60000"	      // MSR Equivalent Data Option
           },
-          "VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
+          //"VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
           "SerialNumberTag": "9F1E"		// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
         },
         "VisaSetA": {
@@ -597,11 +586,11 @@
             "DFEE35": "010503",	      // Visa Reader Risk Flags
             "DFEF4B": "F60000",	      // MSR Equivalent Data Option
             "DFEE34": "000100000000",	// Terminal Contactless Transaction Limit
-	          "DF8120": "DC4000A000",	  // TAC Default
+	          "DF8120": "DC4000A800",	  // TAC Default
             "DF8121": "0010000000",	  // TAC Denial
             "DF8122": "DC4004F800"	  // TAC Online
           },
-          "VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
+          //"VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
           "SerialNumberTag": "9F1E"		// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
         },
         "MasterSetA": {
@@ -629,6 +618,7 @@
             "DFEE4B": "01",		           // Partial Selection
             "DFEE53": "02"		           // AID Participation in Selection Processes
           },
+          // //"VersionTag": "9F4E",		// Data length = 30; first 30 characters from ConfigurationID.Version		// Tag ignored in current firmware
           "SerialNumberTag": "9F1E"		   // Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
         },
         "AmexSetA": {
@@ -646,11 +636,11 @@
             "DF8126": "000100000000",	 // CVM Required Limit
             "DF8123": "000000000000",	 // Reader Contactless Floor Limit
             "9F33": "6008C8",			     // Terminal Capability (Ingenico value 6098C8)
-            "DF8120": "DC50FC9000",		 // TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
+            "DF8120": "DC50FC9800",		 // TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8121": "0010000000",		 // TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8122": "DE00FC9800"		 // TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
          },
-         "VersionTag": "9F4E",		     // Data length = 30; first 30 characters from ConfigurationID.Version
+         //"VersionTag": "9F4E",		     // Data length = 30; first 30 characters from ConfigurationID.Version
          "SerialNumberTag": "9F1E"		 // Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
         },
         "DiscoverSetA": {
@@ -676,11 +666,11 @@
             "9F1B": "00000000",	      // Terminal Floor limit
             "DFEF4B": "F60000"	      // MSR Equivalent Data Option
           },
-          "VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
+          //"VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
           "SerialNumberTag": "9F1E"		// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
           }
         }
-      }      
+      }
     }
   ]
 }

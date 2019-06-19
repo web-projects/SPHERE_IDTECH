@@ -1884,6 +1884,70 @@ namespace IPA.MainApp
             }
         }
 
+        private void ShowTerminalDataInfo(object payload)
+        {
+            MethodInvoker mi = () =>
+            {
+                this.ConfigurationIDgrpBox.Visible = false;
+
+                try
+                {
+                    string [] data = ((IEnumerable) payload)?.Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray() ?? null;
+
+                    if(data != null)
+                    {
+                        StopConfigLoaderTimer();
+                        
+                        this.ConfigurationTerminalDatapicBoxWait.Enabled = false;
+                        this.ConfigurationTerminalDatapicBoxWait.Visible  = false;
+                        this.ConfigurationPanel1pictureBox1.Enabled = false;
+                        this.ConfigurationPanel1pictureBox1.Visible = false;
+                        this.ConfigurationPanel1.Visible = false;
+                        this.ConfigurationPanel2.Visible = false;
+
+                        this.ConfigurationInfogroupBox1.Visible = true;
+                        this.ConfigurationlblInfo3.Text = data[0];
+
+                        new Thread(() => 
+                        {
+                            SoftBlink(this.ConfigurationlblWarning1, Color.FromArgb(255, 0, 60), Color.Red, 5000, true);
+                            SoftBlink(this.ConfigurationlblError1, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblError2, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblError3, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
+                            Thread.Sleep(5000);
+
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                this.ConfigurationInfogroupBox1.Visible = false;
+                                this.ConfigurationPanel1.Visible = true;
+                                this.ConfigurationPanel2.Visible = true;
+
+                                if(data[1]?.Equals("DEVICE", StringComparison.CurrentCultureIgnoreCase) ?? false)
+                                { 
+                                    this.radioLoadFromDevice.Checked = true;
+                                }
+                            });
+
+                        }).Start();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.error("main: ShowTerminalDataError() - exception={0}", (object) ex.Message);
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
         private void ShowAidList(object payload)
         {
             // Invoker with Parameter(s)
@@ -2726,26 +2790,58 @@ namespace IPA.MainApp
         {
             if (((RadioButton)sender).Checked)
             {
-                this.ConfigurationPanel1.Enabled = false;
+                this.ConfigurationTerminalDatapicBoxWait.Enabled = true;
+                this.ConfigurationTerminalDatapicBoxWait.Visible  = true;
+                this.ConfigurationPanel1pictureBox1.Enabled = true;
+                this.ConfigurationPanel1pictureBox1.Visible = true;
 
-                // Load Configuration from FILE
-                new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_CONFIG)).Start();
-
-                SetConfigLoaderTimer();
-
-                if (this.ConfigurationCollapseButton.Visible == false)
+                new Thread(() =>
                 {
-                    this.ConfigurationCollapseButton.Visible = true;
-                    this.ConfigurationPanel2.Visible = true;
-                    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
-                }
+                    // Check Configuration Load is Current
+                    int majorcfgint = devicePlugin?.GetConfigSphereSerializer()?.GetTerminalMajorConfiguration() ?? 2;
+                    bool matches = devicePlugin.ConfigFileMatches(majorcfgint);
 
-                if (this.tabControlConfiguration.SelectedIndex == 0)
-                {
-                    this.tabControlConfiguration.SelectedIndex = -1;
-                    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
-                    this.tabControlConfiguration.SelectedIndex = 0;
-                }
+                    if(matches)
+                    {
+                        // Configuration Matches - No need to reload
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            this.radioLoadFromFile.Checked = false;
+                        });
+
+                        string [] message = { "VERSION: ", "DEVICE" };
+                        ConfigurationID configurationID = devicePlugin?.GetConfigSphereSerializer().GetConfigurationID();
+                        if(configurationID != null)
+                        {
+                            message[0] += configurationID.Version;
+                        }
+
+                        ShowTerminalDataInfo(message);
+                    }
+                    else
+                    { 
+                        // Load Configuration from FILE
+                        new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_CONFIG)).Start();
+
+                        SetConfigLoaderTimer();
+
+                        this.Invoke((MethodInvoker)delegate()
+                        {
+                            if (this.ConfigurationCollapseButton.Visible == false)
+                            {
+                                this.ConfigurationCollapseButton.Visible = true;
+                                this.ConfigurationPanel2.Visible = true;
+                                this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                            }
+
+                            // Allows set back to TerminalData
+                            this.tabControlConfiguration.SelectedIndex = -1;
+                            this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                            this.tabControlConfiguration.SelectedIndex = 0;
+                        });
+                    }
+
+                }).Start();
             }
         }
 
@@ -2767,12 +2863,10 @@ namespace IPA.MainApp
                     this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
                 }
 
-                if (this.tabControlConfiguration.SelectedIndex == 0)
-                {
-                    this.tabControlConfiguration.SelectedIndex = -1;
-                    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
-                    this.tabControlConfiguration.SelectedIndex = 0;
-                }
+                // Allows set back to TerminalData
+                this.tabControlConfiguration.SelectedIndex = -1;
+                this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                this.tabControlConfiguration.SelectedIndex = 0;
             }
         }
 

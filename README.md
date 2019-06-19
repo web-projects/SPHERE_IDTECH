@@ -52,3 +52,6 @@ This an application to Configure IDTech Devices.
 * 20190515 - Updated SphereConfiguration.json with Contactless ApplicationFlow.
 * 20190603 - Renamed configuration file and coded tag 9F4E to process value from ConfigurationID.Version.
 * 20190606 - Added documentation for TAG 9F1E Encoding/Decoding algorithm.
+* 20190619 - Fixes for Augusta SRED switching to keyboard mode.
+           - Fixes to processing of AIDS not found in device AIDS list.
+           - Fixes to processing of CAPKS not found in device CAPKS list.

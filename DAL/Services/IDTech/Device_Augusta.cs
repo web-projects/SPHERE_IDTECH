@@ -37,8 +37,8 @@ namespace IPA.DAL.RBADAL.Services
 
         public Device_Augusta(IDTECH_DEVICE_PID mode) : base(mode)
         {
-            deviceType = IDT_DEVICE_Types.IDT_DEVICE_AUGUSTA;
             deviceMode = mode;
+            deviceType = IDT_DEVICE_Types.IDT_DEVICE_AUGUSTA;
             Debug.WriteLine("device: Augusta instantiated with PID={0}", deviceMode);
             Logger.debug( "device: August instantiated with PID={0}", deviceMode);
         }
@@ -422,6 +422,21 @@ namespace IPA.DAL.RBADAL.Services
 
         #region --- SPHERE SERIALIZER ---
 
+        public override string GetConfigurationFileVersion(int majorcfg)
+        {
+            string [] payload = GetTerminalData(majorcfg);
+            if(payload != null)
+            {
+                string match = Array.Find (payload, n => n.Contains ("9F4E:"));
+                if(match != null)
+                { 
+                    string [] tlv = match.Split(':');
+                    return Common.hexStringToString(tlv[1]);
+                }
+            }
+            return null;
+        }
+
         public override int SetTerminalConfiguration(int majorcfg)
         {
             RETURN_CODE rt = RETURN_CODE.RETURN_CODE_DO_SUCCESS;
@@ -473,6 +488,28 @@ namespace IPA.DAL.RBADAL.Services
                 Debug.WriteLine("device: SetTerminalConfiguration() - exception={0}", (object)ex.Message);
             }
             return (int) rt;
+        }
+
+        private int GetTerminalMajorConfiguration(ConfigSphereSerializer serializer)
+        {
+            try
+            {
+                if(serializer != null)
+                {
+                    TerminalSettings termsettings = serializer.GetTerminalSettings();
+                    string workerstr = termsettings.MajorConfiguration;
+                    string majorcfgstr = Regex.Replace(workerstr, "[^0-9.]", string.Empty);
+                    if(Int32.TryParse(majorcfgstr, out ref int majorcfgint))
+                    {
+                        return majorcfgint;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine("device: SetTerminalConfiguration() - exception={0}", (object)ex.Message);
+            }
+            return 0;
         }
 
         public override string [] GetTerminalData(int majorcfg)
@@ -553,6 +590,23 @@ namespace IPA.DAL.RBADAL.Services
                     byte [] tlv = null;
                     RETURN_CODE rt = IDT_Augusta.SharedController.emv_retrieveTerminalData(ref tlv);
                 
+                    //If no terminal data, set default data
+                    if(rt == RETURN_CODE.RETURN_CODE_NO_TERMINAL_DATA)
+                    {
+                        int majorcfg = GetTerminalMajorConfiguration(serializer);
+                        if(majorcfg > 0)
+                        { 
+                            TerminalDataFactory tf = new TerminalDataFactory();
+                            byte[] term = tf.GetFactoryTerminalData(majorcfg);
+                            rt = IDT_Augusta.SharedController.emv_setTerminalData(term);
+                            if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+                            {
+                                Debug.WriteLine("TERMINAL DATA [DEFAULT] ----------------------------------------------------------------------");
+                                rt = IDT_Augusta.SharedController.emv_retrieveTerminalData(ref tlv);
+                            }
+                        }
+                    }
+
                     if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
                     {
                         Debug.WriteLine("VALIDATE TERMINAL DATA ----------------------------------------------------------------------");
@@ -879,6 +933,31 @@ namespace IPA.DAL.RBADAL.Services
                             }
                         }
 
+                        // ADD SERIALIZER AID ITERATION
+                        foreach(var cfgItem in aid.Aid)
+                        {
+                            KeyValuePair<string, Dictionary<string, string>> cfgCurrentItem = new KeyValuePair<string, Dictionary<string, string>>();
+                            cfgCurrentItem = cfgItem;
+                            byte[] tagCfgName = Device_IDTech.HexStringToByteArray(cfgCurrentItem.Key);
+
+                            List<byte[]> collection = new List<byte[]>();
+                            foreach(var item in cfgCurrentItem.Value)
+                            {
+                                string payload = string.Format("{0}{1:X2}{2}", item.Key, item.Value.Length / 2, item.Value).ToUpper();
+                                byte [] bytes = Device_IDTech.HexStringToByteArray(payload);
+                                collection.Add(bytes);
+                            }
+                            var flattenedList = collection.SelectMany(bytes => bytes);
+                            byte [] tagCfgValue = flattenedList.ToArray();
+                            CommonInterface.ConfigSphere.Configuration.Aid cfgAid = new CommonInterface.ConfigSphere.Configuration.Aid(tagCfgName, tagCfgValue);
+
+                            var itemFound = AidList.Find(x => x.GetAidNameStr().Equals(cfgAid.GetAidNameStr(), StringComparison.CurrentCultureIgnoreCase));
+                            if(itemFound == null)
+                            {
+                                AidList.Add(cfgAid);
+                            }
+                        }
+
                         // Add missing AID(s)
                         foreach(var aidElement in AidList)
                         {
@@ -985,31 +1064,32 @@ namespace IPA.DAL.RBADAL.Services
                         Debug.WriteLine("VALIDATE CAPK LIST ----------------------------------------------------------------------");
 
                         // Get Configuration File AID List
-                        CAPKList capK = serializer.GetCapKList();
+                        CAPKList serializerCAPK = serializer.GetCapKList();
 
                         List<CommonInterface.ConfigSphere.Configuration.Capk> CapKList = new List<CommonInterface.ConfigSphere.Configuration.Capk>();
-                        List<byte[]> capkNames = new List<byte[]>();
+                        List<byte[]> deviceCAPKs = new List<byte[]>();
 
                         // Convert array to array of arrays
                         for(int i = 0; i < keys.Length; i += 6)
                         {
                             byte[] result = new byte[6];
                             Array.Copy(keys, i, result, 0, 6);
-                            capkNames.Add(result); 
+                            deviceCAPKs.Add(result); 
                         }
 
-                        foreach(byte[] capkName in capkNames)
+                        // DELETE DEVICE CAPKS ITERATION
+                        foreach(byte[] deviceCAPK in deviceCAPKs)
                         {
                             bool delete = true;
                             bool found  = false;
                             bool update = false;
                             KeyValuePair<string, CAPK> cfgCurrentItem = new KeyValuePair<string, CAPK>();
-                            string devCapKName = BitConverter.ToString(capkName).Replace("-", string.Empty);
+                            string devCapKName = BitConverter.ToString(deviceCAPK).Replace("-", string.Empty);
 
                             Debug.WriteLine("CAPK: {0} ===============================================", (object) devCapKName);
 
                             // Is this item in the approved list?
-                            foreach(var cfgItem in capK.CAPK)
+                            foreach(var cfgItem in serializerCAPK.CAPK)
                             {
                                 cfgCurrentItem = cfgItem;
                                 string devRID = cfgItem.Value.RID;
@@ -1021,7 +1101,7 @@ namespace IPA.DAL.RBADAL.Services
                                     byte[] value = null;
                                     CommonInterface.ConfigSphere.Configuration.Capk capk = null;
 
-                                    rt = IDT_Augusta.SharedController.emv_retrieveCAPK(capkName, ref value);
+                                    rt = IDT_Augusta.SharedController.emv_retrieveCAPK(deviceCAPK, ref value);
 
                                     if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
                                     {
@@ -1067,7 +1147,8 @@ namespace IPA.DAL.RBADAL.Services
                             }
                             else if(!found)
                             {
-                                byte[] tagCfgName = Device_IDTech.HexStringToByteArray(cfgCurrentItem.Key);
+                                string [] buffer = cfgCurrentItem.Key.Split('-');
+                                byte[] tagCfgName = Device_IDTech.HexStringToByteArray(buffer[0]);
 
                                 List<byte[]> collection = new List<byte[]>();
                                 string payload = string.Format("{0}{1}{2}{3}{4}{5}{6:X2}{7:X2}{8}",
@@ -1082,6 +1163,30 @@ namespace IPA.DAL.RBADAL.Services
                             }
                         }
 
+                        // ADD SERIALIZER CAPK ITERATION
+                        foreach(var cfgItem in serializerCAPK.CAPK)
+                        {
+                            KeyValuePair<string, CAPK> cfgCurrentItem = new KeyValuePair<string, CAPK>();
+                            cfgCurrentItem = (KeyValuePair<string, CAPK>)cfgItem;
+                            string [] buffer = cfgCurrentItem.Key.Split('-');
+                            byte[] tagCfgName = Device_IDTech.HexStringToByteArray(buffer[0]);
+
+                            List<byte[]> collection = new List<byte[]>();
+                            string payload = string.Format("{0}{1}{2}{3}{4}{5}{6:X2}{7:X2}{8}",
+                                                            cfgCurrentItem.Value.RID, cfgCurrentItem.Value.Index,
+                                                            _HASH_SHA1_ID_STR, _ENC_RSA_ID_STR,
+                                                            cfgCurrentItem.Value.Checksum, cfgCurrentItem.Value.Exponent,
+                                                            (cfgCurrentItem.Value.Modulus.Length / 2) % 256, (cfgCurrentItem.Value.Modulus.Length / 2) / 256,
+                                                            cfgCurrentItem.Value.Modulus);
+                            byte[] tagCfgValue = Device_IDTech.HexStringToByteArray(payload);
+                            CommonInterface.ConfigSphere.Configuration.Capk cfgCapK = new CommonInterface.ConfigSphere.Configuration.Capk(tagCfgValue);
+
+                            if(!CapKList.Contains(cfgCapK))
+                            {
+                                CapKList.Add(cfgCapK);
+                            }
+                        }
+                        
                         // Add/Update CAPK(s)
                         foreach(var capkElement in CapKList)
                         {

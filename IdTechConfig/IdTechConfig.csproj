@@ -190,10 +190,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="Assets\Augusta v1.02.020 ICC304R-AJT.fm">
+    <None Include="Assets\Augusta S_V1.02.021.S.fm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\AugustaS v1.02.013.S ICC304R-ABT.fm">
+    <None Include="Assets\Augusta v1.02.020 ICC304R-AJT.fm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Assets\IDTechConfiguration.json">

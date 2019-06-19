@@ -54,9 +54,34 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
     }
 
     [Serializable]
-    public class CAPKList
+    public class CAPKList : IEnumerator, IEnumerable
     {
+        int position = -1;
+
         public Dictionary<string, CAPK> CAPK { get; set; }
+
+        //IEnumerator and IEnumerable require these methods.
+        public IEnumerator GetEnumerator()
+        {
+            return (IEnumerator)this;
+        }
+
+        //IEnumerator
+        public bool MoveNext()
+        {
+            position++;
+            return (position < CAPK.Count());
+        }
+
+        //IEnumerable
+        public void Reset()
+        { position = 0; }
+
+        //IEnumerable
+        public object Current
+        {
+            get { return CAPK.ElementAt(position); }
+        }
     }
 
     [Serializable]
