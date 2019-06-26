@@ -64,6 +64,7 @@ namespace IPA.CommonInterface.ConfigSphere
                 Debug.WriteLine("{0}:{1}", item.Key, item.Value);
             }
         }
+        
         private void DisplayCollection(Dictionary<string, string[]> collection, string name)
         {
             foreach(var item in collection)
@@ -115,14 +116,32 @@ namespace IPA.CommonInterface.ConfigSphere
             return GetAllTerminalData(serialNumber, EMVKernelVer);
         }
 
+        public SortedDictionary<string, string> GetContactOverrideTags(string model)
+        {
+            Debug.WriteLine("serializer: contact override tags for model: {0}", (object) model);
+            SortedDictionary<string, string> collection = new SortedDictionary<string, string>();
+
+            try
+            {
+                collection = emvDeviceSettings.Where(x => x.ModelFirmware.Any(y => y.Key.Contains(model))).Select(z => z.ContactOverrideTags).First();
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine("ConfigSphereSerializer: GetContactOverrideTags() - exception={0}", (object)ex.Message);
+            }
+
+            return collection;
+        }
+
         public ConfigurationID GetConfigurationID()
         { 
             return configurationID;
         }
 
-        public string[] GetTerminalDataString(string serialNumber, string EMVKernelVer)
+        public string[] GetTerminalDataString(string serialNumber, string modelNumber, string EMVKernelVer)
         {
             SortedDictionary<string, string> allTerminalTags = GetAllTerminalData(serialNumber, EMVKernelVer);
+            SortedDictionary<string, string> contactOverrideTags = GetContactOverrideTags(modelNumber);
             List<string> collection = new List<string>();
             foreach(var item in allTerminalTags)
             {
@@ -132,8 +151,20 @@ namespace IPA.CommonInterface.ConfigSphere
                     collection.Add(string.Format("{0}:{1}", item.Key, item.Value));
                 }
                 else
-                { 
-                    collection.Add(string.Format("{0}:{1}", item.Key, item.Value).ToUpper());
+                {
+                    string cfgTagValue = item.Value;
+
+                    // Check for override value
+                    foreach(var contactOverride in contactOverrideTags)
+                    {
+                        if(contactOverride.Key.Equals(item.Key, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            cfgTagValue = contactOverride.Value;
+                            break;
+                        }
+                    }
+                    
+                    collection.Add(string.Format("{0}:{1}", item.Key, cfgTagValue).ToUpper());
                 }
             }
             collection.Sort();
@@ -301,6 +332,7 @@ namespace IPA.CommonInterface.ConfigSphere
             }
             return matched;
         }
+
         public void ReadConfig()
         {
             try

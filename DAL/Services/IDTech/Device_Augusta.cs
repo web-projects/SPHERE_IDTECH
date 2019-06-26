@@ -614,6 +614,7 @@ namespace IPA.DAL.RBADAL.Services
                         // Get Configuration File AID List
                         SortedDictionary<string, string> cfgTerminalData = serializer.GetTerminalData(serialNumber, EMVKernelVer);
                         Dictionary<string, Dictionary<string, string>> dict = Common.processTLV(tlv);
+                        SortedDictionary<string, string> contactOverrideTags = serializer.GetContactOverrideTags(deviceInfo.ModelNumber);
 
                         bool update = false;
 
@@ -634,8 +635,20 @@ namespace IPA.DAL.RBADAL.Services
                                         tagfound = true;
                                         //Debug.Write("key: " + devTag.Key);
 
+                                        cfgTagValue = cfgTag.Value;
+
+                                        // Check for override value
+                                        foreach(var contactOverride in contactOverrideTags)
+                                        {
+                                            if(contactOverride.Key.Equals(cfgTag.Key, StringComparison.CurrentCultureIgnoreCase))
+                                            {
+                                                cfgTagValue = contactOverride.Value;
+                                                break;
+                                            }
+                                        }
+
                                         // Compare value
-                                        if(cfgTag.Value.Equals(devTag.Value, StringComparison.CurrentCultureIgnoreCase))
+                                        if(cfgTagValue.Equals(devTag.Value, StringComparison.CurrentCultureIgnoreCase))
                                         {
                                             tagmatch = true;
                                             //Debug.WriteLine(" matches value: {0}", (object) devTag.Value);
@@ -643,7 +656,6 @@ namespace IPA.DAL.RBADAL.Services
                                         else
                                         {
                                             //Debug.WriteLine(" DOES NOT match value: {0}!={1}", devTag.Value, cfgTag.Value);
-                                            cfgTagValue = cfgTag.Value;
                                             update = true;
                                         }
                                         break;
@@ -678,19 +690,34 @@ namespace IPA.DAL.RBADAL.Services
                                 foreach(var item in cfgTerminalData)
                                 {
                                     byte [] bytes = null;
-                                    string payload = string.Format("{0}{1:X2}{2}", item.Key, item.Value.Length / 2, item.Value).ToUpper();
-                                    if (System.Text.RegularExpressions.Regex.IsMatch(item.Value, @"[g-zG-Z\x20\x2E]+"))
+
+                                    string cfgItemValue = item.Value;
+
+                                    // Check for override value
+                                    foreach(var contactOverride in contactOverrideTags)
+                                    {
+                                        if(contactOverride.Key.Equals(item.Key, StringComparison.CurrentCultureIgnoreCase) &&
+                                            !contactOverride.Value.Equals(item.Value, StringComparison.CurrentCultureIgnoreCase))
+                                        {
+                                            cfgItemValue = contactOverride.Value;
+                                            break;
+                                        }
+                                    }
+
+                                    string payload = string.Format("{0}{1:X2}{2}", item.Key, cfgItemValue.Length / 2, cfgItemValue).ToUpper();
+                                    if (System.Text.RegularExpressions.Regex.IsMatch(cfgItemValue, @"[g-zG-Z\x20\x2E]+"))
                                     {
                                         List<byte> byteArray = new List<byte>();
                                         byteArray.AddRange(Device_IDTech.HexStringToByteArray(item.Key));
-                                        byte [] item1 = Encoding.ASCII.GetBytes(item.Value);
+                                        byte [] item1 = Encoding.ASCII.GetBytes(cfgItemValue);
                                         // TAG 9F1E: compression support
                                         if(item.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase))
                                         {
                                             //item1 = Encoding.GetEncoding(437).GetBytes(item.Value);
-                                            string compressed = Utils.Compress(item.Value ?? "");
+                                            string compressed = Utils.Compress(cfgItemValue ?? "");
                                             item1 = Encoding.GetEncoding(437).GetBytes(compressed);
                                         }
+
                                         byte itemLen = Convert.ToByte(item1.Length);
                                         byte [] item2 = new byte[]{ itemLen };
                                         byteArray.AddRange(item2);

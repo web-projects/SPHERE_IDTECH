@@ -107,7 +107,7 @@ namespace IPA.MainApp
         {
             InitializeComponent();
 
-            this.Text = "IDTECH Device Discovery Application";
+            this.Text = string.Format("IDTECH Device Discovery Application - Version {0}", Assembly.GetEntryAssembly().GetName().Version);
 
             // Initial CONFIG Tab Size
             this.tabControlConfiguration.Width += CONFIG_PANEL_WIDTH;
@@ -2572,7 +2572,6 @@ namespace IPA.MainApp
                 // Configuration Mode
                 this.Invoke(new MethodInvoker(() =>
                 {
-                    this.ConfigurationPanel1.Enabled = false;
                     this.ConfigurationTerminalDatapicBoxWait.Visible = true;
                     this.ConfigurationTerminalDatapicBoxWait.Enabled = true;
                     System.Windows.Forms.Application.DoEvents();
@@ -2747,6 +2746,17 @@ namespace IPA.MainApp
         private void OnSetDeviceInterfaceType(object sender, EventArgs e)
         {
             string mode = this.ConfigurationPanel1btnDeviceMode.Text;
+
+            // Disable Buttons
+            this.ConfigurationPanel1btnEMVMode.Enabled = false;
+            this.AdvancedFirmwarebtnUpdate.Enabled = false;
+
+            // Switch over to Application TAB
+            MaintabControl.SelectedTab = this.ApplicationtabPage;
+
+            this.ApplicationpictureBoxWait.Enabled = true;
+            this.ApplicationpictureBoxWait.Visible = true;
+
             new Thread(() =>
             {
                 try
@@ -2760,10 +2770,6 @@ namespace IPA.MainApp
                 }
 
             }).Start();
-
-            // Disable Buttons
-            this.ConfigurationPanel1btnEMVMode.Enabled = false;
-            this.AdvancedFirmwarebtnUpdate.Enabled = false;
         }
 
         private void OnEMVModeDisable(object sender, EventArgs e)
@@ -2790,58 +2796,40 @@ namespace IPA.MainApp
         {
             if (((RadioButton)sender).Checked)
             {
-                this.ConfigurationTerminalDatapicBoxWait.Enabled = true;
-                this.ConfigurationTerminalDatapicBoxWait.Visible  = true;
                 this.ConfigurationPanel1pictureBox1.Enabled = true;
                 this.ConfigurationPanel1pictureBox1.Visible = true;
 
-                new Thread(() =>
+                if(devicePlugin.ConfigFileLoaded())
                 {
-                    // Check Configuration Load is Current
-                    int majorcfgint = devicePlugin?.GetConfigSphereSerializer()?.GetTerminalMajorConfiguration() ?? 2;
-                    bool matches = devicePlugin.ConfigFileMatches(majorcfgint);
+                    this.radioLoadFromFile.Checked = false;
 
-                    if(matches)
+                    string [] message = { "VERSION: ", "DEVICE" };
+                    ConfigurationID configurationID = devicePlugin?.GetConfigSphereSerializer().GetConfigurationID();
+                    if(configurationID != null)
                     {
-                        // Configuration Matches - No need to reload
-                        this.Invoke((MethodInvoker)delegate()
-                        {
-                            this.radioLoadFromFile.Checked = false;
-                        });
-
-                        string [] message = { "VERSION: ", "DEVICE" };
-                        ConfigurationID configurationID = devicePlugin?.GetConfigSphereSerializer().GetConfigurationID();
-                        if(configurationID != null)
-                        {
-                            message[0] += configurationID.Version;
-                        }
-
-                        ShowTerminalDataInfo(message);
-                    }
-                    else
-                    { 
-                        // Load Configuration from FILE
-                        new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_CONFIG)).Start();
-
-                        SetConfigLoaderTimer();
-
-                        this.Invoke((MethodInvoker)delegate()
-                        {
-                            if (this.ConfigurationCollapseButton.Visible == false)
-                            {
-                                this.ConfigurationCollapseButton.Visible = true;
-                                this.ConfigurationPanel2.Visible = true;
-                                this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
-                            }
-
-                            // Allows set back to TerminalData
-                            this.tabControlConfiguration.SelectedIndex = -1;
-                            this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
-                            this.tabControlConfiguration.SelectedIndex = 0;
-                        });
+                        message[0] += configurationID.Version;
                     }
 
-                }).Start();
+                    ShowTerminalDataInfo(message);
+                }
+                else
+                { 
+                    // Load Configuration from FILE
+                    new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_CONFIG)).Start();
+
+                    if (this.ConfigurationCollapseButton.Visible == false)
+                    {
+                        this.ConfigurationCollapseButton.Visible = true;
+                        this.ConfigurationPanel2.Visible = true;
+                    }
+
+                    // Allows set back to TerminalData
+                    this.tabControlConfiguration.SelectedIndex = -1;
+                    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
+                    this.tabControlConfiguration.SelectedIndex = 0;
+
+                    SetConfigLoaderTimer();
+                }
             }
         }
 
@@ -2854,19 +2842,18 @@ namespace IPA.MainApp
                 // Load Configuration from DEVICE
                 new Thread(() => devicePlugin.SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes.FROM_DEVICE)).Start();
 
-                SetConfigLoaderTimer();
-
                 if (this.ConfigurationCollapseButton.Visible == false)
                 {
                     this.ConfigurationCollapseButton.Visible = true;
                     this.ConfigurationPanel2.Visible = true;
-                    this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
                 }
 
                 // Allows set back to TerminalData
                 this.tabControlConfiguration.SelectedIndex = -1;
                 this.tabControlConfiguration.SelectedTab = this.ConfigurationTerminalDatatabPage;
                 this.tabControlConfiguration.SelectedIndex = 0;
+
+                SetConfigLoaderTimer();
             }
         }
 
@@ -3271,8 +3258,16 @@ namespace IPA.MainApp
 
         private void OnSetDeviceModeClick(object sender, EventArgs e)
         {
-            string mode = this.ApplicationbtnMode.Text;
             TransactionTimer?.Stop();
+
+            // Disable MODE Button
+            this.ApplicationbtnMode.Enabled = false;
+            this.ApplicationtxtCardData.Text = "";
+
+            this.ApplicationpictureBoxWait.Enabled = true;
+            this.ApplicationpictureBoxWait.Visible = true;
+
+            string mode = this.ApplicationbtnMode.Text;
 
             new Thread(() =>
             {
@@ -3287,11 +3282,6 @@ namespace IPA.MainApp
                 }
 
             }).Start();
-
-            // Disable MODE Button
-            this.ApplicationbtnMode.Enabled = false;
-            // Clear Card Data
-            this.ApplicationtxtCardData.Text = "";
         }
 
         private void OnSettingsControlConfigureClick(object sender, EventArgs e)

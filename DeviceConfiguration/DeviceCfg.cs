@@ -52,6 +52,7 @@ namespace IPA.DAL.RBADAL
     private bool connected;
     private bool formClosing;
     private bool firmwareUpdate;
+    private bool configloaded;
 
     private readonly object discoveryLock = new object();
 
@@ -1780,7 +1781,9 @@ namespace IPA.DAL.RBADAL
         SphereSerializer.ReadConfig();
 
         // Terminal Configuration
-        string configuration = GetTerminalMajorConfiguration();
+        string configuration = GetDeviceTerminalMajorConfiguration();
+        int majorcfgint = SphereSerializer.GetTerminalMajorConfiguration();
+        configloaded = ConfigFileMatches(majorcfgint);
 
         // Set Company
         SetCompany();
@@ -1806,7 +1809,7 @@ namespace IPA.DAL.RBADAL
         bool.TryParse(enable_read_terminal_data, out read_terminal_data);
         if(read_terminal_data)
         {
-            IDTechSerializer.terminalCfg.general_configuration.Contact.terminal_ics_type = GetTerminalConfig() ?? null;
+            IDTechSerializer.terminalCfg.general_configuration.Contact.terminal_ics_type = GetDeviceTerminalConfig() ?? null;
             object [] message1 = Device.GetTerminalData(ref IDTechSerializer, ref exponent);
             // Display Terminal Data to User
             //NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SHOW_TERMINAL_DATA, Message = message1 });
@@ -2532,9 +2535,8 @@ namespace IPA.DAL.RBADAL
                     string command = USDK_CONFIGURATION_COMMANDS.GET_QUICK_CHIP_MODE_STATE;
                     RETURN_CODE rt = (RETURN_CODE) (Device?.DataCommand(command, ref response, true) ?? 0);
 
-
                     bool disableQC = true;
-                    byte result = response[0];
+                    byte result = response?[0] ?? 0;
                     if(result == 0x06 && response.Count() > 16)
                     {
                         if(response[17] == 0x01)
@@ -2554,7 +2556,7 @@ namespace IPA.DAL.RBADAL
                         command  = USDK_CONFIGURATION_COMMANDS.SET_KYB_QC_MODE_DISABLED;
                         //command = USDK_CONFIGURATION_COMMANDS.SET_QUICK_CHIP_MODE_DISABLED;
                         rt = (RETURN_CODE) (Device?.DataCommandExt(command, ref response, false) ?? 0);
-                        result = response[0];
+                        result = response?[0] ?? 0;
                         if(result == 0x06)
                         {
                             Thread.Sleep(1000);
@@ -2562,7 +2564,7 @@ namespace IPA.DAL.RBADAL
                         if(attached)
                         { 
                             rt = (RETURN_CODE) (Device?.DataCommandExt(command, ref response, false) ?? 0);
-                            result = response[0];
+                            result = response?[0] ?? 0;
                             if(result == 0x06)
                             {
                                 Thread.Sleep(1000);
@@ -2751,7 +2753,7 @@ namespace IPA.DAL.RBADAL
         }
     }    
 
-    private string GetTerminalConfig()
+    private string GetDeviceTerminalConfig()
     {
         string command = USDK_CONFIGURATION_COMMANDS.GET_MAJOR_TERMINAL_CFG;
         string response = DeviceCommand(command, false);
@@ -2789,9 +2791,9 @@ namespace IPA.DAL.RBADAL
         return response;
     }
 
-    private string GetTerminalMajorConfiguration()
+    private string GetDeviceTerminalMajorConfiguration()
     {
-        string response = GetTerminalConfig();
+        string response = GetDeviceTerminalConfig();
         Debug.WriteLine("Terminal Major Configuration: ----------- =[{0}]", (object) response);
         return response;
     }
@@ -2869,6 +2871,11 @@ namespace IPA.DAL.RBADAL
         return false;
     }
 
+    public bool ConfigFileLoaded()
+    {
+        return configloaded;
+    }
+
     public void GetSphereTerminalData(int majorcfg)
     {
         try
@@ -2893,7 +2900,9 @@ namespace IPA.DAL.RBADAL
                             return;
                         }
                     }
-                    message = SphereSerializer.GetTerminalDataString(deviceInformation.SerialNumber, deviceInformation.EMVKernelVersion);
+                    message = SphereSerializer.GetTerminalDataString(deviceInformation.SerialNumber, deviceInformation.ModelNumber, deviceInformation.EMVKernelVersion);
+                    int majorcfgint = SphereSerializer.GetTerminalMajorConfiguration();
+                    configloaded = ConfigFileMatches(majorcfgint);
                 }
                 else
                 {
@@ -3144,6 +3153,7 @@ namespace IPA.DAL.RBADAL
         try
         {
             Device.FactoryReset(majorcfg);
+            configloaded = false;
         }
         catch (Exception ex)
         {

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using mscoree;
 using IPA.CommonInterface.Interfaces;
 
 namespace IPA.MainApp
@@ -51,20 +54,34 @@ namespace IPA.MainApp
 
         public void UnloadPlugin(AppDomain appdomain)
         {
-            bool unloaded = false;
+            bool unloaded = true;
+            bool domainfound = false;
 
-            try
+            foreach (AppDomain appDomain in EnumAppDomains())
             {
-                AppDomain.Unload(appdomain);
-                unloaded = true;
+                if(appDomain == appdomain)
+                {
+                    domainfound = true;
+                    unloaded = false;
+                    break;
+                }
             }
-            catch (CannotUnloadAppDomainException)
-            {
-                unloaded = true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
+
+            if(domainfound)
+            { 
+                try
+                {
+                    AppDomain.Unload(appdomain);
+                    unloaded = true;
+                }
+                catch (CannotUnloadAppDomainException)
+                {
+                    unloaded = true;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
 
             if (!unloaded)
@@ -92,6 +109,38 @@ namespace IPA.MainApp
             if (!unloaded)
             {
                 Debug.WriteLine("It does not appear that the app domain successfully unloaded.");
+            }
+        }
+
+        public static IEnumerable<AppDomain> EnumAppDomains()
+        {
+            IntPtr enumHandle = IntPtr.Zero;
+            ICorRuntimeHost host = null;
+
+            try
+            {
+                host = new CorRuntimeHostClass();
+                host.EnumDomains(out enumHandle);
+                object domain = null;
+
+                host.NextDomain(enumHandle, out domain);
+                while (domain != null)
+                {
+                    yield return (AppDomain)domain;
+                    host.NextDomain(enumHandle, out domain);
+                }
+            }
+            finally
+            {
+                if (host != null)
+                {
+                    if (enumHandle != IntPtr.Zero)
+                    {
+                        host.CloseEnum(enumHandle);
+                    }
+
+                    Marshal.ReleaseComObject(host);
+                }
             }
         }
 

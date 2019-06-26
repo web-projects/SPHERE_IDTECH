@@ -39,6 +39,7 @@ namespace IPA.CommonInterface.Interfaces
     // TERMINAL DATA
     void  GetSphereTerminalData(int majorcfg);
     bool ConfigFileMatches(int majorcfg);
+    bool ConfigFileLoaded();
     // AID
     void GetAIDList();
     // CAPK

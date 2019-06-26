@@ -62,6 +62,7 @@
     <Compile Include="ConfigSphere\Configuration\Aid.cs" />
     <Compile Include="ConfigSphere\Configuration\Capk.cs" />
     <Compile Include="ConfigSphere\Configuration\ConfigurationID.cs" />
+    <Compile Include="ConfigSphere\Configuration\EMVDeviceSettings.cs" />
     <Compile Include="ConfigSphere\Configuration\Msr.cs" />
     <Compile Include="ConfigSphere\Configuration\MsrConfigItem.cs" />
     <Compile Include="ConfigSphere\Configuration\TerminalConfiguration.cs" />
@@ -99,7 +100,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
