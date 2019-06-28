@@ -301,7 +301,7 @@ namespace IPA.DAL.RBADAL.Services
         {
             return null;
         }
-        public virtual string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        public virtual Task<string []> ValidateTerminalData(ConfigSphereSerializer serializer)
         {
             return null;
         }
@@ -313,15 +313,17 @@ namespace IPA.DAL.RBADAL.Services
         {
             return null;
         }
-        public virtual void ValidateAidList(ref ConfigSphereSerializer serializer)
+        public virtual Task<int> ValidateAidList(ConfigSphereSerializer serializer)
         {
+            return Task.FromResult(0);
         }
         public virtual string [] GetCapKList()
         {
             return null;
         }
-        public virtual void ValidateCapKList(ref ConfigSphereSerializer serializer)
+        public virtual Task<int> ValidateCapKList(ConfigSphereSerializer serializer)
         {
+             return Task.FromResult(0);
         }
         public virtual void ValidateConfigGroup(ConfigSphereSerializer serializer, int group)
         {

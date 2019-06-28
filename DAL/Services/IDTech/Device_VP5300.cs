@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using IPA.CommonInterface.ConfigSphere;
 using IPA.CommonInterface.ConfigSphere.Configuration;
+using System.Threading.Tasks;
 
 namespace IPA.DAL.RBADAL.Services
 {
@@ -485,7 +486,7 @@ namespace IPA.DAL.RBADAL.Services
             return data;
         }
 
-        public override string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        private string [] TerminalDataValidation(ConfigSphereSerializer serializer)
         {
             string [] result = null;
             try
@@ -633,6 +634,11 @@ namespace IPA.DAL.RBADAL.Services
             return result;
         }
         
+        public override Task<string []> ValidateTerminalData(ConfigSphereSerializer serializer)
+        {
+            return Task.FromResult(TerminalDataValidation(serializer));
+        }
+
         public override string [] GetAidList()
          {
             string [] data = null;
@@ -688,14 +694,16 @@ namespace IPA.DAL.RBADAL.Services
             return data;
          }
 
-        public override void ValidateAidList(ref ConfigSphereSerializer serializer)
-         {
+        private int AidListValidation(ConfigSphereSerializer serializer)
+        {
+            RETURN_CODE rt = RETURN_CODE.RETURN_CODE_DO_SUCCESS;
+
             try
             {
                 if(serializer != null)
                 {
                     byte [][] keys = null;
-                    RETURN_CODE rt = IDT_SpectrumPro.SharedController.emv_retrieveAIDList(ref keys);
+                    rt = IDT_SpectrumPro.SharedController.emv_retrieveAIDList(ref keys);
                 
                     if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
                     {
@@ -844,8 +852,15 @@ namespace IPA.DAL.RBADAL.Services
             {
                 Debug.WriteLine("device: ValidateAidList() - exception={0}", (object)ex.Message);
             }
-         }
+
+            return (int) rt;
+        }
     
+        public override Task<int> ValidateAidList(ConfigSphereSerializer serializer)
+        {
+            return new Task<int>(() => { return AidListValidation(serializer); });
+        }
+
         public override string [] GetCapKList()
          {
             string [] data = null;
@@ -907,14 +922,16 @@ namespace IPA.DAL.RBADAL.Services
             return data;
          }
 
-        public override void ValidateCapKList(ref ConfigSphereSerializer serializer)
+        private int CapKListValidation(ConfigSphereSerializer serializer)
         {
+            RETURN_CODE rt = RETURN_CODE.RETURN_CODE_DO_SUCCESS;
+
             try
             {
                 if(serializer != null)
                 {
                     byte [] keys = null;
-                    RETURN_CODE rt = IDT_SpectrumPro.SharedController.emv_retrieveCAPKList(ref keys);
+                    rt = IDT_SpectrumPro.SharedController.emv_retrieveCAPKList(ref keys);
                 
                     if (rt == RETURN_CODE.RETURN_CODE_NO_CA_KEY)
                     {
@@ -1049,6 +1066,13 @@ namespace IPA.DAL.RBADAL.Services
             {
                 Debug.WriteLine("device: ValidateAidList() - exception={0}", (object)ex.Message);
             }
+
+            return (int) rt;
+        }
+
+        public override Task<int> ValidateCapKList(ConfigSphereSerializer serializer)
+        {
+            return Task.FromResult(CapKListValidation(serializer));
         }
 
         public override string [] GetConfigGroup(int group)

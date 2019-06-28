@@ -91,8 +91,9 @@ namespace IPA.DAL.RBADAL
       DevicePluginName = "DeviceCfg";
 
       // Create Device info object
-      deviceInformation = new DeviceInformation();
-      deviceInformation.emvConfigSupported = false;
+      deviceInformation = new DeviceInformation { 
+        emvConfigSupported = false
+      };
 
       // Device Discovery
       //useUniversalSDK = DeviceDiscovery();
@@ -1790,8 +1791,7 @@ namespace IPA.DAL.RBADAL
 
         // Terminal Info
         string enable_read_terminal_info = System.Configuration.ConfigurationManager.AppSettings["tc_read_terminal_info"] ?? "true";
-        bool read_terminal_info;
-        bool.TryParse(enable_read_terminal_info, out read_terminal_info);
+        bool.TryParse(enable_read_terminal_info, out bool read_terminal_info);
         if(read_terminal_info)
         {
             IDTechSerializer.terminalCfg.config_meta.Type = "device";
@@ -1805,8 +1805,7 @@ namespace IPA.DAL.RBADAL
  
         // Terminal Information
         string enable_read_terminal_data = System.Configuration.ConfigurationManager.AppSettings["tc_read_terminal_data"] ?? "true";
-        bool read_terminal_data;
-        bool.TryParse(enable_read_terminal_data, out read_terminal_data);
+        bool.TryParse(enable_read_terminal_data, out bool read_terminal_data);
         if(read_terminal_data)
         {
             IDTechSerializer.terminalCfg.general_configuration.Contact.terminal_ics_type = GetDeviceTerminalConfig() ?? null;
@@ -1817,8 +1816,7 @@ namespace IPA.DAL.RBADAL
 
         // Encryption Control
         string enable_read_encryption = System.Configuration.ConfigurationManager.AppSettings["tc_read_encryption"] ?? "true";
-        bool read_encryption;
-        bool.TryParse(enable_read_encryption, out read_encryption);
+        bool.TryParse(enable_read_encryption, out bool read_encryption);
         if(read_encryption)
         {
             Device.GetEncryptionControl(ref IDTechSerializer);
@@ -1826,8 +1824,7 @@ namespace IPA.DAL.RBADAL
 
         // Device Configuration: contact:capk
         string enable_read_capk_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_capk_settings"] ?? "true";
-        bool read_capk_settings;
-        bool.TryParse(enable_read_capk_settings, out read_capk_settings);
+        bool.TryParse(enable_read_capk_settings, out bool read_capk_settings);
         if(read_capk_settings)
         {
             Device.GetCapKList(ref IDTechSerializer);
@@ -1835,8 +1832,7 @@ namespace IPA.DAL.RBADAL
 
         // Device Configuration: contact:aid
         string enable_read_aid_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_aid_settings"] ?? "true";
-        bool read_aid_settings;
-        bool.TryParse(enable_read_aid_settings, out read_aid_settings);
+        bool.TryParse(enable_read_aid_settings, out bool read_aid_settings);
         if(read_aid_settings)
         {
             Device.GetAidList(ref IDTechSerializer);
@@ -1844,8 +1840,7 @@ namespace IPA.DAL.RBADAL
 
         // MSR Settings
         string enable_read_msr_settings = System.Configuration.ConfigurationManager.AppSettings["tc_read_msr_settings"] ?? "true";
-        bool read_msr_settings;
-        bool.TryParse(enable_read_msr_settings, out read_msr_settings);
+        bool.TryParse(enable_read_msr_settings, out bool read_msr_settings);
         if(read_msr_settings)
         {
             Device.GetMSRSettings(ref IDTechSerializer);
@@ -2226,14 +2221,15 @@ namespace IPA.DAL.RBADAL
           {
               Logger.info("DeviceCfg::GetCardData(): EMV Turned On successfully; Ready to swipe");
 
-              int tc_read_msr_timeout = 20000;
               string read_msr_timeout = System.Configuration.ConfigurationManager.AppSettings["tc_read_msr_timeout"] ?? "20000";
-              int.TryParse(read_msr_timeout, out tc_read_msr_timeout);
+              int.TryParse(read_msr_timeout, out int tc_read_msr_timeout);
               int msrTimerInterval = tc_read_msr_timeout;
 
               // Set Read Timeout
-              MSRTimer = new System.Timers.Timer(msrTimerInterval);
-              MSRTimer.AutoReset = false;
+              MSRTimer = new System.Timers.Timer(msrTimerInterval)
+              { 
+                AutoReset = false,
+              };
               MSRTimer.Elapsed += (sender, e) => RaiseTimerExpired(new Core.Client.Dal.Models.TimerEventArgs { Timer = TimerType.MSR });
               MSRTimer.Start();
           }
@@ -2876,7 +2872,7 @@ namespace IPA.DAL.RBADAL
         return configloaded;
     }
 
-    public void GetSphereTerminalData(int majorcfg)
+    public async Task GetSphereTerminalData(int majorcfg)
     {
         try
         { 
@@ -2891,18 +2887,47 @@ namespace IPA.DAL.RBADAL
                 {
                     Logger.info("DEVICE INFO: MODEL={0}, FIRMWARE={1}", deviceInformation.ModelNumber, SphereSerializer.GetDeviceFirmware(deviceInformation.ModelNumber).FirstOrDefault());
                     
-                    if((RETURN_CODE)(Device?.SetTerminalConfiguration(SphereSerializer) ??  (int)RETURN_CODE.RETURN_CODE_FAILED) == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+                    // First time loading configuration from file
+                    if(!configloaded)
                     { 
-                        string [] result = Device.ValidateTerminalData(ref SphereSerializer);
+                        // Set General Group Defaults
+                        SetGeneralGroupDefaults();
+
+                        // Set MSR Group Defaults
+                        SetMSRGroupDefaults();
+
+                        // Set ICC Group Defaults
+                        SetICCGroupDefaults();
+                    }
+
+                    if((RETURN_CODE)(Device?.SetTerminalConfiguration(SphereSerializer) ?? (int)RETURN_CODE.RETURN_CODE_FAILED) == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
+                    { 
+                        string [] result = await Device.ValidateTerminalData(SphereSerializer);
                         if(result != null)
                         {
                             NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_SET_TERMINAL_DATA_ERROR, Message = result });
                             return;
                         }
                     }
+
                     message = SphereSerializer.GetTerminalDataString(deviceInformation.SerialNumber, deviceInformation.ModelNumber, deviceInformation.EMVKernelVersion);
-                    int majorcfgint = SphereSerializer.GetTerminalMajorConfiguration();
-                    configloaded = ConfigFileMatches(majorcfgint);
+
+                    // First time loading configuration from file
+                    if(!configloaded)
+                    { 
+                        int majorcfgint = SphereSerializer.GetTerminalMajorConfiguration();
+                        configloaded = ConfigFileMatches(majorcfgint);
+
+                        // Validate AIDS
+                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_UPDATE_SETUP_MESSAGE, Message = new object [] { "SETTING UP AID VALUES...", System.Drawing.Color.Blue } });
+                        int success = await Device.ValidateAidList(SphereSerializer);
+                        Debug.WriteLine("device: GetSphereTerminalData() - VALIDATE AIDS RESULT={0}", success);
+
+                        // Validate CAPKS
+                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_UPDATE_SETUP_MESSAGE, Message = new object [] { "SETTING UP CAPK VALUES...", System.Drawing.Color.Green } });
+                        success = await Device.ValidateCapKList(SphereSerializer);
+                        Debug.WriteLine("device: GetSphereTerminalData() - VALIDATE CAPKS RESULT={0}", success);
+                    }
                 }
                 else
                 {
@@ -2919,18 +2944,18 @@ namespace IPA.DAL.RBADAL
         }
     }
 
-    public void GetAIDList()
+    public async Task GetAIDList()
     {
         try
         { 
             string [] message = null;
-            if(configurationMode == ConfigurationModes.FROM_DEVICE)
+            if(configurationMode == ConfigurationModes.FROM_DEVICE || configloaded)
             {
                 message = Device.GetAidList();
             }
             else
             {
-                Device.ValidateAidList(ref SphereSerializer);
+                int result = await Device.ValidateAidList(SphereSerializer);
                 message = SphereSerializer.GetAIDCollection();
             }
 
@@ -2942,18 +2967,18 @@ namespace IPA.DAL.RBADAL
         }
     }
 
-    public void GetCapKList()
+    public async Task GetCapKList()
     {
         try
         {
             string [] message = null;
-            if(configurationMode == ConfigurationModes.FROM_DEVICE)
+            if(configurationMode == ConfigurationModes.FROM_DEVICE || configloaded)
             {
                 message = Device.GetCapKList();
             }
             else
             {
-                Device.ValidateCapKList(ref SphereSerializer);
+                int result = await Device.ValidateCapKList(SphereSerializer);
                 message = SphereSerializer.GetCapKCollection();
             }
 
@@ -3148,6 +3173,54 @@ namespace IPA.DAL.RBADAL
     {
         return firmwareUpdate;
     }
+    public void SetGeneralGroupDefaults()
+    {
+        try
+        {
+            string result = DeviceCommand(USDK_CONFIGURATION_COMMANDS.SET_GENERAL_GROUP_DEFAULTS, false);
+            if(!string.IsNullOrWhiteSpace(result))
+            {
+                Debug.WriteLine("device: SetGeneralGroupDefaults() result={0}", (object)(result.Equals("06") ? "SUCCESS" : "FAIL"));
+            }
+        }
+        catch(Exception ex)
+        {
+           Logger.error("DeviceCfg::ResetDefaultGeneralGroup(): - exception={0}", (object)ex.Message);
+        }
+
+    }
+    public void SetMSRGroupDefaults()
+    {
+        try
+        {
+            string result = DeviceCommand(USDK_CONFIGURATION_COMMANDS.SET_MSR_GROUP_DEFAULTS, false);
+            if(!string.IsNullOrWhiteSpace(result))
+            {
+                Debug.WriteLine("device: SetMSRGroupDefaults() result={0}", (object)(result.Equals("06") ? "SUCCESS" : "FAIL"));
+            }
+        }
+        catch(Exception ex)
+        {
+           Logger.error("DeviceCfg::ResetDefaultGeneralGroup(): - exception={0}", (object)ex.Message);
+        }
+
+    }
+    public void SetICCGroupDefaults()
+    {
+        try
+        {
+            string result = DeviceCommand(USDK_CONFIGURATION_COMMANDS.SET_ICC_GROUP_DEFAULTS, false);
+            if(!string.IsNullOrWhiteSpace(result))
+            {
+                Debug.WriteLine("device: SetICCGroupDefaults() result={0}", (object)(result.Equals("06") ? "SUCCESS" : "FAIL"));
+            }
+        }
+        catch(Exception ex)
+        {
+           Logger.error("DeviceCfg::ResetDefaultGeneralGroup(): - exception={0}", (object)ex.Message);
+        }
+
+    }
     public void FactoryReset(int majorcfg)
     {
         try
@@ -3208,6 +3281,9 @@ namespace IPA.DAL.RBADAL
         internal const string SET_QUICK_CHIP_MODE_DISABLED = "72 53 01 29 01 30";
         internal const string SET_KYB_QC_MODE_DISABLED     = "02 06 00 72 53 01 29 01 30 38 20 03";
         internal const string SET_QUICK_CHIP_MODE_ENABLED  = "72 53 01 29 01 31";
+        internal const string SET_GENERAL_GROUP_DEFAULTS   = "78 53 00";
+        internal const string SET_MSR_GROUP_DEFAULTS       = "73 53 00";
+        internal const string SET_ICC_GROUP_DEFAULTS       = "72 53 00";
     }
 
     internal class DeviceFirmwareSignature

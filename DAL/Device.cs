@@ -338,26 +338,26 @@ if (deviceID.ToLower().Contains("usb\\") && ((deviceID.Contains($"VID_{IDTECH}")
             return deviceInterface?.GetTerminalData(majorcfg);
         }
 
-        public string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        public async Task<string []> ValidateTerminalData(ConfigSphereSerializer serializer)
         {
-            return deviceInterface?.ValidateTerminalData(ref serializer) ?? null;
+            return await deviceInterface?.ValidateTerminalData(serializer) ?? null;
         }
 
         public string [] GetAidList()
         {
             return deviceInterface?.GetAidList();
         }
-        public void ValidateAidList(ref ConfigSphereSerializer serializer)
+        public async Task<int> ValidateAidList(ConfigSphereSerializer serializer)
         {
-            deviceInterface?.ValidateAidList(ref serializer);
+            return await deviceInterface?.ValidateAidList(serializer);
         }
         public string [] GetCapKList()
         {
             return deviceInterface?.GetCapKList();
         }
-        public void ValidateCapKList(ref ConfigSphereSerializer serializer)
+        public async Task<int> ValidateCapKList(ConfigSphereSerializer serializer)
         {
-            deviceInterface?.ValidateCapKList(ref serializer);
+            return await deviceInterface?.ValidateCapKList(serializer);
         }
         #endregion
 

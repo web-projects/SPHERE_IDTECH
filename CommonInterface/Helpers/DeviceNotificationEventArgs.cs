@@ -23,6 +23,7 @@ namespace IPA.CommonInterface.Helpers
         NT_SHOW_JSON_CONFIG,
         NT_SHOW_AID_LIST,
         NT_SHOW_CAPK_LIST,
+        NT_UPDATE_SETUP_MESSAGE,
         // PROCESSING EVENTS
         NT_SHOW_CONFIG_GROUP,
         NT_UI_ENABLE_BUTTONS,

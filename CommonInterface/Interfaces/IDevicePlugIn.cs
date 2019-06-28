@@ -2,6 +2,7 @@
 using IPA.CommonInterface.Helpers;
 using IPA.CommonInterface.ConfigIDTech;
 using IPA.CommonInterface.ConfigSphere;
+using System.Threading.Tasks;
 
 namespace IPA.CommonInterface.Interfaces
 {
@@ -37,13 +38,13 @@ namespace IPA.CommonInterface.Interfaces
     // Configuration Mode
     void SetConfigurationMode(IPA.Core.Shared.Enums.ConfigurationModes mode);
     // TERMINAL DATA
-    void  GetSphereTerminalData(int majorcfg);
+    Task GetSphereTerminalData(int majorcfg);
     bool ConfigFileMatches(int majorcfg);
     bool ConfigFileLoaded();
     // AID
-    void GetAIDList();
+    Task GetAIDList();
     // CAPK
-    void GetCapKList();
+    Task GetCapKList();
     void GetConfigGroup(int group);
     // Firmware Update
     void FirmwareUpdate(string filename, byte[] bytes);

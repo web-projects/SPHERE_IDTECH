@@ -90,29 +90,23 @@
             this.SettingsMsrlabel3 = new System.Windows.Forms.Label();
             this.SettingsMsrConfigureBtn = new System.Windows.Forms.Button();
             this.ConfigurationtabPage = new System.Windows.Forms.TabPage();
-            this.ConfigurationInfogroupBox1 = new System.Windows.Forms.GroupBox();
-            this.ConfigurationlblInfo3 = new System.Windows.Forms.Label();
-            this.ConfigurationlblInfo2 = new System.Windows.Forms.Label();
-            this.ConfigurationlblInfo1 = new System.Windows.Forms.Label();
-            this.ConfigurationErrorgroupBox1 = new System.Windows.Forms.GroupBox();
-            this.ConfigurationlblWarning1 = new System.Windows.Forms.Label();
-            this.ConfigurationlblError3 = new System.Windows.Forms.Label();
-            this.ConfigurationlblError2 = new System.Windows.Forms.Label();
-            this.ConfigurationlblError1 = new System.Windows.Forms.Label();
             this.ConfigurationPanel2 = new System.Windows.Forms.Panel();
             this.ConfigurationExpandButton = new System.Windows.Forms.Button();
             this.tabControlConfiguration = new System.Windows.Forms.TabControl();
             this.ConfigurationTerminalDatatabPage = new System.Windows.Forms.TabPage();
+            this.ConfigurationTerminalDataLoading = new System.Windows.Forms.Label();
             this.ConfigurationTerminalDatapicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationTerminalDatalistView = new System.Windows.Forms.ListView();
             this.ConfigurationTerminalDatacolumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationTerminalDatacolumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationAIDStabPage = new System.Windows.Forms.TabPage();
+            this.ConfigurationAIDLoading = new System.Windows.Forms.Label();
             this.ConfigurationAIDSpicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationAIDSlistView = new System.Windows.Forms.ListView();
             this.ConfigurationAIDStabPageColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationAIDStabPageColumnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ConfigurationCAPKStabPage = new System.Windows.Forms.TabPage();
+            this.ConfigurationCAPKLoading = new System.Windows.Forms.Label();
             this.ConfigurationCAPKSpicBoxWait = new System.Windows.Forms.PictureBox();
             this.ConfigurationCAPKSlistView = new System.Windows.Forms.ListView();
             this.ConfigurationCAPKStabPageColumnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -148,6 +142,15 @@
             this.ConfigurationGroupBox1 = new System.Windows.Forms.GroupBox();
             this.radioLoadFromDevice = new System.Windows.Forms.RadioButton();
             this.radioLoadFromFile = new System.Windows.Forms.RadioButton();
+            this.ConfigurationInfogroupBox1 = new System.Windows.Forms.GroupBox();
+            this.ConfigurationlblInfo3 = new System.Windows.Forms.Label();
+            this.ConfigurationlblInfo2 = new System.Windows.Forms.Label();
+            this.ConfigurationlblInfo1 = new System.Windows.Forms.Label();
+            this.ConfigurationErrorgroupBox1 = new System.Windows.Forms.GroupBox();
+            this.ConfigurationlblWarning1 = new System.Windows.Forms.Label();
+            this.ConfigurationlblError3 = new System.Windows.Forms.Label();
+            this.ConfigurationlblError2 = new System.Windows.Forms.Label();
+            this.ConfigurationlblError1 = new System.Windows.Forms.Label();
             this.ApplicationtabPage = new System.Windows.Forms.TabPage();
             this.ApplicationpictureBoxWait = new System.Windows.Forms.PictureBox();
             this.ApplicationlistView1 = new System.Windows.Forms.ListView();
@@ -191,8 +194,6 @@
             this.SettingsMSRgroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsMsrpicBoxWait)).BeginInit();
             this.ConfigurationtabPage.SuspendLayout();
-            this.ConfigurationInfogroupBox1.SuspendLayout();
-            this.ConfigurationErrorgroupBox1.SuspendLayout();
             this.ConfigurationPanel2.SuspendLayout();
             this.tabControlConfiguration.SuspendLayout();
             this.ConfigurationTerminalDatatabPage.SuspendLayout();
@@ -207,6 +208,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConfigurationPanel1pictureBox1)).BeginInit();
             this.ConfigurationIDgrpBox.SuspendLayout();
             this.ConfigurationGroupBox1.SuspendLayout();
+            this.ConfigurationInfogroupBox1.SuspendLayout();
+            this.ConfigurationErrorgroupBox1.SuspendLayout();
             this.ApplicationtabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpictureBoxWait)).BeginInit();
             this.Applicationpanel1.SuspendLayout();
@@ -860,9 +863,9 @@
             // ConfigurationtabPage
             // 
             this.ConfigurationtabPage.Controls.Add(this.ConfigurationInfogroupBox1);
-            this.ConfigurationtabPage.Controls.Add(this.ConfigurationErrorgroupBox1);
             this.ConfigurationtabPage.Controls.Add(this.ConfigurationPanel2);
             this.ConfigurationtabPage.Controls.Add(this.ConfigurationPanel1);
+            this.ConfigurationtabPage.Controls.Add(this.ConfigurationErrorgroupBox1);
             this.ConfigurationtabPage.Location = new System.Drawing.Point(4, 22);
             this.ConfigurationtabPage.Margin = new System.Windows.Forms.Padding(2);
             this.ConfigurationtabPage.Name = "ConfigurationtabPage";
@@ -871,106 +874,6 @@
             this.ConfigurationtabPage.TabIndex = 1;
             this.ConfigurationtabPage.Text = "Configuration";
             this.ConfigurationtabPage.UseVisualStyleBackColor = true;
-            // 
-            // ConfigurationInfogroupBox1
-            // 
-            this.ConfigurationInfogroupBox1.BackColor = System.Drawing.Color.Yellow;
-            this.ConfigurationInfogroupBox1.Controls.Add(this.ConfigurationlblInfo3);
-            this.ConfigurationInfogroupBox1.Controls.Add(this.ConfigurationlblInfo2);
-            this.ConfigurationInfogroupBox1.Controls.Add(this.ConfigurationlblInfo1);
-            this.ConfigurationInfogroupBox1.Location = new System.Drawing.Point(0, 0);
-            this.ConfigurationInfogroupBox1.Margin = new System.Windows.Forms.Padding(5);
-            this.ConfigurationInfogroupBox1.Name = "ConfigurationInfogroupBox1";
-            this.ConfigurationInfogroupBox1.Padding = new System.Windows.Forms.Padding(5);
-            this.ConfigurationInfogroupBox1.Size = new System.Drawing.Size(696, 522);
-            this.ConfigurationInfogroupBox1.TabIndex = 2;
-            this.ConfigurationInfogroupBox1.TabStop = false;
-            this.ConfigurationInfogroupBox1.Visible = false;
-            // 
-            // ConfigurationlblInfo3
-            // 
-            this.ConfigurationlblInfo3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblInfo3.Location = new System.Drawing.Point(3, 339);
-            this.ConfigurationlblInfo3.Name = "ConfigurationlblInfo3";
-            this.ConfigurationlblInfo3.Size = new System.Drawing.Size(683, 44);
-            this.ConfigurationlblInfo3.TabIndex = 21;
-            this.ConfigurationlblInfo3.Text = "[INFO]";
-            this.ConfigurationlblInfo3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ConfigurationlblInfo2
-            // 
-            this.ConfigurationlblInfo2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblInfo2.Location = new System.Drawing.Point(56, 216);
-            this.ConfigurationlblInfo2.Name = "ConfigurationlblInfo2";
-            this.ConfigurationlblInfo2.Size = new System.Drawing.Size(577, 44);
-            this.ConfigurationlblInfo2.TabIndex = 21;
-            this.ConfigurationlblInfo2.Text = "IS UP TO DATE";
-            this.ConfigurationlblInfo2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ConfigurationlblInfo1
-            // 
-            this.ConfigurationlblInfo1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblInfo1.Location = new System.Drawing.Point(20, 112);
-            this.ConfigurationlblInfo1.Name = "ConfigurationlblInfo1";
-            this.ConfigurationlblInfo1.Size = new System.Drawing.Size(639, 44);
-            this.ConfigurationlblInfo1.TabIndex = 21;
-            this.ConfigurationlblInfo1.Text = "DEVICE CONFIGURATION";
-            this.ConfigurationlblInfo1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ConfigurationErrorgroupBox1
-            // 
-            this.ConfigurationErrorgroupBox1.BackColor = System.Drawing.Color.Yellow;
-            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblWarning1);
-            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError3);
-            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError2);
-            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError1);
-            this.ConfigurationErrorgroupBox1.Location = new System.Drawing.Point(0, 0);
-            this.ConfigurationErrorgroupBox1.Margin = new System.Windows.Forms.Padding(5);
-            this.ConfigurationErrorgroupBox1.Name = "ConfigurationErrorgroupBox1";
-            this.ConfigurationErrorgroupBox1.Padding = new System.Windows.Forms.Padding(5);
-            this.ConfigurationErrorgroupBox1.Size = new System.Drawing.Size(696, 522);
-            this.ConfigurationErrorgroupBox1.TabIndex = 2;
-            this.ConfigurationErrorgroupBox1.TabStop = false;
-            this.ConfigurationErrorgroupBox1.Visible = false;
-            // 
-            // ConfigurationlblWarning1
-            // 
-            this.ConfigurationlblWarning1.AutoSize = true;
-            this.ConfigurationlblWarning1.Font = new System.Drawing.Font("Showcard Gothic", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblWarning1.Location = new System.Drawing.Point(17, 114);
-            this.ConfigurationlblWarning1.Name = "ConfigurationlblWarning1";
-            this.ConfigurationlblWarning1.Size = new System.Drawing.Size(35, 44);
-            this.ConfigurationlblWarning1.TabIndex = 4;
-            this.ConfigurationlblWarning1.Text = "!";
-            // 
-            // ConfigurationlblError3
-            // 
-            this.ConfigurationlblError3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblError3.Location = new System.Drawing.Point(56, 339);
-            this.ConfigurationlblError3.Name = "ConfigurationlblError3";
-            this.ConfigurationlblError3.Size = new System.Drawing.Size(577, 44);
-            this.ConfigurationlblError3.TabIndex = 21;
-            this.ConfigurationlblError3.Text = "VALIDATE CONFIGURATION FILE";
-            this.ConfigurationlblError3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // ConfigurationlblError2
-            // 
-            this.ConfigurationlblError2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblError2.Location = new System.Drawing.Point(56, 216);
-            this.ConfigurationlblError2.Name = "ConfigurationlblError2";
-            this.ConfigurationlblError2.Size = new System.Drawing.Size(577, 44);
-            this.ConfigurationlblError2.TabIndex = 21;
-            this.ConfigurationlblError2.Text = "[ERROR]";
-            this.ConfigurationlblError2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // ConfigurationlblError1
-            // 
-            this.ConfigurationlblError1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ConfigurationlblError1.Location = new System.Drawing.Point(56, 112);
-            this.ConfigurationlblError1.Name = "ConfigurationlblError1";
-            this.ConfigurationlblError1.Size = new System.Drawing.Size(577, 44);
-            this.ConfigurationlblError1.TabIndex = 21;
-            this.ConfigurationlblError1.Text = "ERROR CONFIGURING DEVICE";
             // 
             // ConfigurationPanel2
             // 
@@ -1018,6 +921,7 @@
             // 
             // ConfigurationTerminalDatatabPage
             // 
+            this.ConfigurationTerminalDatatabPage.Controls.Add(this.ConfigurationTerminalDataLoading);
             this.ConfigurationTerminalDatatabPage.Controls.Add(this.ConfigurationTerminalDatapicBoxWait);
             this.ConfigurationTerminalDatatabPage.Controls.Add(this.ConfigurationTerminalDatalistView);
             this.ConfigurationTerminalDatatabPage.Location = new System.Drawing.Point(4, 22);
@@ -1027,6 +931,17 @@
             this.ConfigurationTerminalDatatabPage.TabIndex = 3;
             this.ConfigurationTerminalDatatabPage.Text = "Terminal Data";
             this.ConfigurationTerminalDatatabPage.UseVisualStyleBackColor = true;
+            // 
+            // ConfigurationTerminalDataLoading
+            // 
+            this.ConfigurationTerminalDataLoading.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationTerminalDataLoading.Location = new System.Drawing.Point(3, 418);
+            this.ConfigurationTerminalDataLoading.Name = "ConfigurationTerminalDataLoading";
+            this.ConfigurationTerminalDataLoading.Size = new System.Drawing.Size(413, 50);
+            this.ConfigurationTerminalDataLoading.TabIndex = 5;
+            this.ConfigurationTerminalDataLoading.Text = "SETTING UP TERMINAL DATA...";
+            this.ConfigurationTerminalDataLoading.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ConfigurationTerminalDataLoading.Visible = false;
             // 
             // ConfigurationTerminalDatapicBoxWait
             // 
@@ -1038,7 +953,7 @@
             this.ConfigurationTerminalDatapicBoxWait.Location = new System.Drawing.Point(2, 2);
             this.ConfigurationTerminalDatapicBoxWait.Margin = new System.Windows.Forms.Padding(2);
             this.ConfigurationTerminalDatapicBoxWait.Name = "ConfigurationTerminalDatapicBoxWait";
-            this.ConfigurationTerminalDatapicBoxWait.Size = new System.Drawing.Size(384, 469);
+            this.ConfigurationTerminalDatapicBoxWait.Size = new System.Drawing.Size(384, 424);
             this.ConfigurationTerminalDatapicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.ConfigurationTerminalDatapicBoxWait.TabIndex = 4;
             this.ConfigurationTerminalDatapicBoxWait.TabStop = false;
@@ -1071,6 +986,7 @@
             // 
             // ConfigurationAIDStabPage
             // 
+            this.ConfigurationAIDStabPage.Controls.Add(this.ConfigurationAIDLoading);
             this.ConfigurationAIDStabPage.Controls.Add(this.ConfigurationAIDSpicBoxWait);
             this.ConfigurationAIDStabPage.Controls.Add(this.ConfigurationAIDSlistView);
             this.ConfigurationAIDStabPage.Location = new System.Drawing.Point(4, 22);
@@ -1080,6 +996,17 @@
             this.ConfigurationAIDStabPage.TabIndex = 0;
             this.ConfigurationAIDStabPage.Text = "AIDS";
             this.ConfigurationAIDStabPage.UseVisualStyleBackColor = true;
+            // 
+            // ConfigurationAIDLoading
+            // 
+            this.ConfigurationAIDLoading.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationAIDLoading.Location = new System.Drawing.Point(3, 418);
+            this.ConfigurationAIDLoading.Name = "ConfigurationAIDLoading";
+            this.ConfigurationAIDLoading.Size = new System.Drawing.Size(413, 50);
+            this.ConfigurationAIDLoading.TabIndex = 5;
+            this.ConfigurationAIDLoading.Text = "RETRIEVING AID VALUES...";
+            this.ConfigurationAIDLoading.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ConfigurationAIDLoading.Visible = false;
             // 
             // ConfigurationAIDSpicBoxWait
             // 
@@ -1091,7 +1018,7 @@
             this.ConfigurationAIDSpicBoxWait.Location = new System.Drawing.Point(2, 2);
             this.ConfigurationAIDSpicBoxWait.Margin = new System.Windows.Forms.Padding(2);
             this.ConfigurationAIDSpicBoxWait.Name = "ConfigurationAIDSpicBoxWait";
-            this.ConfigurationAIDSpicBoxWait.Size = new System.Drawing.Size(382, 467);
+            this.ConfigurationAIDSpicBoxWait.Size = new System.Drawing.Size(382, 424);
             this.ConfigurationAIDSpicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.ConfigurationAIDSpicBoxWait.TabIndex = 4;
             this.ConfigurationAIDSpicBoxWait.TabStop = false;
@@ -1123,6 +1050,7 @@
             // 
             // ConfigurationCAPKStabPage
             // 
+            this.ConfigurationCAPKStabPage.Controls.Add(this.ConfigurationCAPKLoading);
             this.ConfigurationCAPKStabPage.Controls.Add(this.ConfigurationCAPKSpicBoxWait);
             this.ConfigurationCAPKStabPage.Controls.Add(this.ConfigurationCAPKSlistView);
             this.ConfigurationCAPKStabPage.Location = new System.Drawing.Point(4, 22);
@@ -1134,6 +1062,17 @@
             this.ConfigurationCAPKStabPage.Text = "CAPKS";
             this.ConfigurationCAPKStabPage.UseVisualStyleBackColor = true;
             // 
+            // ConfigurationCAPKLoading
+            // 
+            this.ConfigurationCAPKLoading.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationCAPKLoading.Location = new System.Drawing.Point(5, 416);
+            this.ConfigurationCAPKLoading.Name = "ConfigurationCAPKLoading";
+            this.ConfigurationCAPKLoading.Size = new System.Drawing.Size(413, 50);
+            this.ConfigurationCAPKLoading.TabIndex = 5;
+            this.ConfigurationCAPKLoading.Text = "RETRIEVING CAPK VALUES...";
+            this.ConfigurationCAPKLoading.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ConfigurationCAPKLoading.Visible = false;
+            // 
             // ConfigurationCAPKSpicBoxWait
             // 
             this.ConfigurationCAPKSpicBoxWait.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1144,7 +1083,7 @@
             this.ConfigurationCAPKSpicBoxWait.Location = new System.Drawing.Point(4, 4);
             this.ConfigurationCAPKSpicBoxWait.Margin = new System.Windows.Forms.Padding(2);
             this.ConfigurationCAPKSpicBoxWait.Name = "ConfigurationCAPKSpicBoxWait";
-            this.ConfigurationCAPKSpicBoxWait.Size = new System.Drawing.Size(386, 467);
+            this.ConfigurationCAPKSpicBoxWait.Size = new System.Drawing.Size(386, 424);
             this.ConfigurationCAPKSpicBoxWait.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.ConfigurationCAPKSpicBoxWait.TabIndex = 4;
             this.ConfigurationCAPKSpicBoxWait.TabStop = false;
@@ -1506,6 +1445,106 @@
             this.radioLoadFromFile.UseVisualStyleBackColor = true;
             this.radioLoadFromFile.CheckedChanged += new System.EventHandler(this.OnLoadFromFile);
             // 
+            // ConfigurationInfogroupBox1
+            // 
+            this.ConfigurationInfogroupBox1.BackColor = System.Drawing.Color.Yellow;
+            this.ConfigurationInfogroupBox1.Controls.Add(this.ConfigurationlblInfo3);
+            this.ConfigurationInfogroupBox1.Controls.Add(this.ConfigurationlblInfo2);
+            this.ConfigurationInfogroupBox1.Controls.Add(this.ConfigurationlblInfo1);
+            this.ConfigurationInfogroupBox1.Location = new System.Drawing.Point(0, 0);
+            this.ConfigurationInfogroupBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.ConfigurationInfogroupBox1.Name = "ConfigurationInfogroupBox1";
+            this.ConfigurationInfogroupBox1.Padding = new System.Windows.Forms.Padding(5);
+            this.ConfigurationInfogroupBox1.Size = new System.Drawing.Size(696, 522);
+            this.ConfigurationInfogroupBox1.TabIndex = 2;
+            this.ConfigurationInfogroupBox1.TabStop = false;
+            this.ConfigurationInfogroupBox1.Visible = false;
+            // 
+            // ConfigurationlblInfo3
+            // 
+            this.ConfigurationlblInfo3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblInfo3.Location = new System.Drawing.Point(3, 339);
+            this.ConfigurationlblInfo3.Name = "ConfigurationlblInfo3";
+            this.ConfigurationlblInfo3.Size = new System.Drawing.Size(683, 44);
+            this.ConfigurationlblInfo3.TabIndex = 21;
+            this.ConfigurationlblInfo3.Text = "[INFO]";
+            this.ConfigurationlblInfo3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ConfigurationlblInfo2
+            // 
+            this.ConfigurationlblInfo2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblInfo2.Location = new System.Drawing.Point(56, 216);
+            this.ConfigurationlblInfo2.Name = "ConfigurationlblInfo2";
+            this.ConfigurationlblInfo2.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblInfo2.TabIndex = 21;
+            this.ConfigurationlblInfo2.Text = "IS UP TO DATE";
+            this.ConfigurationlblInfo2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ConfigurationlblInfo1
+            // 
+            this.ConfigurationlblInfo1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblInfo1.Location = new System.Drawing.Point(20, 112);
+            this.ConfigurationlblInfo1.Name = "ConfigurationlblInfo1";
+            this.ConfigurationlblInfo1.Size = new System.Drawing.Size(639, 44);
+            this.ConfigurationlblInfo1.TabIndex = 21;
+            this.ConfigurationlblInfo1.Text = "DEVICE CONFIGURATION";
+            this.ConfigurationlblInfo1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ConfigurationErrorgroupBox1
+            // 
+            this.ConfigurationErrorgroupBox1.BackColor = System.Drawing.Color.Yellow;
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblWarning1);
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError3);
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError2);
+            this.ConfigurationErrorgroupBox1.Controls.Add(this.ConfigurationlblError1);
+            this.ConfigurationErrorgroupBox1.Location = new System.Drawing.Point(0, 0);
+            this.ConfigurationErrorgroupBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.ConfigurationErrorgroupBox1.Name = "ConfigurationErrorgroupBox1";
+            this.ConfigurationErrorgroupBox1.Padding = new System.Windows.Forms.Padding(5);
+            this.ConfigurationErrorgroupBox1.Size = new System.Drawing.Size(696, 522);
+            this.ConfigurationErrorgroupBox1.TabIndex = 2;
+            this.ConfigurationErrorgroupBox1.TabStop = false;
+            this.ConfigurationErrorgroupBox1.Visible = false;
+            // 
+            // ConfigurationlblWarning1
+            // 
+            this.ConfigurationlblWarning1.AutoSize = true;
+            this.ConfigurationlblWarning1.Font = new System.Drawing.Font("Showcard Gothic", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblWarning1.Location = new System.Drawing.Point(17, 114);
+            this.ConfigurationlblWarning1.Name = "ConfigurationlblWarning1";
+            this.ConfigurationlblWarning1.Size = new System.Drawing.Size(35, 44);
+            this.ConfigurationlblWarning1.TabIndex = 4;
+            this.ConfigurationlblWarning1.Text = "!";
+            // 
+            // ConfigurationlblError3
+            // 
+            this.ConfigurationlblError3.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblError3.Location = new System.Drawing.Point(56, 339);
+            this.ConfigurationlblError3.Name = "ConfigurationlblError3";
+            this.ConfigurationlblError3.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblError3.TabIndex = 21;
+            this.ConfigurationlblError3.Text = "VALIDATE CONFIGURATION FILE";
+            this.ConfigurationlblError3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // ConfigurationlblError2
+            // 
+            this.ConfigurationlblError2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblError2.Location = new System.Drawing.Point(56, 216);
+            this.ConfigurationlblError2.Name = "ConfigurationlblError2";
+            this.ConfigurationlblError2.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblError2.TabIndex = 21;
+            this.ConfigurationlblError2.Text = "[ERROR]";
+            this.ConfigurationlblError2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // ConfigurationlblError1
+            // 
+            this.ConfigurationlblError1.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ConfigurationlblError1.Location = new System.Drawing.Point(56, 112);
+            this.ConfigurationlblError1.Name = "ConfigurationlblError1";
+            this.ConfigurationlblError1.Size = new System.Drawing.Size(577, 44);
+            this.ConfigurationlblError1.TabIndex = 21;
+            this.ConfigurationlblError1.Text = "ERROR CONFIGURING DEVICE";
+            // 
             // ApplicationtabPage
             // 
             this.ApplicationtabPage.Controls.Add(this.ApplicationpictureBoxWait);
@@ -1769,9 +1808,6 @@
             this.SettingsMSRgroupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SettingsMsrpicBoxWait)).EndInit();
             this.ConfigurationtabPage.ResumeLayout(false);
-            this.ConfigurationInfogroupBox1.ResumeLayout(false);
-            this.ConfigurationErrorgroupBox1.ResumeLayout(false);
-            this.ConfigurationErrorgroupBox1.PerformLayout();
             this.ConfigurationPanel2.ResumeLayout(false);
             this.tabControlConfiguration.ResumeLayout(false);
             this.ConfigurationTerminalDatatabPage.ResumeLayout(false);
@@ -1789,6 +1825,9 @@
             this.ConfigurationIDgrpBox.PerformLayout();
             this.ConfigurationGroupBox1.ResumeLayout(false);
             this.ConfigurationGroupBox1.PerformLayout();
+            this.ConfigurationInfogroupBox1.ResumeLayout(false);
+            this.ConfigurationErrorgroupBox1.ResumeLayout(false);
+            this.ConfigurationErrorgroupBox1.PerformLayout();
             this.ApplicationtabPage.ResumeLayout(false);
             this.ApplicationtabPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ApplicationpictureBoxWait)).EndInit();
@@ -1870,18 +1909,21 @@
     private System.Windows.Forms.ColumnHeader ConfigurationTerminalDatacolumnHeader1;
     private System.Windows.Forms.ColumnHeader ConfigurationTerminalDatacolumnHeader2;
     private System.Windows.Forms.PictureBox ConfigurationTerminalDatapicBoxWait;
+    private System.Windows.Forms.Label ConfigurationTerminalDataLoading;
     // SUB-TAB: AID LIST
     private System.Windows.Forms.TabPage ConfigurationAIDStabPage;
     private System.Windows.Forms.ListView ConfigurationAIDSlistView;
     private System.Windows.Forms.ColumnHeader ConfigurationAIDStabPageColumnHeader1;
     private System.Windows.Forms.ColumnHeader ConfigurationAIDStabPageColumnHeader2;
     private System.Windows.Forms.PictureBox ConfigurationAIDSpicBoxWait;
+    private System.Windows.Forms.Label ConfigurationAIDLoading;
     // SUB-TAB: CAPK LIST
     private System.Windows.Forms.TabPage ConfigurationCAPKStabPage;
     private System.Windows.Forms.ListView ConfigurationCAPKSlistView;
     private System.Windows.Forms.ColumnHeader ConfigurationCAPKStabPageColumnHeader1;
     private System.Windows.Forms.ColumnHeader ConfigurationCAPKStabPageColumnHeader2;
     private System.Windows.Forms.PictureBox ConfigurationCAPKSpicBoxWait;
+    private System.Windows.Forms.Label ConfigurationCAPKLoading;
     // SUB-TAB: GROUPS
     private System.Windows.Forms.TabPage ConfigurationGROUPStabPage;
     private System.Windows.Forms.Label ConfigurationGROUPSConfigurationPanel1label1;

@@ -350,11 +350,10 @@ namespace IPA.DAL.RBADAL.Services
                     bool? isHid = null;
                     try
                     {
-                        byte[] resBuffer;
-                        var eStatus = PrepareGetCommand(0x23, out resBuffer);
-                        if (byteCompare(resBuffer, FeatureResponses.USBHIDResponse, FeatureResponses.USBHIDResponse.Length))
+                        var eStatus = PrepareGetCommand(0x23, out byte[] resBuffer);
+                        if (ByteCompare(resBuffer, FeatureResponses.USBHIDResponse, FeatureResponses.USBHIDResponse.Length))
                             isHid = true;
-                        else if (byteCompare(resBuffer, FeatureResponses.USBKBResponse, FeatureResponses.USBKBResponse.Length))
+                        else if (ByteCompare(resBuffer, FeatureResponses.USBKBResponse, FeatureResponses.USBKBResponse.Length))
                             isHid = false;
                         else
                         {
@@ -453,8 +452,6 @@ namespace IPA.DAL.RBADAL.Services
 
         private EntryModeStatus GetCurrentConfig()
         {
-            byte[] result;
-
             //Create the command to get config values
             var readConfig = new byte[CommandTokens.ReadConfiguration.Length + 1];
             Array.Copy(CommandTokens.ReadConfiguration, readConfig, CommandTokens.ReadConfiguration.Length);
@@ -462,7 +459,7 @@ namespace IPA.DAL.RBADAL.Services
             readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
 
             //execute the command, get the result
-            var status = SetupCommand(readConfig, out result);
+            var status = SetupCommand(readConfig, out byte[] result);
             deviceInfo.ConfigValues = result;
 
             return status;
@@ -670,7 +667,7 @@ namespace IPA.DAL.RBADAL.Services
 
         #region -- device helper methods --
 
-        private static bool byteCompare(byte[] left, byte[] right, int length)
+        private static bool ByteCompare(byte[] left, byte[] right, int length)
         {
             bool same = true;
             if (left.Length < length || right.Length < length)
@@ -773,7 +770,6 @@ namespace IPA.DAL.RBADAL.Services
         {
             //declare variables
             string serialNumber = null;
-            byte[] result;
 
             //setup command to get the serial number
             var getSerialNumber = new byte[CommandTokens.GetSerialNumber.Length + 1];
@@ -782,7 +778,7 @@ namespace IPA.DAL.RBADAL.Services
             getSerialNumber[getSerialNumber.Length - 1] = GetCheckSumValue(getSerialNumber);
 
             //issue the call to run the command
-            var status = SetupCommand(getSerialNumber, out result);
+            var status = SetupCommand(getSerialNumber, out byte[] result);
 
             //if the call was successful, get the serial number
             if (status == EntryModeStatus.Success && result[0] == (byte)Token.ACK)
@@ -810,7 +806,6 @@ namespace IPA.DAL.RBADAL.Services
         {
             // declare variables
             string firmwareVersion = null;
-            byte[] result;
 
             // setup the command to get the firmware version
             var getFirmware = new byte[CommandTokens.ReadFirmwareVersion.Length + 1];
@@ -819,7 +814,7 @@ namespace IPA.DAL.RBADAL.Services
             getFirmware[getFirmware.Length - 1] = GetCheckSumValue(getFirmware);
 
             //execute the command
-            var status = SetupCommand(getFirmware, out result);
+            var status = SetupCommand(getFirmware, out byte[] result);
             if (status == EntryModeStatus.Success && result[0] == (byte)Token.ACK)
             {
                 firmwareVersion = Encoding.ASCII.GetString(result);
@@ -844,8 +839,7 @@ namespace IPA.DAL.RBADAL.Services
                         configFormat = configValues[currentConfigDeviceFormatIndex + 2];
                     else
                     {
-                        byte[] buffer;
-                        var status = PrepareGetCommand((byte)FuncID.DeviceFormat, out buffer);
+                        var status = PrepareGetCommand((byte)FuncID.DeviceFormat, out byte[] buffer);
                         if (status == EntryModeStatus.Success && buffer[0] == (byte)Token.ACK)
                             configFormat = buffer[4];
                     }
@@ -903,8 +897,7 @@ namespace IPA.DAL.RBADAL.Services
             else
             {
                 //if it is not in the config values, get it directly from the device
-                byte[] securityResult = null;
-                var status = PrepareGetCommand((byte)FuncID.SecurityLevel, out securityResult);
+                var status = PrepareGetCommand((byte)FuncID.SecurityLevel, out byte[] securityResult);
 
                 if (status == EntryModeStatus.Success && securityResult[0] == (byte)Token.ACK)
                     securityID = securityResult[4];
@@ -1018,8 +1011,10 @@ namespace IPA.DAL.RBADAL.Services
                                 }
                                 else
                                 {
-                                    setStatus = new IDTSetStatus();
-                                    setStatus.Success = true;
+                                    setStatus = new IDTSetStatus
+                                    {
+                                        Success = true
+                                    };
                                 }
                             }
                             status = EntryModeStatus.Success;
@@ -1059,8 +1054,7 @@ namespace IPA.DAL.RBADAL.Services
             commandLine[indx + 1] = 0x00;
             commandLine[indx + 1] = GetCheckSumValue(commandLine);
 
-            byte[] result;
-            var status = SetupCommand(commandLine, out result);
+            var status = SetupCommand(commandLine, out byte[] result);
             if (result != null)
                 return result[0];
             else
@@ -1072,9 +1066,9 @@ namespace IPA.DAL.RBADAL.Services
             var test = Encoding.ASCII.GetString(bytes);
             var testdata = Encoding.ASCII.GetBytes(test);
 
-            var osDvcMsgEnd = search(bytes, Encoding.ASCII.GetBytes("</DvcMsg>"), 0);
-            var osCard = search(bytes, Encoding.ASCII.GetBytes("<Card "), 0);
-            var osCardEnd = search(bytes, Encoding.ASCII.GetBytes("></Card"), osCard);
+            var osDvcMsgEnd = Search(bytes, Encoding.ASCII.GetBytes("</DvcMsg>"), 0);
+            var osCard = Search(bytes, Encoding.ASCII.GetBytes("<Card "), 0);
+            var osCardEnd = Search(bytes, Encoding.ASCII.GetBytes("></Card"), osCard);
             bool osIsSwipe = true;
             int osETrk1 = 0;
             int osETrk1End = 0;
@@ -1082,36 +1076,36 @@ namespace IPA.DAL.RBADAL.Services
             int osETrk2End = 0;
             int osECData = 0;
             int osECDataEnd = 0;
-            int cardEntry = search(bytes, Encoding.ASCII.GetBytes("Entry=\"MANUAL\""), 0);
+            int cardEntry = Search(bytes, Encoding.ASCII.GetBytes("Entry=\"MANUAL\""), 0);
             if (cardEntry > 0)//manual
             {
                 osIsSwipe = false;
-                osECData = search(bytes, Encoding.ASCII.GetBytes("ECData=\""), osCard);
+                osECData = Search(bytes, Encoding.ASCII.GetBytes("ECData=\""), osCard);
                 if (osECData < 0)
                     osECData = 0;
-                osECDataEnd = search(bytes, Encoding.ASCII.GetBytes("\" CDataKSN=\""), osECData);
+                osECDataEnd = Search(bytes, Encoding.ASCII.GetBytes("\" CDataKSN=\""), osECData);
             }
             else
             {
                 try
                 {
-                    osETrk1 = search(bytes, Encoding.ASCII.GetBytes("ETrk1=\""), osCard);
+                    osETrk1 = Search(bytes, Encoding.ASCII.GetBytes("ETrk1=\""), osCard);
                     if (osETrk1 < 0)
                         osETrk1 = 0;
-                    osETrk1End = search(bytes, Encoding.ASCII.GetBytes("\" ETrk2=\""), osETrk1);
+                    osETrk1End = Search(bytes, Encoding.ASCII.GetBytes("\" ETrk2=\""), osETrk1);
                 }
                 catch (Exception)
                 {
 
                 }
-                osETrk2 = search(bytes, Encoding.ASCII.GetBytes("ETrk2=\""), osETrk1End);
-                osETrk2End = search(bytes, Encoding.ASCII.GetBytes("\" CDataKSN=\""), osETrk2);
+                osETrk2 = Search(bytes, Encoding.ASCII.GetBytes("ETrk2=\""), osETrk1End);
+                osETrk2End = Search(bytes, Encoding.ASCII.GetBytes("\" CDataKSN=\""), osETrk2);
 
             }
 
 
-            var osKsn = search(bytes, Encoding.ASCII.GetBytes("CDataKSN=\""), osETrk2);
-            var osKsnEnd = search(bytes, Encoding.ASCII.GetBytes("\" Exp=\""), osKsn);
+            var osKsn = Search(bytes, Encoding.ASCII.GetBytes("CDataKSN=\""), osETrk2);
+            var osKsnEnd = Search(bytes, Encoding.ASCII.GetBytes("\" Exp=\""), osKsn);
 
             const int MaxResponseLength = 666;
             var data = new StringBuilder(MaxResponseLength);
@@ -1550,18 +1544,18 @@ namespace IPA.DAL.RBADAL.Services
                 .ToArray();
         }
 
-        static int search(byte[] haystack, byte[] needle, int start)
+        static int Search(byte[] haystack, byte[] needle, int start)
         {
             for (int i = start; i <= haystack.Length - needle.Length; i++)
             {
-                if (match(haystack, needle, i))
+                if (Match(haystack, needle, i))
                 {
                     return i;
                 }
             }
             return -1;
         }
-        static bool match(byte[] haystack, byte[] needle, int start)
+        static bool Match(byte[] haystack, byte[] needle, int start)
         {
             if (needle.Length + start > haystack.Length)
             {
@@ -1735,26 +1729,22 @@ if(empty)
 
         public bool Reset()
         {
-           byte[] result;
-
-           // Create the command to get config values
-           var readConfig = new byte[CommandTokens.DeviceReset.Length + 1];
-           Array.Copy(CommandTokens.DeviceReset, readConfig, CommandTokens.DeviceReset.Length);
+            // Create the command to get config values
+            var readConfig = new byte[CommandTokens.DeviceReset.Length + 1];
+            Array.Copy(CommandTokens.DeviceReset, readConfig, CommandTokens.DeviceReset.Length);
            readConfig[CommandTokens.DeviceReset.Length] = 0x00;
            readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
 
            // execute the command, get the result
-           var status = SetupCommand(readConfig, out result);
+           var status = SetupCommand(readConfig, out byte[] result);
            return (status == EntryModeStatus.Success) ? true : false;
         }
 
         public bool SetQuickChipMode(bool mode)
         {
-           byte[] result;
-
-           // Create the command to get config values
-           var readConfig = new byte[CommandTokens.QuickChipModeOn.Length + 1];
-           if(mode)
+            // Create the command to get config values
+            var readConfig = new byte[CommandTokens.QuickChipModeOn.Length + 1];
+            if (mode)
            {
               Array.Copy(CommandTokens.QuickChipModeOn, readConfig, CommandTokens.QuickChipModeOn.Length);
            }
@@ -1766,22 +1756,20 @@ if(empty)
            readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
 
            // execute the command, get the result
-           var status = SetupCommand(readConfig, out result);
+           var status = SetupCommand(readConfig, out byte[] result);
            return (status == EntryModeStatus.Success) ? true : false;
         }
 
         public bool SetUSBHIDMode()
         {
-           byte[] result;
-
-           // Create the command to get config values
-           var readConfig = new byte[CommandTokens.SetUSBHIDMode.Length + 1];
-           Array.Copy(CommandTokens.SetUSBHIDMode, readConfig, CommandTokens.SetUSBHIDMode.Length);
+            // Create the command to get config values
+            var readConfig = new byte[CommandTokens.SetUSBHIDMode.Length + 1];
+            Array.Copy(CommandTokens.SetUSBHIDMode, readConfig, CommandTokens.SetUSBHIDMode.Length);
            readConfig[CommandTokens.SetUSBHIDMode.Length] = 0x00;
            readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
 
            // execute the command, get the result
-           var status = SetupCommand(readConfig, out result);
+           var status = SetupCommand(readConfig, out byte[] result);
            return (status == EntryModeStatus.Success) ? true : false;
         }
 
@@ -1835,7 +1823,7 @@ if(empty)
         {
             return null;
         }
-        public virtual string [] ValidateTerminalData(ref ConfigIDTechSerializer serializer)
+        public virtual string [] ValidateTerminalData(ConfigIDTechSerializer serializer)
         {
             return null;
         }
@@ -1843,14 +1831,14 @@ if(empty)
         {
             return null;
         }
-        public virtual void ValidateAidList(ref ConfigIDTechSerializer serializer)
+        public virtual void ValidateAidList(ConfigIDTechSerializer serializer)
         {
         }
         public virtual string [] GetCapKList(ref ConfigIDTechSerializer serializer)
         {
             return null;
         }
-        public virtual void ValidateCapKList(ref ConfigIDTechSerializer serializer)
+        public virtual void ValidateCapKList(ConfigIDTechSerializer serializer)
         {
         }
         #endregion
@@ -1860,7 +1848,7 @@ if(empty)
         {
             return null;
         }
-        public virtual string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        public virtual Task<string []> ValidateTerminalData(ConfigSphereSerializer serializer)
         {
             return null;
         }
@@ -1868,15 +1856,17 @@ if(empty)
         {
             return null;
         }
-        public virtual void ValidateAidList(ref ConfigSphereSerializer serializer)
+        public virtual Task<int> ValidateAidList(ConfigSphereSerializer serializer)
         {
+             return Task.FromResult(0);
         }
         public virtual string [] GetCapKList()
         {
             return null;
         }
-        public virtual void ValidateCapKList(ref ConfigSphereSerializer serializer)
+        public virtual Task<int> ValidateCapKList(ConfigSphereSerializer serializer)
         {
+             return Task.FromResult(0);
         }
         public virtual void ValidateConfigGroup(ConfigSphereSerializer serializer, int group)
         {

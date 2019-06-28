@@ -88,6 +88,9 @@ namespace IPA.MainApp
         // Timers
         Stopwatch stopWatch;
 
+        DateTime configloadStart;
+        TimeSpan configloadDuration;
+
         internal static System.Timers.Timer TransactionTimer { get; set; }
         internal static System.Timers.Timer ConfigLoaderTimer { get; set; }
 
@@ -294,20 +297,25 @@ namespace IPA.MainApp
             ConfigurationManager.RefreshSection("appSettings");
         }
 
-        private async void SoftBlink(Control ctrl, Color c1, Color c2, short CycleTime_ms, bool BkClr)
+        private async void SoftBlink(Control ctrl, Color c1, Color c2, short cycleTimeMS, bool backColor)
         {
-            var sw = new Stopwatch(); sw.Start();
-            short halfCycle = (short)Math.Round(CycleTime_ms * 0.5);
-            while (true)
+            Debug.WriteLine("SoftBlink: START");
+
+            short halfCycle = (short)Math.Round(cycleTimeMS * 0.5);
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            while (ctrl.Visible)
             {
                 await Task.Delay(1);
-                var n = sw.ElapsedMilliseconds % CycleTime_ms;
-                var per = (double)Math.Abs(n - halfCycle) / halfCycle;
+                var cycle = sw.ElapsedMilliseconds % cycleTimeMS;
+                var per = (double)Math.Abs(cycle - halfCycle) / halfCycle;
                 var red = (short)Math.Round((c2.R - c1.R) * per) + c1.R;
                 var grn = (short)Math.Round((c2.G - c1.G) * per) + c1.G;
                 var blw = (short)Math.Round((c2.B - c1.B) * per) + c1.B;
                 var clr = Color.FromArgb(red, grn, blw);
-                if (BkClr)
+                if (backColor)
                 {
                     ctrl.BackColor = clr;
                 }
@@ -316,6 +324,7 @@ namespace IPA.MainApp
                     ctrl.ForeColor = clr;
                 }
             }
+            Debug.WriteLine("SoftBlink: STOP");
         }
 
         private void OnFadeTimerEvent(object sender, ElapsedEventArgs e)
@@ -452,6 +461,12 @@ namespace IPA.MainApp
                 case NOTIFICATION_TYPE.NT_SHOW_CAPK_LIST:
                 {
                     ShowCapKListUI(sender, args);
+                    break;
+                }
+
+                case NOTIFICATION_TYPE.NT_UPDATE_SETUP_MESSAGE:
+                {
+                    UpdateSetupMessageUI(sender, args);
                     break;
                 }
 
@@ -651,6 +666,11 @@ namespace IPA.MainApp
         private void ShowCapKListUI(object sender, DeviceNotificationEventArgs e)
         {
             ShowCapKList(e.Message);
+        }
+
+        private void UpdateSetupMessageUI(object sender, DeviceNotificationEventArgs e)
+        {
+            UpdateSetupMessage(e.Message);
         }
 
         private void ShowConfigGroupUI(object sender, DeviceNotificationEventArgs e)
@@ -1066,8 +1086,7 @@ namespace IPA.MainApp
                 {
                     object [] data = ((IEnumerable) payload).Cast<object>().Select(x => x == null ? "" : x.ToString()).ToArray();
                     // update the view only once
-                    bool updateView = true;
-                    bool.TryParse((string) data[4], out updateView);
+                    bool.TryParse((string) data[4], out bool updateView);
                     if(updateView)
                     {
                         this.ApplicationtxtCardData.Text = (string) data[0];
@@ -1086,8 +1105,7 @@ namespace IPA.MainApp
                         this.ApplicationtxtCardData.ForeColor = TEXTBOX_FORE_COLOR;
 
                         // Set TAGS to display
-                        bool isHIDMode = true;
-                        if(bool.TryParse((string) data[3], out isHIDMode))
+                        if(bool.TryParse((string) data[3], out bool isHIDMode))
                         {
                             SetTagData((string) data[1], isHIDMode);
                         }
@@ -1282,17 +1300,17 @@ namespace IPA.MainApp
                                 if(this.SettingsBeepControlErrorlabel1.Visible)
                                 {
                                     formElements.Add(this.SettingsBeepControlErrorlabel1);
-                                    SoftBlink(this.SettingsBeepControlErrorlabel1, Color.FromArgb(255, 0, 60), Color.Red, 1000, true);
+                                    SoftBlink(this.SettingsBeepControlErrorlabel1, Color.FromArgb(30, 30, 30), Color.Red, 1000, true);
                                 }
                                 if(this.SettingsLEDControlErrorlabel1.Visible)
                                 {
                                     formElements.Add(this.SettingsLEDControlErrorlabel1);
-                                    SoftBlink(this.SettingsLEDControlErrorlabel1, Color.FromArgb(255, 0, 60), Color.Red, 1000, true);
+                                    SoftBlink(this.SettingsLEDControlErrorlabel1, Color.FromArgb(30, 30, 30), Color.Red, 1000, true);
                                 }
                                 if(this.SettingsEncryptionControlErrorlabel1.Visible)
                                 {
                                     formElements.Add(this.SettingsEncryptionControlErrorlabel1);
-                                    SoftBlink(this.SettingsEncryptionControlErrorlabel1, Color.FromArgb(255, 0, 60), Color.Red, 1000, true);
+                                    SoftBlink(this.SettingsEncryptionControlErrorlabel1, Color.FromArgb(30, 30, 30), Color.Red, 1000, true);
                                 }
                             });
 
@@ -1769,6 +1787,18 @@ namespace IPA.MainApp
                                 // Set ConfigurationID
                                 if(this.radioLoadFromFile.Checked)
                                 {
+                                    if(configloadDuration.ToString().Equals("00:00:00"))
+                                    { 
+                                        configloadDuration = DateTime.Now - configloadStart;
+                                        string configloadDurationlbl = String.Format("{0}:{1:D2}:{2:D2}", configloadDuration.Hours, configloadDuration.Minutes, configloadDuration.Seconds);
+                                        ToolTip tpDuration = new ToolTip()
+                                        { 
+                                            IsBalloon = true,
+                                            ToolTipTitle = "Configuration Load Time",
+                                        };
+                                        tpDuration.SetToolTip(this.ConfigurationVersionlbl, configloadDurationlbl);
+                                    }
+
                                     ConfigurationID configurationID = devicePlugin?.GetConfigSphereSerializer().GetConfigurationID();
 
                                     // Update Configuration File
@@ -1777,9 +1807,11 @@ namespace IPA.MainApp
                                         this.ConfigurationPlatform.Text = configurationID.Platform;
                                         this.ConfigurationEnvironment.Text = configurationID.CardEnvironment;
                                         this.ConfigurationVersion.Text = configurationID.Version;
-                                        ToolTip tp = new ToolTip();
-                                        tp.IsBalloon = true;
-                                        tp.ToolTipTitle = "Configuration Version";
+                                        ToolTip tp = new ToolTip()
+                                        { 
+                                            IsBalloon = true,
+                                            ToolTipTitle = "Configuration Version",
+                                        };
                                         tp.SetToolTip(this.ConfigurationVersion, configurationID.Version);
                                         this.ConfigurationIDgrpBox.Visible = true;
                                     }
@@ -1816,6 +1848,7 @@ namespace IPA.MainApp
                         this.ConfigurationTerminalDatapicBoxWait.Visible  = false;
                         this.ConfigurationPanel1pictureBox1.Enabled = false;
                         this.ConfigurationPanel1pictureBox1.Visible = false;
+                        this.ConfigurationTerminalDataLoading.Visible = false;
                         this.ConfigurationPanel1.Enabled = true;
                     }
                 };
@@ -1857,10 +1890,10 @@ namespace IPA.MainApp
 
                         new Thread(() => 
                         {
-                            SoftBlink(this.ConfigurationlblWarning1, Color.FromArgb(255, 0, 60), Color.Red, 5000, true);
-                            SoftBlink(this.ConfigurationlblError1, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
-                            SoftBlink(this.ConfigurationlblError2, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
-                            SoftBlink(this.ConfigurationlblError3, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblWarning1, Color.FromArgb(30, 30, 30), Color.Red, 5000, true);
+                            SoftBlink(this.ConfigurationlblError1, Color.FromArgb(30, 30, 30), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblError2, Color.FromArgb(30, 30, 30), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblError3, Color.FromArgb(30, 30, 30), Color.Green, 5000, true);
                             Thread.Sleep(15000);
                             // Exit the App
                             System.Diagnostics.Process.GetCurrentProcess().Kill();
@@ -1902,6 +1935,7 @@ namespace IPA.MainApp
                         this.ConfigurationTerminalDatapicBoxWait.Visible  = false;
                         this.ConfigurationPanel1pictureBox1.Enabled = false;
                         this.ConfigurationPanel1pictureBox1.Visible = false;
+                        this.ConfigurationTerminalDataLoading.Visible = false;
                         this.ConfigurationPanel1.Visible = false;
                         this.ConfigurationPanel2.Visible = false;
 
@@ -1910,10 +1944,10 @@ namespace IPA.MainApp
 
                         new Thread(() => 
                         {
-                            SoftBlink(this.ConfigurationlblWarning1, Color.FromArgb(255, 0, 60), Color.Red, 5000, true);
-                            SoftBlink(this.ConfigurationlblError1, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
-                            SoftBlink(this.ConfigurationlblError2, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
-                            SoftBlink(this.ConfigurationlblError3, Color.FromArgb(255, 0, 60), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblWarning1, Color.FromArgb(30, 30, 30), Color.Red, 5000, true);
+                            SoftBlink(this.ConfigurationlblError1, Color.FromArgb(30, 0, 30), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblError2, Color.FromArgb(30, 0, 30), Color.Green, 5000, true);
+                            SoftBlink(this.ConfigurationlblError3, Color.FromArgb(30, 0, 30), Color.Green, 5000, true);
                             Thread.Sleep(5000);
 
                             this.Invoke((MethodInvoker)delegate()
@@ -2003,6 +2037,7 @@ namespace IPA.MainApp
                     this.ConfigurationAIDSpicBoxWait.Visible  = false;
                     this.ConfigurationPanel1pictureBox1.Enabled = false;
                     this.ConfigurationPanel1pictureBox1.Visible = false;
+                    this.ConfigurationAIDLoading.Visible = false;
                     this.ConfigurationPanel1.Enabled = true;
                 }
             };
@@ -2105,7 +2140,53 @@ namespace IPA.MainApp
                     this.ConfigurationCAPKSpicBoxWait.Visible  = false;
                     this.ConfigurationPanel1pictureBox1.Enabled = false;
                     this.ConfigurationPanel1pictureBox1.Visible = false;
+                    this.ConfigurationCAPKLoading.Visible = false;
                     this.ConfigurationPanel1.Enabled = true;
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                BeginInvoke(mi);
+            }
+            else
+            {
+                Invoke(mi);
+            }
+        }
+
+        private void UpdateSetupMessage(object payload)
+        {
+            // Invoker with Parameter(s)
+            MethodInvoker mi = () =>
+            {
+                // Configuration Loading
+                StopConfigLoaderTimer();
+
+                try
+                {
+                    object [] data = ((IEnumerable) payload)?.Cast<object>().Select(x => x ?? "").ToArray() ?? null;
+
+                    if(data != null && data.Length > 0)
+                    {
+                        this.ConfigurationTerminalDataLoading.Text = (string) data[0];
+                        if(data.Length > 1)
+                        { 
+                            Color color = (Color) data[1];
+                            new Thread(() => 
+                            {
+                                Thread.CurrentThread.IsBackground = true;
+                                Thread.Sleep(100);
+                                SoftBlink(this.ConfigurationTerminalDataLoading, Color.FromArgb(30, 30, 30), color, 2000, true);
+                                // Set Configuration Load Timer
+                                SetConfigLoaderTimer();
+                            }).Start();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.error("main: UpdateSetupMessage() - exception={0}", (object) ex.Message);
                 }
             };
 
@@ -2407,8 +2488,10 @@ namespace IPA.MainApp
         #region -- device timers --
         private void SetConfigLoaderTimer()
         {
-            ConfigLoaderTimer = new System.Timers.Timer(tc_configloader_timeout);
-            ConfigLoaderTimer.AutoReset = false;
+            ConfigLoaderTimer = new System.Timers.Timer(tc_configloader_timeout)
+            {
+                AutoReset = false
+            };
             ConfigLoaderTimer.Elapsed += (sender, e) => ConfigLoaderRaiseTimerExpired(new TimerEventArgs { Timer = TimerType.Transaction });
             ConfigLoaderTimer.Start();
         }
@@ -2419,8 +2502,10 @@ namespace IPA.MainApp
 
         private void SetTransactionTimer()
         {
-            TransactionTimer = new System.Timers.Timer(tc_transaction_timeout);
-            TransactionTimer.AutoReset = false;
+            TransactionTimer = new System.Timers.Timer(tc_transaction_timeout)
+            {
+                AutoReset = false
+            };
             TransactionTimer.Elapsed += (sender, e) => TransactionRaiseTimerExpired(new TimerEventArgs { Timer = TimerType.Transaction });
             TransactionTimer.Start();
         }
@@ -2574,13 +2659,50 @@ namespace IPA.MainApp
                 {
                     this.ConfigurationTerminalDatapicBoxWait.Visible = true;
                     this.ConfigurationTerminalDatapicBoxWait.Enabled = true;
+                    this.ConfigurationTerminalDataLoading.Visible = true;
                     System.Windows.Forms.Application.DoEvents();
+
+                    // load starting time
+                    configloadStart = DateTime.Now;
+
+                    if(!devicePlugin.ConfigFileLoaded() && this.radioLoadFromFile.Checked)
+                    {
+                        this.ConfigurationTerminalDataLoading.Text = "SETTING UP TERMINAL DATA...";
+                        this.ConfigurationTerminalDataLoading.ForeColor = Color.Black;
+
+                        // Add Pages sequentially after load is complete
+                        if(tabControlConfiguration.Contains(ConfigurationAIDStabPage))
+                        {
+                            tabControlConfiguration.TabPages.Remove(ConfigurationAIDStabPage);
+                        }
+                        if(tabControlConfiguration.Contains(ConfigurationCAPKStabPage))
+                        {
+                            tabControlConfiguration.TabPages.Remove(ConfigurationCAPKStabPage);
+                        }
+                        if(tabControlConfiguration.Contains(ConfigurationGROUPStabPage))
+                        {
+                            tabControlConfiguration.TabPages.Remove(ConfigurationGROUPStabPage);
+                        }
+                    }
+                    else
+                    {
+                        this.ConfigurationTerminalDataLoading.Text = "RETRIEVING TERMINAL DATA...";
+                        this.ConfigurationTerminalDataLoading.ForeColor = Color.White;
+                    }
+
                     new Thread(() => 
                     {
+                        Thread.CurrentThread.IsBackground = true;
                         try 
                         {
+                            this.Invoke((MethodInvoker)delegate()
+                            {
+                                SoftBlink(this.ConfigurationTerminalDataLoading, Color.FromArgb(30, 30, 30), Color.Red, 2000, true);
+                                System.Windows.Forms.Application.DoEvents();
+                            });
+
                             int majorcfgint = devicePlugin?.GetConfigSphereSerializer()?.GetTerminalMajorConfiguration() ?? 2;
-                            Thread.CurrentThread.IsBackground = true; devicePlugin. GetSphereTerminalData(majorcfgint); 
+                            devicePlugin. GetSphereTerminalData(majorcfgint); 
                         }
                         catch(Exception)
                         {
@@ -2604,12 +2726,17 @@ namespace IPA.MainApp
                     this.ConfigurationPanel1.Enabled = false;
                     this.ConfigurationAIDSpicBoxWait.Visible = true;
                     this.ConfigurationAIDSpicBoxWait.Enabled = true;
+                    this.ConfigurationAIDLoading.Visible = true;
+                    this.ConfigurationAIDLoading.ForeColor = Color.White;
+                    SoftBlink(this.ConfigurationAIDLoading, Color.FromArgb(30, 30, 30), Color.Blue, 2000, true);
                     System.Windows.Forms.Application.DoEvents();
+
                     new Thread(() => 
                     { 
                         try
                         {
-                            Thread.CurrentThread.IsBackground = true; devicePlugin.GetAIDList(); 
+                            Thread.CurrentThread.IsBackground = true;
+                            devicePlugin.GetAIDList(); 
                         }
                         catch(Exception)
                         {
@@ -2633,7 +2760,11 @@ namespace IPA.MainApp
                     this.ConfigurationPanel1.Enabled = false;
                     this.ConfigurationCAPKSpicBoxWait.Visible = true;
                     this.ConfigurationCAPKSpicBoxWait.Enabled = true;
+                    this.ConfigurationCAPKLoading.Visible = true;
+                    this.ConfigurationCAPKLoading.ForeColor = Color.White;
+                    SoftBlink(this.ConfigurationCAPKLoading, Color.FromArgb(30, 30, 30), Color.Green, 2000, true);
                     System.Windows.Forms.Application.DoEvents();
+
                     new Thread(() => 
                     { 
                         try

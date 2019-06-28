@@ -13,6 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using IPA.CommonInterface.ConfigSphere;
 using IPA.CommonInterface.ConfigSphere.Configuration;
+using System.Threading.Tasks;
 
 namespace IPA.DAL.RBADAL.Services
 {
@@ -316,17 +317,17 @@ namespace IPA.DAL.RBADAL.Services
                         string language = td.GetTagValue("DF10");
                         language = (language.Length > 1) ? language.Substring(0, 2) : "";
                         string merchantName = td.GetTagValue("9F4E");
-    ///                merchantName = CardReader.ConvertHexStringToAscii(merchantName);
+                        ///merchantName = CardReader.ConvertHexStringToAscii(merchantName);
                         string merchantID = td.GetTagValue("9F16");
-    ///                merchantID = CardReader.ConvertHexStringToAscii(merchantID);
+                        ///merchantID = CardReader.ConvertHexStringToAscii(merchantID);
                         string terminalID = td.GetTagValue("9F1C");
-    ///                terminalID = CardReader.ConvertHexStringToAscii(terminalID);
+                        ///                terminalID = CardReader.ConvertHexStringToAscii(terminalID);
     ///                AUGUSTA SRED FAILS HERE !!! --- CONFIG ISSUE
-                       string exp = td.GetTagValue("5F36");
-                       if(exp.Length > 0)
-                       {
-                          exponent = Int32.Parse(exp);
-                       }
+                        string exp = td.GetTagValue("5F36");
+                        if(exp.Length > 0)
+                        {
+                            exponent = Int32.Parse(exp);
+                        }
                     }
                 }
             }
@@ -580,7 +581,7 @@ namespace IPA.DAL.RBADAL.Services
         /// NOTE: MAY REQUIRE TO SET TERMINAL MAJOR CONFIGURATION BEFORE SAVING TERMINAL DATA
         /// </summary>
         /// <param name="serializer"></param>
-        public override string [] ValidateTerminalData(ref ConfigSphereSerializer serializer)
+        private string [] TerminalDataValidation(ConfigSphereSerializer serializer)
         {
             string [] result = null;
             try
@@ -772,7 +773,12 @@ namespace IPA.DAL.RBADAL.Services
 
             return result;
         }
-        
+
+        public override Task<string []> ValidateTerminalData(ConfigSphereSerializer serializer)
+        {
+            return Task.FromResult(TerminalDataValidation(serializer));
+        }
+
         public override string [] GetAidList()
          {
             string [] data = null;
@@ -828,14 +834,16 @@ namespace IPA.DAL.RBADAL.Services
             return data;
          }
 
-        public override void ValidateAidList(ref ConfigSphereSerializer serializer)
-         {
+        private int AidListValidation(ConfigSphereSerializer serializer)
+        {
+            RETURN_CODE rt = RETURN_CODE.RETURN_CODE_DO_SUCCESS;
+
             try
             {
                 if(serializer != null)
                 {
                     byte [][] keys = null;
-                    RETURN_CODE rt = IDT_Augusta.SharedController.emv_retrieveAIDList(ref keys);
+                    rt = IDT_Augusta.SharedController.emv_retrieveAIDList(ref keys);
                 
                     if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
                     {
@@ -1009,7 +1017,14 @@ namespace IPA.DAL.RBADAL.Services
             {
                 Debug.WriteLine("device: ValidateAidList() - exception={0}", (object)ex.Message);
             }
-         }
+    
+            return (int) rt;
+        }
+
+        public override Task<int> ValidateAidList(ConfigSphereSerializer serializer)
+        {
+            return Task.FromResult(AidListValidation(serializer));
+        }
     
         public override string [] GetCapKList()
          {
@@ -1072,14 +1087,16 @@ namespace IPA.DAL.RBADAL.Services
             return data;
          }
 
-        public override void ValidateCapKList(ref ConfigSphereSerializer serializer)
+        private int CapKListValidation(ConfigSphereSerializer serializer)
         {
+            RETURN_CODE rt = RETURN_CODE.RETURN_CODE_DO_SUCCESS;
+
             try
             {
                 if(serializer != null)
                 {
                     byte [] keys = null;
-                    RETURN_CODE rt = IDT_Augusta.SharedController.emv_retrieveCAPKList(ref keys);
+                    rt = IDT_Augusta.SharedController.emv_retrieveCAPKList(ref keys);
                 
                     if (rt == RETURN_CODE.RETURN_CODE_NO_CA_KEY)
                     {
@@ -1240,6 +1257,13 @@ namespace IPA.DAL.RBADAL.Services
             {
                 Debug.WriteLine("device: ValidateAidList() - exception={0}", (object)ex.Message);
             }
+
+            return (int) rt;
+        }
+
+        public override Task<int> ValidateCapKList(ConfigSphereSerializer serializer)
+        {
+            return Task.FromResult(CapKListValidation(serializer));
         }
 
         public override string [] GetConfigGroup(int group)

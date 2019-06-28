@@ -56,3 +56,4 @@ This an application to Configure IDTech Devices.
            - Fixes to processing of AIDS not found in device AIDS list.
            - Fixes to processing of CAPKS not found in device CAPKS list.
 * 20190626 - Implemented ContactOverrideTags.
+* 20190628 - Added MSR, ICC, and General Group default reset.

@@ -78,11 +78,11 @@ namespace IPA.DAL.RBADAL.Interfaces
         int SetTerminalConfiguration(int majorcfg);
         int SetTerminalConfiguration(ConfigSphereSerializer serializer);
         string[] GetTerminalData(int majorcfg);
-        string [] ValidateTerminalData(ref ConfigSphereSerializer serializer);
+        Task<string []> ValidateTerminalData(ConfigSphereSerializer serializer);
         string [] GetAidList();
-        void ValidateAidList(ref ConfigSphereSerializer serializer);
+        Task<int> ValidateAidList(ConfigSphereSerializer serializer);
         string [] GetCapKList();
-        void ValidateCapKList(ref ConfigSphereSerializer serializer);
+        Task<int> ValidateCapKList(ConfigSphereSerializer serializer);
         #endregion
 
         void GetMSRSettings(ref ConfigIDTechSerializer serializer);
