@@ -99,10 +99,28 @@ namespace IPA.CommonInterface.ConfigSphere
         private SortedDictionary<string, string> GetAllTerminalData(string serialNumber, string EMVKernelVer)
         {
             SortedDictionary<string, string> allTerminalTags = termSettings.TerminalData;
-            // enforce tag max length of 10 bytes
-            allTerminalTags["9F1E"] = serialNumber?.Substring(Math.Max(0, serialNumber.Length - 10)) ?? "";
+            // Enforce tag max length of 10 bytes
+            string serialNumberTagValue = serialNumber?.Substring(Math.Max(0, serialNumber.Length - 10)) ?? "";
+            // Check for Serial Number compression
+            if(string.IsNullOrWhiteSpace(termSettings.CompressedSerialNumberTag))
+            { 
+                // Set max length of 9F1E value to favor trailing characters (negative value)
+                int serialNumberMaxLen = termSettings.SerialNumberMaxLen;
+                if(serialNumberMaxLen != 0)
+                {
+                    serialNumberTagValue = serialNumber?.Substring(serialNumber.Length - Math.Abs(serialNumberMaxLen)) ?? "";
+                }
+            }
+            allTerminalTags["9F1E"] = serialNumberTagValue;
             // enforce tag max length of 8 bytes
+            string EMVKernelVerTagValue = EMVKernelVer?.Substring(EMVKernelVer.LastIndexOf(' ') + 1) ?? "";
             allTerminalTags["9F1C"] = EMVKernelVer?.Substring(Math.Max(0, EMVKernelVer.Length - 8)) ?? "";
+            // Combined SN/EMVKernelVersion
+            if(!string.IsNullOrWhiteSpace(termSettings.CombinedSerialKernelTag))
+            { 
+                allTerminalTags["DFED22"] = serialNumberTagValue + termSettings.CombinedSerialKernelSeparator + EMVKernelVerTagValue;
+            }
+            // Transaction TAGS
             string [] tagsRequested = termSettings.TransactionTagsRequested;
             allTerminalTags["DFEF5A"] = string.Join("", tagsRequested);
             // Configuration File Name

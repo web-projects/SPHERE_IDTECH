@@ -423,9 +423,9 @@ namespace IPA.DAL.RBADAL.Services
 
         #region --- SPHERE SERIALIZER ---
 
-        public override string GetConfigurationFileVersion(int majorcfg)
+        public override string GetConfigurationFileVersion(int majorcfg, bool compressedSerialNumber)
         {
-            string [] payload = GetTerminalData(majorcfg);
+            string [] payload = GetTerminalData(majorcfg, compressedSerialNumber);
             if(payload != null)
             {
                 string match = Array.Find (payload, n => n.Contains ("9F4E:"));
@@ -513,7 +513,7 @@ namespace IPA.DAL.RBADAL.Services
             return 0;
         }
 
-        public override string [] GetTerminalData(int majorcfg)
+        public override string [] GetTerminalData(int majorcfg, bool compressedSerialNumber)
          {
             string [] data = null;
 
@@ -538,7 +538,7 @@ namespace IPA.DAL.RBADAL.Services
                             foreach(var devTag in devCollection)
                             {
                                 // TAG 9F1E: compression support (default: "Terminal")
-                                if(devTag.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase) && !devTag.Value.Equals("5465726D696E616C", StringComparison.CurrentCultureIgnoreCase))
+                                if(devTag.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase) && !devTag.Value.Equals("5465726D696E616C", StringComparison.CurrentCultureIgnoreCase) && compressedSerialNumber)
                                 {
                                     string [] tagValue = new string[devTag.Value.Length / 2];
                                 
@@ -714,9 +714,13 @@ namespace IPA.DAL.RBADAL.Services
                                         // TAG 9F1E: compression support
                                         if(item.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase))
                                         {
-                                            //item1 = Encoding.GetEncoding(437).GetBytes(item.Value);
-                                            string compressed = Utils.Compress(cfgItemValue ?? "");
-                                            item1 = Encoding.GetEncoding(437).GetBytes(compressed);
+                                            TerminalSettings termsettings = serializer.GetTerminalSettings();
+                                            if(!string.IsNullOrWhiteSpace(termsettings.CompressedSerialNumberTag))
+                                            { 
+                                                //item1 = Encoding.GetEncoding(437).GetBytes(item.Value);
+                                                string compressed = Utils.Compress(cfgItemValue ?? "");
+                                                item1 = Encoding.GetEncoding(437).GetBytes(compressed);
+                                            }
                                         }
 
                                         byte itemLen = Convert.ToByte(item1.Length);

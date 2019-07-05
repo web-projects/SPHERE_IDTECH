@@ -1798,7 +1798,7 @@ if(empty)
         /********************************************************************************************************/
         #region -- device configuration --
 
-        public virtual string GetConfigurationFileVersion(int majorcfg)
+        public virtual string GetConfigurationFileVersion(int majorcfg, bool compressedSerialNumber)
         {
             return null;
         }
@@ -1844,7 +1844,7 @@ if(empty)
         #endregion
 
         #region --- SPHERE SERIALIZER ---
-        public virtual string [] GetTerminalData(int majorcfgint)
+        public virtual string [] GetTerminalData(int majorcfgint, bool compressedSerialNumber)
         {
             return null;
         }

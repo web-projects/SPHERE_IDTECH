@@ -118,11 +118,31 @@ namespace IPA.CommonInterface.ConfigSphere.Configuration
         public List<string> MajorConfigurationChecksum { get; set; }
         [JsonProperty(PropertyName = "SerialNumberTag", Order = 2)]
         public string SerialNumberTag { get; set; }
-        [JsonProperty(PropertyName = "KernelVersionTag", Order = 3)]
+        [JsonProperty(PropertyName = "SerialNumberMaxLen", Order = 3)]
+        public int SerialNumberMaxLen { get; set; }
+        [JsonProperty(PropertyName = "SerialNumber2Tag", Order = 4)]
+        public string SerialNumber2Tag { get; set; }
+        [JsonProperty(PropertyName = "SerialNumber2MaxLen", Order = 5)]
+        public int SerialNumber2MaxLen { get; set; }
+        [JsonProperty(PropertyName = "CompressedSerialNumberTag", Order = 6)]
+        public string CompressedSerialNumberTag { get; set; }
+        [JsonProperty(PropertyName = "CompressedSerialNumberMaxLen", Order = 7)]
+        public int CompressedSerialNumberMaxLen { get; set; }
+        [JsonProperty(PropertyName = "SerialNumberPrefix", Order = 8)]
+        public string SerialNumberPrefix { get; set; }
+        [JsonProperty(PropertyName = "VersionTag", Order = 9)]
+        public string VersionTag { get; set; }
+        [JsonProperty(PropertyName = "KernelVersionTag", Order = 10)]
         public string KernelVersionTag { get; set; }
-        [JsonProperty(PropertyName = "TerminalData", Order = 4)]
+        [JsonProperty(PropertyName = "CombinedSerialKernelTag", Order = 11)]
+        public string CombinedSerialKernelTag { get; set; }
+        [JsonProperty(PropertyName = "CombinedSerialKernelMaxLen", Order = 12)]
+        public int CombinedSerialKernelMaxLen { get; set; }
+        [JsonProperty(PropertyName = "CombinedSerialKernelSeparator", Order = 13)]
+        public string CombinedSerialKernelSeparator { get; set; }
+        [JsonProperty(PropertyName = "TerminalData", Order = 14)]
         public SortedDictionary<string, string> TerminalData { get; set; }
-        [JsonProperty(PropertyName = "TransactionTagsRequested", Order = 5)]
+        [JsonProperty(PropertyName = "TransactionTagsRequested", Order = 15)]
         public string [] TransactionTagsRequested { get; set; }
     }
 

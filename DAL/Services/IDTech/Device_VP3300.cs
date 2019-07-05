@@ -317,7 +317,7 @@ namespace IPA.DAL.RBADAL.Services
 
         #region --- SPHERE SERIALIZER ---
 
-        public override string GetConfigurationFileVersion(int majorcfg)
+        public override string GetConfigurationFileVersion(int majorcfg, bool compressedSerialNumber)
         {
             return null;
         }

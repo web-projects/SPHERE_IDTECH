@@ -318,9 +318,9 @@ if (deviceID.ToLower().Contains("usb\\") && ((deviceID.Contains($"VID_{IDTECH}")
 
         #region --- SPHERE SERIALIZER ---
 
-        public string GetConfigurationFileVersion(int majorcfg)
+        public string GetConfigurationFileVersion(int majorcfg, bool compressedSerialNumber)
         {
-            return deviceInterface?.GetConfigurationFileVersion(majorcfg);
+            return deviceInterface?.GetConfigurationFileVersion(majorcfg, compressedSerialNumber);
         }
 
         public int SetTerminalConfiguration(int majorcfg)
@@ -333,9 +333,9 @@ if (deviceID.ToLower().Contains("usb\\") && ((deviceID.Contains($"VID_{IDTECH}")
             return deviceInterface?.SetTerminalConfiguration(serializer) ?? 0;
         }
 
-        public string [] GetTerminalData(int majorcfg)
+        public string [] GetTerminalData(int majorcfg, bool compressedSerialNumber)
         {
-            return deviceInterface?.GetTerminalData(majorcfg);
+            return deviceInterface?.GetTerminalData(majorcfg, compressedSerialNumber);
         }
 
         public async Task<string []> ValidateTerminalData(ConfigSphereSerializer serializer)

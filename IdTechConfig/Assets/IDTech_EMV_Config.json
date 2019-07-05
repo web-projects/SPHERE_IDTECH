@@ -99,16 +99,25 @@
         "MajorConfigurationChecksum": [			            // Note: can differ by Kernel version
           "B430CEB9FE858B00B8B27D6F56EF40D42F0EAF8A"		// 2C checksum for EMV Common L2 Version V1.10.037  (can use value to determine if current MajorConfiguration is correct)
         ],
-        "SerialNumberTag": "9F1E",		// Data length = 8; compressed string returned from config_getSerialNumber()
-        "VersionTag": "9F4E",		      // Data length = 30; first 30 characters from ConfigurationID.Version
-        "KernelVersionTag": "9F1C",		// Data length = 8; last whitespace separated group from emv_getEMVKernelVersion()
+        "SerialNumberTag": "9F1E",		        // Tag 9F1E (Interface Device Serial Number) is set from live value (from config_getSerialNumber())
+        "SerialNumberMaxLen": -8,		          // Set max length of 9F1E value to favor trailing characters (negative value)
+        //"SerialNumber2Tag": "9F16",		        // Tag 9F16 (Merchant Identifier) is set from live value (from config_getSerialNumber())
+        //"SerialNumber2MaxLen": -15,		        // Set max length of 9F16 value to favor trailing characters (negative value)
+        //"CompressedSerialNumberTag": "9F1E",	// Tag 9F1E (Interface Device Serial Number) is set from live value (from config_getSerialNumber())
+        //"CompressedSerialNumberMaxLen": -8,		// Set max length of 9F1E value to favor trailing characters (negative value)
+        //"SerialNumberPrefix": "SPTC_",	      // Serial number prefix (for tags such as 9F16)
+        "VersionTag": "9F4E",		              // Data length = 30; first 30 characters from ConfigurationID.Version
+        "KernelVersionTag": "9F1C",		        // Data length = 8; last whitespace separated group from emv_getEMVKernelVersion()
+        "CombinedSerialKernelTag": "DFED22",	// Tag DFED22 is IDTech specific Current Configuration Version value for Augusta is set from combined live device serial and EMVKernel version
+        "CombinedSerialKernelMaxLen": 32,		  // Set max length of DFED22 value
+        "CombinedSerialKernelSeparator": "-",	// Separator value between device serial number and EMV Kernel version
         "TerminalData": {
           // Tags for QuickChip KB-mode
           "9F02": "000000001000",		      // Default amount (10.00)
-	        "DFEE1E": "10C420D0C41E4400",		// Contact Terminal Configuration (Ingenico equiv F0DC3CF0C2D28400)	// Non-KB 5C value "D09C20F0C20E1600"
-          //   Byte 1:
+          "DFEE1E": "50C420D0C41E4400",		// Contact Terminal Configuration (Ingenico equiv F0DC3CF0C2D28400)	// Non-KB 2C value "D09C20F0C20E1600"
+         //   Byte 1:
           //     Key Pad Support (b8) - False
-          //     LCD Support (b7) - False
+          //     LCD Support (b7) - True (to ensure we LCD messaging used by workflows, even if no physical LCD is attached)
           //     PIN Pad Support (b6) - False
           //     Print Support (b5) - True
           //     RFU (b4) - False
@@ -270,12 +279,9 @@
           //     Code Table 1 (b1)
           "9F15": "5999",		// Merchant Category code				  // IDTech default value "1234"
 
-          //"9F1C": "3837363534333231",								        // Terminal Identification (len 8) - replace with last Serial#?
-          //"9F7C": "54323031395F312E302E305F53706865726554435F41",			// Data length = 20; T2019_1.0.0_SphereTC_A
-
           "DF26": "01",			            // Enable/Disable Certificate Revocation List  (equivalent to Ingenico 9F8442 = 01?)
           "DF10": "656E667265737A68",		// Language (var up to 128; default 656e667265737a68)	-- Ingenico tag 9F8431, value 65 6e  <!-- enes (en=65 6e; es=65 73; fr=66 72-->   Supported Languages.
-          "DF11": "01",			            // Support Transaction Log  (note: cannot set to "01" on Augusta) (equivalent to Ingenico 9F8444 = 00?)
+          "DF11": "00",			            // Support Transaction Log  (note: cannot set to "01" on Augusta) (equivalent to Ingenico 9F8444 = 00?)
           "DF27": "00",			            // Support Exception File  (equivalent to Ingenico 9F844C = 00?)
           "DFEE15": "01",		            // Terminal Support ASI
           "DFEE16": "00",		            // Terminal Encrypt Mode
@@ -346,6 +352,8 @@
           "9F7C",		// Customer Exclusive Data
           "DFEE23",	// MSR all track data
           //"DFEE26",	// Encryption Status Information		// This is not an Augusta tag; it is for NEO class devices
+          "DFED22",	// XXXXXXXXXXXXXXXXXX
+          "DFEF57",	// XXXXXXXXXXXXXXXXXX
           "FFEE01"	// ViVOpay TLV Group Tag	// End disable for VP3300
         ]
       }
@@ -522,9 +530,11 @@
          "VP5300": [ "VP5300 FW v1.00.028.0192.S", "VP5300 FW v1.00.028.0192.S Test", "VP5300 FW v1.00.029.0193.S", "VP5300 FW v1.00.029.0193.S Test", "VP5300 FW v1.00.043.0317.S Test" ]
       },
       "ContactDoNotSendTags": [
+        "9F1C",			  // Terminal Identification (used for EMV Kernel for QC KB; causes transaction issues on VP5300)
         "9F53",			  // Transaction Category Code
-        //"DFEE1D",			// Masked Output Data Parameter
         "DFED0A",			// Output Fallback Reason (1 = enabled)
+        "DFED22",		  // XXXXXXXXXXXXXXXXXX
+        "DFEF57",		  // XXXXXXXXXXXXXXXXXX
         "DFEF65",			// Control Output Errors (1 = enabled)
         "DFEF62",			// Allow MSR Swipe data from ICC card - disabled (01)
         "DFEF7D",			// Re-power on times
@@ -536,10 +546,9 @@
         "IDEM-85XX": [ "ID TECH Augusta S USB-KB V1.02.012.S", "ID TECH Augusta S USB-KB V1.02.013.S", "ID TECH Augusta S USB-HID V1.02.021.S" ]
       },
       "ContactDoNotSendTags": [
-        //"DFEE1D"			// Masked Output Data Parameter
       ],
       "ContactOverrideTags": {
-        "DFEE1E": "50C420D0C41E0400",	// Contact Terminal Configuration (Ingenico equiv F0DC3CF0C2D28400)	// Non-KB 2C value "D09C20F0C20E1600"
+        "DFEE1E": "50C420D0C41E0400"	// Contact Terminal Configuration (Ingenico equiv F0DC3CF0C2D28400)	// Non-KB 2C value "D09C20F0C20E1600"
         //   Byte 1:
         //     Key Pad Support (b8) - False
         //     LCD Support (b7) - True
@@ -612,7 +621,6 @@
         //     RFU (b3) - False
         //     RFU (b2) - False
         //     RFU (b1) - False
-        "DF11": "00"			// Support Transaction Log  (note: cannot set to "01" on Augusta) (equivalent to Ingenico 9F8444 = 00?)
       },
       "DeviceConfigValues": {
         //"CrypTypeID": "4C",	,		          // Function ID for CrypType
@@ -659,8 +667,14 @@
             "DFEE1D": "06042A0C33",	  // Masked Data Output Parameter (PrePAN=6, PosPAN=4, MaskASCII=2A, MaskHex=0C, Expire=NotMask, ServiceCode=NotMask)
             "DFEF4B": "F60000"	      // MSR Equivalent Data Option
           },
-          //"VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
-          "SerialNumberTag": "9F1E"		// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
+          "VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
+          "SerialNumberTag": "9F1E",	// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
+          "SerialNumberMaxLen": -8		// Set max length of 9F1E value to favor trailing characters (negative value)
+          //"SerialNumber2Tag": "9F16",		          // Tag 9F16 (Merchant Identifier) is set from live value (from config_getSerialNumber())
+          //"SerialNumber2MaxLen": -15,		          // Set max length of 9F16 value to favor trailing characters (negative value)
+          //"CompressedSerialNumberTag": "9F1E",		// Tag 9F1E (Interface Device Serial Number) is set from live value (from config_getSerialNumber())
+          //"CompressedSerialNumberMaxLen": -8,		  // Set max length of 9F1E value to favor trailing characters (negative value)
+          //"SerialNumberPrefix": "SPTC_"	          // Serial number prefix (for tags such as 9F16)
         },
         "VisaSetA": {
           "Group": {
@@ -684,8 +698,14 @@
             "DF8121": "0010000000",	  // TAC Denial
             "DF8122": "DC4004F800"	  // TAC Online
           },
-          //"VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
-          "SerialNumberTag": "9F1E"		// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
+          "VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
+          "SerialNumberTag": "9F1E",	// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
+          "SerialNumberMaxLen": -8	  // Set max length of 9F1E value to favor trailing characters (negative value)
+          //"SerialNumber2Tag": "9F16",		        // Tag 9F16 (Merchant Identifier) is set from live value (from config_getSerialNumber())
+          //"SerialNumber2MaxLen": -15,		        // Set max length of 9F16 value to favor trailing characters (negative value)
+          //"CompressedSerialNumberTag": "9F1E",	// Tag 9F1E (Interface Device Serial Number) is set from live value (from config_getSerialNumber())
+          //"CompressedSerialNumberMaxLen": -8,		// Set max length of 9F1E value to favor trailing characters (negative value)
+          //"SerialNumberPrefix": "SPTC_"	        // Serial number prefix (for tags such as 9F16)
         },
         "MasterSetA": {
           "Group": {
@@ -699,7 +719,7 @@
           "ApplicationFlow": "03",
           "TagValues": {
             "9F33": "0028C8",            // Terminal Capability (Ingenico value 6098C8)
-            "9F1D": "6CFF000000000000",	 // Terminal Risk Management
+            "9F1D": "0808000000000000",	 // Terminal Risk Management
             "DF8120": "F45080800C",		   // TAC Default (Ingenico 9F8128)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8121": "0000000000",		   // TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8122": "F45080800C",		   // TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
@@ -712,8 +732,14 @@
             "DFEE4B": "01",		           // Partial Selection
             "DFEE53": "02"		           // AID Participation in Selection Processes
           },
-          // //"VersionTag": "9F4E",		// Data length = 30; first 30 characters from ConfigurationID.Version		// Tag ignored in current firmware
-          "SerialNumberTag": "9F1E"		   // Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
+          "VersionTag": "9F4E",		       // Data length = 30; first 30 characters from ConfigurationID.Version		// Tag ignored in current firmware
+          "SerialNumberTag": "9F1E",		 // Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
+          "SerialNumberMaxLen": -8		   // Set max length of 9F1E value to favor trailing characters (negative value)
+          //"SerialNumber2Tag": "9F16",		        // Tag 9F16 (Merchant Identifier) is set from live value (from config_getSerialNumber())
+          //"SerialNumber2MaxLen": -15,		        // Set max length of 9F16 value to favor trailing characters (negative value)
+          //"CompressedSerialNumberTag": "9F1E",	// Tag 9F1E (Interface Device Serial Number) is set from live value (from config_getSerialNumber())
+          //"CompressedSerialNumberMaxLen": -8,		// Set max length of 9F1E value to favor trailing characters (negative value)
+          //"SerialNumberPrefix": "SPTC_"	        // Serial number prefix (for tags such as 9F16)
         },
         "AmexSetA": {
           "Group": {
@@ -734,8 +760,14 @@
             "DF8121": "0010000000",		 // TAC Denial (Ingenico 9F8129)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
             "DF8122": "DE00FC9800"		 // TAC Online (Ingenico 9F812A)  -- note : tag in NEO 2 IDG manual; unsure what value to use here
          },
-         //"VersionTag": "9F4E",		     // Data length = 30; first 30 characters from ConfigurationID.Version
-         "SerialNumberTag": "9F1E"		 // Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
+         "VersionTag": "9F4E",		     // Data length = 30; first 30 characters from ConfigurationID.Version
+         "SerialNumberTag": "9F1E",		 // Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
+         "SerialNumberMaxLen": -8		// Set max length of 9F1E value to favor trailing characters (negative value)
+         //"SerialNumber2Tag": "9F16",		        // Tag 9F16 (Merchant Identifier) is set from live value (from config_getSerialNumber())
+         //"SerialNumber2MaxLen": -15,		        // Set max length of 9F16 value to favor trailing characters (negative value)
+         //"CompressedSerialNumberTag": "9F1E",		// Tag 9F1E (Interface Device Serial Number) is set from live value (from config_getSerialNumber())
+         //"CompressedSerialNumberMaxLen": -8,		// Set max length of 9F1E value to favor trailing characters (negative value)
+         //"SerialNumberPrefix": "SPTC_"	        // Serial number prefix (for tags such as 9F16)
         },
         "DiscoverSetA": {
           "Group": {
@@ -760,11 +792,17 @@
             "9F1B": "00000000",	      // Terminal Floor limit
             "DFEF4B": "F60000"	      // MSR Equivalent Data Option
           },
-          //"VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
-          "SerialNumberTag": "9F1E"		// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
-          }
+          "VersionTag": "9F4E",		    // Data length = 30; first 30 characters from ConfigurationID.Version
+          "SerialNumberTag": "9F1E",		// Terminal IDF; Data length = 8; last 8 characters returned from config_getSerialNumber()
+          "SerialNumberMaxLen": -8		// Set max length of 9F1E value to favor trailing characters (negative value)
+          //"SerialNumber2Tag": "9F16",		        // Tag 9F16 (Merchant Identifier) is set from live value (from config_getSerialNumber())
+          //"SerialNumber2MaxLen": -15,		        // Set max length of 9F16 value to favor trailing characters (negative value)
+          //"CompressedSerialNumberTag": "9F1E",	// Tag 9F1E (Interface Device Serial Number) is set from live value (from config_getSerialNumber())
+          //"CompressedSerialNumberMaxLen": -8,		// Set max length of 9F1E value to favor trailing characters (negative value)
+          //"SerialNumberPrefix": "SPTC_"	        // Serial number prefix (for tags such as 9F16)
         }
       }
     }
+  }
   ]
 }

@@ -70,6 +70,16 @@ namespace IPA.DAL.RBADAL
     byte[] additionalTags;
     string amount;
 
+    enum ID_TECH_LCD_MESSAGES
+    {
+        ID_TECH_LCD_MESSAGE_USE_CHIP_READER			 = 0x0E,
+        ID_TECH_LCD_MESSAGE_USE_MAGSTRIPE			 = 0x13,
+        ID_TECH_LCD_MESSAGE_TRY_ICC_AGAIN			 = 0x42,
+        ID_TECH_LCD_MESSAGE_PLEASE_SEE_PHONE		 = 0x4A,
+        ID_TECH_LCD_MESSAGE_PLEASE_TAP_OR_SWIPE_CARD = 0x57,
+        ID_TECH_LCD_MESSAGE_PRESENT_ONE_CARD		 = 0x5E,
+    };
+
     // configuration modes
     IPA.Core.Shared.Enums.ConfigurationModes configurationMode = ConfigurationModes.FROM_CONFIG;
 
@@ -917,37 +927,70 @@ namespace IPA.DAL.RBADAL
     {
         if (emvCallback != null) 
         {
-            Debug.WriteLine("ProcessEMVCallback: LCD Display ={0}", (object)Common.getHexStringFromBytes(emvCallback.lcd_messages));
-        }
-        if (emvCallback.lcd_displayMode != EMV_LCD_DISPLAY_MODE.EMV_LCD_DISPLAY_MODE_CANCEL)
-        {
-            //IDTechSoftwareDevice.UpdateEMVResponse(emvCallback);
-        }
-        if (emvCallback.callbackType == EMV_CALLBACK_TYPE.EMV_CALLBACK_TYPE_LCD) //LCD Callback Type
-        {
-            if (emvCallback.lcd_displayMode == EMV_LCD_DISPLAY_MODE.EMV_LCD_DISPLAY_MODE_CLEAR_SCREEN)
-            {
-                return;
-            }
-            else if (emvCallback.lcd_displayMode == EMV_LCD_DISPLAY_MODE.EMV_LCD_DISPLAY_MODE_MESSAGE)
-            {
-            }
-            else
-            {
-                //Display message with menu/language or prompt, and return result to emv_callbackResponseLCD
-                //Kernel will not proceed until this step is complete
-            }
+            Debug.WriteLine("ProcessEMVCallback: LCD Display={0}", (object)Common.getHexStringFromBytes(emvCallback.lcd_messages));
 
-        }
-        if (emvCallback.callbackType == EMV_CALLBACK_TYPE.EMV_CALLBACK_TYPE_PINPAD) //PIN Callback Type
-        {
-            //Provide PIN information to emv_callbackResponsePIN
-            //Kernel will not proceed until this step is complete
-        }
-        if (emvCallback.callbackType == EMV_CALLBACK_TYPE.EMV_CALLBACK_MSR) //MSR Callback Type
-        {
-            //Provide MSR Swipe information to emv_callbackResponseMSR
-            //Kernel will not proceed until this step is complete
+             //LCD Callback Type
+            if (emvCallback.callbackType == EMV_CALLBACK_TYPE.EMV_CALLBACK_TYPE_LCD)
+            {
+                switch((ID_TECH_LCD_MESSAGES)emvCallback.lcd_messages[1])
+                {
+                    case ID_TECH_LCD_MESSAGES.ID_TECH_LCD_MESSAGE_USE_CHIP_READER:
+                    {
+                        Debug.WriteLine("------------------ USE CHIP READER");
+                        break;
+                    }
+
+                    case ID_TECH_LCD_MESSAGES.ID_TECH_LCD_MESSAGE_USE_MAGSTRIPE:
+                    {
+                        Debug.WriteLine("------------------ USE MAGSTRIPE");
+                        break;
+                    }
+
+                    case ID_TECH_LCD_MESSAGES.ID_TECH_LCD_MESSAGE_TRY_ICC_AGAIN:
+                    {
+                        Debug.WriteLine("------------------ TRY ICC AGAIN");
+                        break;
+                    }
+
+                    case ID_TECH_LCD_MESSAGES.ID_TECH_LCD_MESSAGE_PLEASE_SEE_PHONE:
+                    {
+                        Debug.WriteLine("------------------ PLEASE SEE PHONE");
+                        break;
+                    }
+
+                    case ID_TECH_LCD_MESSAGES.ID_TECH_LCD_MESSAGE_PLEASE_TAP_OR_SWIPE_CARD:
+                    {
+                        Debug.WriteLine("PLEASE TAP OR SWIPE CARD");
+                        break;
+                    }
+
+                    case ID_TECH_LCD_MESSAGES.ID_TECH_LCD_MESSAGE_PRESENT_ONE_CARD:
+                    {
+                        Debug.WriteLine("------------------ PRESENT ONE CARD");
+                        break;
+                    }
+
+                    default:
+                    {
+                        Debug.WriteLine("------------------ DEFAULT");
+                        break;
+                    }
+                }
+            }
+            //PIN Callback Type
+            else if (emvCallback.callbackType == EMV_CALLBACK_TYPE.EMV_CALLBACK_TYPE_PINPAD)
+            {
+                //Provide PIN information to emv_callbackResponsePIN
+                //Kernel will not proceed until this step is complete
+                Debug.WriteLine("ProcessEMVCallback: EMV_CALLBACK_TYPE.EMV_CALLBACK_TYPE_PINPAD");
+            }
+            //MSR Callback Type
+            else if (emvCallback.callbackType == EMV_CALLBACK_TYPE.EMV_CALLBACK_MSR)
+            {
+                //Provide MSR Swipe information to emv_callbackResponseMSR
+                //Kernel will not proceed until this step is complete
+                Debug.WriteLine("ProcessEMVCallback: EMV_CALLBACK_TYPE.EMV_CALLBACK_MSR");
+            }
         }
     }
 
@@ -2858,8 +2901,10 @@ namespace IPA.DAL.RBADAL
 
     public bool ConfigFileMatches(int majorcfg)
     {
+        CommonInterface.ConfigSphere.Configuration.TerminalSettings terminalSettings = SphereSerializer.GetTerminalSettings();
+
         // Get Current TAGS and Find TAG: 9F4E
-        string tag9F4E = Device.GetConfigurationFileVersion(majorcfg);
+        string tag9F4E = Device.GetConfigurationFileVersion(majorcfg, !string.IsNullOrWhiteSpace(terminalSettings.CompressedSerialNumberTag));
         if(tag9F4E != null)
         {
             return SphereSerializer.DeviceConfigVersionMatches(tag9F4E);
@@ -2879,7 +2924,8 @@ namespace IPA.DAL.RBADAL
             string [] message = { "" };
             if(configurationMode == ConfigurationModes.FROM_DEVICE)
             {
-                message = Device.GetTerminalData(majorcfg);
+                CommonInterface.ConfigSphere.Configuration.TerminalSettings terminalSettings = SphereSerializer.GetTerminalSettings();
+                message = Device.GetTerminalData(majorcfg, !string.IsNullOrWhiteSpace(terminalSettings.CompressedSerialNumberTag));
             }
             else
             {

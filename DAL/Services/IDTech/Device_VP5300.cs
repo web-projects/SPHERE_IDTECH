@@ -372,7 +372,7 @@ namespace IPA.DAL.RBADAL.Services
 
         #region --- SPHERE SERIALIZER ---
 
-        public override string GetConfigurationFileVersion(int majorcfg)
+        public override string GetConfigurationFileVersion(int majorcfg, bool compressedSerialNumber)
         {
             return null;
         }
@@ -423,7 +423,7 @@ namespace IPA.DAL.RBADAL.Services
             return (int) rt;
         }
 
-        public override string [] GetTerminalData(int majorcfg)
+        public override string [] GetTerminalData(int majorcfg, bool compressedSerialNumber)
          {
             string [] data = null;
 
@@ -447,7 +447,7 @@ namespace IPA.DAL.RBADAL.Services
                             foreach(var devTag in devCollection)
                             {
                                 // TAG 9F1E: compression support (default: "Terminal")
-                                if(devTag.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase) && !devTag.Value.Equals("5465726D696E616C", StringComparison.CurrentCultureIgnoreCase))
+                                if(devTag.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase) && !devTag.Value.Equals("5465726D696E616C", StringComparison.CurrentCultureIgnoreCase) && compressedSerialNumber)
                                 {
                                     string [] tagValue = new string[devTag.Value.Length / 2];
                                 
@@ -576,9 +576,13 @@ namespace IPA.DAL.RBADAL.Services
                                         // TAG 9F1E: compression support
                                         if(item.Key.Equals("9F1E", StringComparison.CurrentCultureIgnoreCase))
                                         {
-                                            //item1 = Encoding.GetEncoding(437).GetBytes(item.Value);
-                                            string compressed = Utils.Compress(item.Value ?? "");
-                                            item1 = Encoding.GetEncoding(437).GetBytes(compressed);
+                                            TerminalSettings termsettings = serializer.GetTerminalSettings();
+                                            if(!string.IsNullOrWhiteSpace(termsettings.CompressedSerialNumberTag))
+                                            { 
+                                                //item1 = Encoding.GetEncoding(437).GetBytes(item.Value);
+                                                string compressed = Utils.Compress(cfgItemValue ?? "");
+                                                item1 = Encoding.GetEncoding(437).GetBytes(compressed);
+                                            }
                                         }
                                         byte itemLen = Convert.ToByte(item1.Length);
                                         byte [] item2 = new byte[]{ itemLen };
@@ -606,7 +610,8 @@ namespace IPA.DAL.RBADAL.Services
                                 else
                                 {
                                     Debug.WriteLine("emv_setTerminalMajorConfiguration() error: {0}", rt);
-                                    Logger.error( "device: ValidateTerminalData() error={0} DATA={1}", rt, BitConverter.ToString(terminalData).Replace("-", string.Empty));
+                                    Logger.error( "device: ValidateTerminalData() error={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt));
+                                    Logger.error( "device: ValidateTerminalData() DATA=[{0}]", BitConverter.ToString(terminalData).Replace("-", string.Empty));
                                     result = new [] { string.Format("TERMINAL DATA ERROR={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt)) };
                                 }
                             }
@@ -618,7 +623,8 @@ namespace IPA.DAL.RBADAL.Services
                     }
                     else
                     {
-                        Debug.WriteLine("TERMINAL DATA: emv_retrieveTerminalData() - ERROR=error: {0}", rt);
+                        Logger.error( "device: ValidateTerminalData() error={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt));
+                        result = new [] { string.Format("TERMINAL DATA ERROR={0} - [{1}]", rt, IDTechSDK.errorCode.getErrorString(rt)) };
                     }
                 }
                 else
