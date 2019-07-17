@@ -470,7 +470,7 @@ namespace IPA.DAL.RBADAL.Services
                     TerminalSettings termsettings = serializer.GetTerminalSettings();
                     string workerstr = termsettings.MajorConfiguration;
                     string majorcfgstr = Regex.Replace(workerstr, "[^0-9.]", string.Empty);
-                    if(Int32.TryParse(majorcfgstr, out ref int majorcfgint))
+                    if(Int32.TryParse(majorcfgstr, out int majorcfgint))
                     {
                         rt = IDT_Augusta.SharedController.emv_setTerminalMajorConfiguration(majorcfgint);
                         if(rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
@@ -500,7 +500,7 @@ namespace IPA.DAL.RBADAL.Services
                     TerminalSettings termsettings = serializer.GetTerminalSettings();
                     string workerstr = termsettings.MajorConfiguration;
                     string majorcfgstr = Regex.Replace(workerstr, "[^0-9.]", string.Empty);
-                    if(Int32.TryParse(majorcfgstr, out ref int majorcfgint))
+                    if(Int32.TryParse(majorcfgstr, out int majorcfgint))
                     {
                         return majorcfgint;
                     }

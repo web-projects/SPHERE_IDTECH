@@ -58,3 +58,4 @@ This an application to Configure IDTech Devices.
 * 20190626 - Implemented ContactOverrideTags.
 * 20190628 - Added MSR, ICC, and General Group default reset.
 * 20190705 - Added CombinedSerialKernelTag support for TAG DFED22.
+* 20190717 - Cleaned up device methods.

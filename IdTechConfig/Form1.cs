@@ -238,7 +238,7 @@ namespace IPA.MainApp
             InitalizeDevice();
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
             formClosing = true;
 
@@ -1002,7 +1002,6 @@ namespace IPA.MainApp
                 while (!formClosing && !foundit)
                 {
                     HidDevice device = HidDevices.Enumerate(Device_IDTech.IDTechVendorID).FirstOrDefault();
-
                     if (device != null)
                     {
                         foundit = true;
