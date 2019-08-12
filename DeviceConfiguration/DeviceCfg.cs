@@ -116,76 +116,76 @@ namespace IPA.DAL.RBADAL
 
                 if (device != null)
                 {
-                // Get Capabilities
-                Debug.WriteLine("");
-                Debug.WriteLine("device capabilities ----------------------------------------------------------------");
-		        Debug.WriteLine("  Usage                          : " + Convert.ToString(device.Capabilities.Usage, 16));
-		        Debug.WriteLine("  Usage Page                     : " + Convert.ToString(device.Capabilities.UsagePage, 16));
-		        Debug.WriteLine("  Input Report Byte Length       : " + device.Capabilities.InputReportByteLength);
-		        Debug.WriteLine("  Output Report Byte Length      : " + device.Capabilities.OutputReportByteLength);
-		        Debug.WriteLine("  Feature Report Byte Length     : " + device.Capabilities.FeatureReportByteLength);
-		        Debug.WriteLine("  Number of Link Collection Nodes: " + device.Capabilities.NumberLinkCollectionNodes);
-		        Debug.WriteLine("  Number of Input Button Caps    : " + device.Capabilities.NumberInputButtonCaps);
-		        Debug.WriteLine("  Number of Input Value Caps     : " + device.Capabilities.NumberInputValueCaps);
-		        Debug.WriteLine("  Number of Input Data Indices   : " + device.Capabilities.NumberInputDataIndices);
-		        Debug.WriteLine("  Number of Output Button Caps   : " + device.Capabilities.NumberOutputButtonCaps);
-		        Debug.WriteLine("  Number of Output Value Caps    : " + device.Capabilities.NumberOutputValueCaps);
-		        Debug.WriteLine("  Number of Output Data Indices  : " + device.Capabilities.NumberOutputDataIndices);
-		        Debug.WriteLine("  Number of Feature Button Caps  : " + device.Capabilities.NumberFeatureButtonCaps);
-		        Debug.WriteLine("  Number of Feature Value Caps   : " + device.Capabilities.NumberFeatureValueCaps);
-		        Debug.WriteLine("  Number of Feature Data Indices : " + device.Capabilities.NumberFeatureDataIndices);
+                    // Get Capabilities
+                    Debug.WriteLine("");
+                    Debug.WriteLine("device capabilities ----------------------------------------------------------------");
+		            Debug.WriteLine("  Usage                          : " + Convert.ToString(device.Capabilities.Usage, 16));
+		            Debug.WriteLine("  Usage Page                     : " + Convert.ToString(device.Capabilities.UsagePage, 16));
+		            Debug.WriteLine("  Input Report Byte Length       : " + device.Capabilities.InputReportByteLength);
+		            Debug.WriteLine("  Output Report Byte Length      : " + device.Capabilities.OutputReportByteLength);
+		            Debug.WriteLine("  Feature Report Byte Length     : " + device.Capabilities.FeatureReportByteLength);
+		            Debug.WriteLine("  Number of Link Collection Nodes: " + device.Capabilities.NumberLinkCollectionNodes);
+		            Debug.WriteLine("  Number of Input Button Caps    : " + device.Capabilities.NumberInputButtonCaps);
+		            Debug.WriteLine("  Number of Input Value Caps     : " + device.Capabilities.NumberInputValueCaps);
+		            Debug.WriteLine("  Number of Input Data Indices   : " + device.Capabilities.NumberInputDataIndices);
+		            Debug.WriteLine("  Number of Output Button Caps   : " + device.Capabilities.NumberOutputButtonCaps);
+		            Debug.WriteLine("  Number of Output Value Caps    : " + device.Capabilities.NumberOutputValueCaps);
+		            Debug.WriteLine("  Number of Output Data Indices  : " + device.Capabilities.NumberOutputDataIndices);
+		            Debug.WriteLine("  Number of Feature Button Caps  : " + device.Capabilities.NumberFeatureButtonCaps);
+		            Debug.WriteLine("  Number of Feature Value Caps   : " + device.Capabilities.NumberFeatureValueCaps);
+		            Debug.WriteLine("  Number of Feature Data Indices : " + device.Capabilities.NumberFeatureDataIndices);
 
-                // Using the device notifier to detect device removed event
-                device.Removed += DeviceRemovedHandler;
-                Device.OnNotification += OnNotification;
+                    // Using the device notifier to detect device removed event
+                    device.Removed += DeviceRemovedHandler;
+                    Device.OnNotification += OnNotification;
 
-                Device.Init(SerialPortService.GetAvailablePorts(), ref deviceInformation.deviceMode);
+                    Device.Init(SerialPortService.GetAvailablePorts(), ref deviceInformation.deviceMode);
 
-                // Notify Main Form
-                SetDeviceInterfaceType(deviceInformation.deviceMode);
+                    // Notify Main Form
+                    SetDeviceInterfaceType(deviceInformation.deviceMode);
 
-                // connect to device
-                Device.Connect();
+                    // connect to device
+                    Device.Connect();
 
-                // Set as Attached
-                attached = true;
+                    // Set as Attached
+                    attached = true;
 
-                if(!useUniversalSDK)
-                {
-                    Debug.WriteLine("device information ----------------------------------------------------------------");
-                    DeviceInfo di = Device.GetDeviceInfo();
-                    deviceInformation.SerialNumber = di.SerialNumber;
-                    Debug.WriteLine("device INFO[Serial Number]   : {0}", (object) deviceInformation.SerialNumber);
-                    deviceInformation.FirmwareVersion = di.FirmwareVersion;
-                    Debug.WriteLine("device INFO[Firmware Version]: {0}", (object) deviceInformation.FirmwareVersion);
-                    deviceInformation.ModelNumber = di.ModelNumber;
-                    Debug.WriteLine("device INFO[Model Number]    : {0}", (object) deviceInformation.ModelNumber);
-                    deviceInformation.ModelName = di.ModelName;
-                    Debug.WriteLine("device INFO[Model Name]      : {0}", (object) deviceInformation.ModelName);
-                    deviceInformation.Port = di.Port;
-                    Debug.WriteLine("device INFO[Port]            : {0}", (object) deviceInformation.Port);
-                }
+                    if(!useUniversalSDK)
+                    {
+                        Debug.WriteLine("device information ----------------------------------------------------------------");
+                        DeviceInfo di = Device.GetDeviceInfo();
+                        deviceInformation.SerialNumber = di.SerialNumber;
+                        Debug.WriteLine("device INFO[Serial Number]   : {0}", (object) deviceInformation.SerialNumber);
+                        deviceInformation.FirmwareVersion = di.FirmwareVersion;
+                        Debug.WriteLine("device INFO[Firmware Version]: {0}", (object) deviceInformation.FirmwareVersion);
+                        deviceInformation.ModelNumber = di.ModelNumber;
+                        Debug.WriteLine("device INFO[Model Number]    : {0}", (object) deviceInformation.ModelNumber);
+                        deviceInformation.ModelName = di.ModelName;
+                        Debug.WriteLine("device INFO[Model Name]      : {0}", (object) deviceInformation.ModelName);
+                        deviceInformation.Port = di.Port;
+                        Debug.WriteLine("device INFO[Port]            : {0}", (object) deviceInformation.Port);
+                    }
 
-                // DEVICES with USDK Support
-                if(useUniversalSDK)
-                {
-                    // Initialize Universal SDK
-                    IDT_Device.setCallback(MessageCallBack);
-                    IDT_Device.startUSBMonitoring();
-                    Logger.debug("DeviceCfg::DeviceInit(): - device TYPE={0}", IDT_Device.getDeviceType());
+                    // DEVICES with USDK Support
+                    if(useUniversalSDK)
+                    {
+                        // Initialize Universal SDK
+                        IDT_Device.setCallback(MessageCallBack);
+                        IDT_Device.startUSBMonitoring();
+                        Logger.debug("DeviceCfg::DeviceInit(): - device TYPE={0}", IDT_Device.getDeviceType());
 
-                    NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
-                }
-                else if(deviceInformation.deviceMode == IDTECH_DEVICE_PID.VP3000_KYB)
-                {
-                    deviceType = IDT_DEVICE_Types.IDT_DEVICE_VP3300;
-                    SetDeviceConfig(true);
-                    NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
-                }
+                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
+                    }
+                    else if(deviceInformation.deviceMode == IDTECH_DEVICE_PID.VP3000_KYB)
+                    {
+                        deviceType = IDT_DEVICE_Types.IDT_DEVICE_VP3300;
+                        SetDeviceConfig(true);
+                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
+                    }
                 }
                 else
                 {
-                throw new Exception("NoDevice");
+                    throw new Exception("NoDevice");
                 }
             }
             catch (Exception ex)

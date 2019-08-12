@@ -285,7 +285,7 @@ namespace IPA.MainApp
                 Logger.error("main: SetupLogging() - exception={0}", (object) e.Message);
             }*/
             string fullName = Assembly.GetEntryAssembly().Location;
-            Logger.info( "{0} VERSION {1}.", System.IO.Path.GetFileNameWithoutExtension(fullName).ToUpper(), Assembly.GetEntryAssembly().GetName().Version);
+            Logger.info("{0} VERSION {1}.", System.IO.Path.GetFileNameWithoutExtension(fullName).ToUpper(), Assembly.GetEntryAssembly().GetName().Version);
         }
 
         private void UpdateAppSetting(string key, string value)
