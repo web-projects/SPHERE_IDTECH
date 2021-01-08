@@ -174,18 +174,6 @@ namespace IPA.DAL.RBADAL
                         SetDeviceConfig(true);
                         NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
                     }
-                    else if (deviceInformation.deviceMode == IDTECH_DEVICE_PID.SECUREKEY_HID)
-                    {
-                        deviceType = IDT_DEVICE_Types.IDT_DEVICE_SECUREKEY;
-                        SetDeviceConfig(true);
-                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
-                    }
-                    else if (deviceInformation.deviceMode == IDTECH_DEVICE_PID.SREDKEY2_HID)
-                    {
-                        deviceType = IDT_DEVICE_Types.IDT_DEVICE_SREDKEY2;
-                        SetDeviceConfig(true);
-                        NotificationRaise(new DeviceNotificationEventArgs { NotificationType = NOTIFICATION_TYPE.NT_INITIALIZE_DEVICE, Message = new object[] { "COMPLETED" } });
-                    }
                 }
                 else
                 {
@@ -309,6 +297,7 @@ namespace IPA.DAL.RBADAL
                 case IDTECH_DEVICE_PID.AUGUSTA_HID:
                 case IDTECH_DEVICE_PID.AUGUSTAS_HID:
                 case IDTECH_DEVICE_PID.SREDKEY2_HID:
+                case IDTECH_DEVICE_PID.SECUREKEY_HID:
                 {
                     useUniversalSDK = true;
                     deviceInformation.deviceMode = mode;
@@ -317,7 +306,6 @@ namespace IPA.DAL.RBADAL
                 }
 
                 case IDTECH_DEVICE_PID.MAGSTRIPE_HID:
-                case IDTECH_DEVICE_PID.SECUREKEY_HID:
                 case IDTECH_DEVICE_PID.SECUREMAG_HID:
                 {
                     useUniversalSDK = false;
@@ -327,7 +315,6 @@ namespace IPA.DAL.RBADAL
                 }
 
                 case IDTECH_DEVICE_PID.MAGSTRIPE_KYB:
-                case IDTECH_DEVICE_PID.SECUREKEY_KYB:
                 case IDTECH_DEVICE_PID.SECUREMAG_KYB:
                 {
                     useUniversalSDK = false;
@@ -341,6 +328,7 @@ namespace IPA.DAL.RBADAL
                 case IDTECH_DEVICE_PID.AUGUSTA_KYB:
                 case IDTECH_DEVICE_PID.AUGUSTAS_KYB:
                 case IDTECH_DEVICE_PID.SREDKEY2_KYB:
+                case IDTECH_DEVICE_PID.SECUREKEY_KYB:
                 {
                     useUniversalSDK = true;
                     deviceInformation.deviceMode = mode;
@@ -1573,7 +1561,7 @@ namespace IPA.DAL.RBADAL
             object[] message = null;
 
             // Process Card Data
-            if (deviceInformation.deviceMode == IDTECH_DEVICE_PID.SREDKEY2_HID)
+            if (deviceInformation.deviceMode == IDTECH_DEVICE_PID.SREDKEY2_HID || deviceInformation.deviceMode == IDTECH_DEVICE_PID.SECUREKEY_HID)
             {
                 Debug.WriteLine("device: PROCESS CARD DATA -> CODE={0} - card data=[{1}]", cardData.msr_errorCode, text);
 
@@ -2304,10 +2292,15 @@ namespace IPA.DAL.RBADAL
 
             if (useUniversalSDK)
             {
-                if (deviceInformation.deviceMode == IDTECH_DEVICE_PID.SREDKEY2_HID)
+                if (deviceInformation.deviceMode == IDTECH_DEVICE_PID.SREDKEY2_HID || deviceInformation.deviceMode == IDTECH_DEVICE_PID.SECUREKEY_HID)
                 {
                     additionalTags = null;
-                    RETURN_CODE rt = IDT_SREDKey2.SharedController.msr_enable();
+
+                    RETURN_CODE rt = (deviceInformation.deviceMode switch
+                    {
+                        IDTECH_DEVICE_PID.SREDKEY2_HID => IDT_SREDKey2.SharedController.msr_enable(),
+                        IDTECH_DEVICE_PID.SECUREKEY_HID => RETURN_CODE.RETURN_CODE_DO_SUCCESS
+                    });
 
                     if (rt == RETURN_CODE.RETURN_CODE_DO_SUCCESS)
                     {
