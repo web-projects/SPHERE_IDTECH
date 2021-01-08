@@ -60,3 +60,4 @@ This an application to Configure IDTech Devices.
 * 20190705 - Added CombinedSerialKernelTag support for TAG DFED22.
 * 20190717 - Cleaned up device methods.
 * 20190812 - Formatting clean up.
+* 20210107 - SRedKey2 initial implementation.

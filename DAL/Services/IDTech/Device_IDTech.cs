@@ -1,26 +1,22 @@
-﻿using IPA.Core.Data.Entity;
-using IPA.Core.Data.Entity.Other;
+﻿using HidLibrary;
+using IPA.CommonInterface.ConfigIDTech;
+using IPA.CommonInterface.ConfigSphere;
+using IPA.Core.Data.Entity;
 using IPA.Core.Shared.Enums;
+using IPA.Core.Shared.Helpers.StatusCode;
 using IPA.DAL.RBADAL.Interfaces;
 using IPA.DAL.RBADAL.Models;
+using IPA.DAL.RBADAL.Services.Devices.IDTech;
+using IPA.DAL.RBADAL.Services.Devices.IDTech.Models;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Xml.Serialization;
-using HidLibrary;
-using IPA.DAL.RBADAL.Services.Devices.IDTech;
-using IPA.DAL.RBADAL.Services.Devices.IDTech.Models;
-using System.Collections.Generic;
 ///using IPA.Core.XO.TCCustAttribute;
 using System.Threading.Tasks;
-using IPA.Core.Shared.Helpers;
-using IPA.Core.Shared.Helpers.StatusCode;
-using IPA.CommonInterface;
-using IPA.CommonInterface.ConfigIDTech;
-using IPA.CommonInterface.ConfigSphere;
+using System.Xml.Serialization;
 
 namespace IPA.DAL.RBADAL.Services
 {
@@ -28,7 +24,7 @@ namespace IPA.DAL.RBADAL.Services
     {
         const int StxValid = 2;
         const int EtxValid = 3;
-        
+
         const int osStx = 0;
         const int osLenDataL = 1;
         const int osLenDataH = 2;
@@ -54,16 +50,16 @@ namespace IPA.DAL.RBADAL.Services
         //Not sure how this is used, set in Connect
         private static DeviceInfo deviceInfo;
 
-//        private static string attachedPort;
+        //        private static string attachedPort;
         private static string[] acceptedPorts;
         private static string[] availablePorts;
 
         //Transaction Processing Variables, track state and status through device workflow
-        
-//        private Signature signature;
+
+        //        private Signature signature;
         private string currentPaymentAmount;
-//        private bool IsDebit;
-//        private bool IsEMV;
+        //        private bool IsDebit;
+        //        private bool IsEMV;
         private IDTECH_DEVICE_PID deviceMode;
 
         public EventWaitHandle waitForReply = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -74,7 +70,7 @@ namespace IPA.DAL.RBADAL.Services
 
         #region -- public properties --
 
-        bool IDevice.Connected => device?.IsConnected != null && (bool) device?.IsConnected;
+        bool IDevice.Connected => device?.IsConnected != null && (bool)device?.IsConnected;
 
         Core.Data.Entity.Device IDevice.DeviceInfo => new Core.Data.Entity.Device
         {
@@ -117,7 +113,7 @@ namespace IPA.DAL.RBADAL.Services
         DeviceStatus IDevice.Connect()
         {
             //initialize attached device because application detected USB device change
-//            attachedPort = null;
+            //            attachedPort = null;
 
             if (Convert.ToInt32(ConnectToDevice()) == (int)EntryModeStatus.Success)
             {
@@ -126,7 +122,7 @@ namespace IPA.DAL.RBADAL.Services
                 InitializeDeviceXORequest();
 
                 SetDeviceXORequest();
-                if(!device.IsConnected )
+                if (!device.IsConnected)
                     ConnectToDevice();
                 return DeviceStatus.Connected;
             }
@@ -152,8 +148,8 @@ namespace IPA.DAL.RBADAL.Services
 
         void IDevice.BadRead()
         {
-///            Transaction.PaymentXO.Request.ReadAttempts += 1;
-///            Transaction.PaymentXO.Request.CreditCard.AbortType = DeviceAbortType.BadRead;
+            ///            Transaction.PaymentXO.Request.ReadAttempts += 1;
+            ///            Transaction.PaymentXO.Request.CreditCard.AbortType = DeviceAbortType.BadRead;
             NotificationRaise(new NotificationEventArgs { NotificationType = NotificationType.DeviceEvent, DeviceEvent = DeviceEvent.CardReadComplete });
         }
 
@@ -162,7 +158,7 @@ namespace IPA.DAL.RBADAL.Services
             //Transaction.PaymentXO.Request.CreditCard = new CreditCard
             //{
             //    AbortType = abortType,
-                
+
             //};
             //Transaction.PaymentXO.Request.CustomFields = Transaction.PaymentXO.Request.CustomFields ?? string.Empty;
             waitForReply.Set();
@@ -179,26 +175,26 @@ namespace IPA.DAL.RBADAL.Services
                 device?.OpenDevice(DeviceMode.Overlapped, DeviceMode.NonOverlapped, ShareMode.ShareRead | ShareMode.ShareWrite);
             }
         }
-/*
-        async Task IDevice.CardRead(string paymentAmount, string promptText, string availableReaders, List<TCCustAttributeItem> tcCustAttributes, Core.Shared.Enums.EntryModeType entryModeType)
-        {
-            Transaction.PaymentXO.Request.CustomFields = Transaction.PaymentXO.Request.CustomFields ?? string.Empty;
+        /*
+                async Task IDevice.CardRead(string paymentAmount, string promptText, string availableReaders, List<TCCustAttributeItem> tcCustAttributes, Core.Shared.Enums.EntryModeType entryModeType)
+                {
+                    Transaction.PaymentXO.Request.CustomFields = Transaction.PaymentXO.Request.CustomFields ?? string.Empty;
 
-            if (!device.IsConnected)
-                return ;
+                    if (!device.IsConnected)
+                        return ;
 
-            currentPaymentAmount = paymentAmount;
-            //waitForReply.Reset();
-            device.ReadReport(OnReport, int.Parse(Transaction.MSRTimer.Interval.ToString()));
-            //Wait for the Event Procedure to notify it has the data
-            //waitForReply.WaitOne();
-            //device.CloseDevice();
-            //NotificationRaise(new NotificationEventArgs { NotificationType = NotificationType.DeviceEvent, DeviceEvent = DeviceEvent.CardReadComplete });
+                    currentPaymentAmount = paymentAmount;
+                    //waitForReply.Reset();
+                    device.ReadReport(OnReport, int.Parse(Transaction.MSRTimer.Interval.ToString()));
+                    //Wait for the Event Procedure to notify it has the data
+                    //waitForReply.WaitOne();
+                    //device.CloseDevice();
+                    //NotificationRaise(new NotificationEventArgs { NotificationType = NotificationType.DeviceEvent, DeviceEvent = DeviceEvent.CardReadComplete });
 
-            //Now that the card info was captured, return it
-            return;
-        }
-*/
+                    //Now that the card info was captured, return it
+                    return;
+                }
+        */
         async Task IDevice.CardRead(string paymentAmount, string promptText)
         {
             if (!device.IsConnected)
@@ -222,33 +218,33 @@ namespace IPA.DAL.RBADAL.Services
             {
                 case DeviceProcess.Approved:
 
-                    DeviceReset();
-                    break;
+                DeviceReset();
+                break;
 
                 case DeviceProcess.Declined:
 
-                    DeviceReset();
-                    break;
+                DeviceReset();
+                break;
 
                 case DeviceProcess.Reset:
 
-                    DeviceReset();
-                    InitializeDeviceXORequest();
-                    SetDeviceXORequest();
-                    break;
+                DeviceReset();
+                InitializeDeviceXORequest();
+                SetDeviceXORequest();
+                break;
 
                 case DeviceProcess.Canceled:
 
-                    DeviceReset();
-                    break;
+                DeviceReset();
+                break;
             }
         }
-/*
-        Signature IDevice.Signature()
-        {
-            throw new NotImplementedException();
-        }
-*/
+        /*
+                Signature IDevice.Signature()
+                {
+                    throw new NotImplementedException();
+                }
+        */
         bool IDevice.UpdateDevice(DeviceUpdateType updateType)
         {
             if (updateType == DeviceUpdateType.Forms)   //TODO: need to define parameters to an update type for IDTech devices
@@ -268,21 +264,27 @@ namespace IPA.DAL.RBADAL.Services
             switch (deviceInfo.ModelNumber)
             {
                 case DeviceModelNumber.SecureMag:
+                { 
                     SetKBCommand = SetKBCommandTokens.DTSecureMag;
                     resetConfigCommand = ResetConfigCommand.DTSecureMag;
                     break;
+                }
                 case DeviceModelNumber.SRedKey:
                 case DeviceModelNumber.SecuRED:
+                { 
                     SetKBCommand = SetKBCommandTokens.DTSRedKey;
                     resetConfigCommand = ResetConfigCommand.DTSRedKey;
                     break;
+                }
                 default:
+                { 
                     SetKBCommand = SetKBCommandTokens.DTSecureKey;
                     resetConfigCommand = ResetConfigCommand.DTSecureKey;
                     break;
+                }
             }
             var configStatus = SetConfig(SetKBCommand, resetConfigCommand);
-            
+
             return configStatus;
         }
         public virtual string GetSerialNumber()
@@ -299,16 +301,16 @@ namespace IPA.DAL.RBADAL.Services
                     switch (deviceInfo.ConfigValues[index])
                     {
                         case (byte)FuncID.SerialNumber:
-                            // Device serial number starts at 0x4E and followed by a 12-bytes value
-                            if (index + 12 < deviceInfo.ConfigValues.Length)
-                            {
-                                serial = new ASCIIEncoding().GetString(deviceInfo.ConfigValues, index + 3, 10);
-                            }
-                            break;
+                        // Device serial number starts at 0x4E and followed by a 12-bytes value
+                        if (index + 12 < deviceInfo.ConfigValues.Length)
+                        {
+                            serial = new ASCIIEncoding().GetString(deviceInfo.ConfigValues, index + 3, 10);
+                        }
+                        break;
                     }
                 }
             }
-            if(string.IsNullOrEmpty(serial ))
+            if (string.IsNullOrEmpty(serial))
                 serial = GetDeviceSerialNumber();
             return serial;
         }
@@ -318,8 +320,8 @@ namespace IPA.DAL.RBADAL.Services
 
         public void NotificationRaise(NotificationEventArgs e)
         {
-///            if (Notifications.LoggingOn && e?.Message != null)
-///                IPA.Core.Client.DataAccess.Shared.Logging.LogToFile(new Exception(e.Message), EntryModeStatus.Error, skipElmahLogging: true);
+            ///            if (Notifications.LoggingOn && e?.Message != null)
+            ///                IPA.Core.Client.DataAccess.Shared.Logging.LogToFile(new Exception(e.Message), EntryModeStatus.Error, skipElmahLogging: true);
 
             if (e.NotificationType == NotificationType.DeviceEvent)
             {
@@ -367,12 +369,20 @@ namespace IPA.DAL.RBADAL.Services
                     }
                     if (isHid != null && isHid != true)
                     {
+                        SetUSBHIDMode();
+
                         PopulateDeviceInfo();
+
                         //DeviceReset requires the device be Populated first...
                         DeviceReset();
                         //Reseting device changes the device.DevicePath, so to be safe, just get the entire object as new...
                         device = HidDevices.Enumerate(IDTechVendorID).FirstOrDefault();
                     }
+                    //else
+                    //{
+                    //    SetUSBKBMode();
+                    //    SetUSBKeyboardMode();
+                    //}
                 }
                 if (device != null)
                 {
@@ -478,26 +488,26 @@ namespace IPA.DAL.RBADAL.Services
                     switch (deviceInfo.ConfigValues[index])
                     {
                         case (byte)FuncID.SecurityLevel:
-                            deviceInfo.SecurityLevel = GetSecurityLevel(deviceInfo.ConfigValues, index);
-                            break;
+                        deviceInfo.SecurityLevel = GetSecurityLevel(deviceInfo.ConfigValues, index);
+                        break;
 
                         case (byte)FuncID.SerialNumber:
-                            // Device serial number starts at 0x4E and followed by a 12-bytes value
-                            if (index + 12 < deviceInfo.ConfigValues.Length)
+                        // Device serial number starts at 0x4E and followed by a 12-bytes value
+                        if (index + 12 < deviceInfo.ConfigValues.Length)
+                        {
+                            // Find out the end of Serial Number indicator, which is either ETK or a FuncID 
+                            int endIndex = 0;
+                            while (endIndex <= 12)
                             {
-                                // Find out the end of Serial Number indicator, which is either ETK or a FuncID 
-                                int endIndex = 0;
-                                while (endIndex <= 12)
-                                {
-                                    if (deviceInfo.ConfigValues[index + endIndex] == (byte)Token.ETK || deviceInfo.ConfigValues[index + endIndex] == (byte)FuncID.DeviceFormat)
-                                        break;
-                                    else
-                                        endIndex++;
-                                }
-
-                                deviceInfo.SerialNumber = new ASCIIEncoding().GetString(deviceInfo.ConfigValues, index + 3, endIndex - 3);
+                                if (deviceInfo.ConfigValues[index + endIndex] == (byte)Token.ETK || deviceInfo.ConfigValues[index + endIndex] == (byte)FuncID.DeviceFormat)
+                                    break;
+                                else
+                                    endIndex++;
                             }
-                            break;
+
+                            deviceInfo.SerialNumber = new ASCIIEncoding().GetString(deviceInfo.ConfigValues, index + 3, endIndex - 3);
+                        }
+                        break;
                     }
                 }
 
@@ -513,10 +523,18 @@ namespace IPA.DAL.RBADAL.Services
                 if (!String.IsNullOrWhiteSpace(firmwareModelInfo))
                 {
                     deviceInfo.FirmwareVersion = ParseFirmwareVersion(firmwareModelInfo);
-                    deviceInfo.ModelName = firmwareModelInfo.Substring(2, firmwareModelInfo.IndexOf("USB", StringComparison.Ordinal) - 3);
-                    deviceInfo.Port = firmwareModelInfo.Substring(firmwareModelInfo.IndexOf("USB", StringComparison.Ordinal), 7);
+                    if (firmwareModelInfo.IndexOf("USB", StringComparison.Ordinal) != -1)
+                    {
+                        deviceInfo.ModelName = firmwareModelInfo.Substring(2, firmwareModelInfo.IndexOf("USB", StringComparison.Ordinal) - 3);
+                        deviceInfo.Port = firmwareModelInfo.Substring(firmwareModelInfo.IndexOf("USB", StringComparison.Ordinal), 7);
+                    }
+                    else
+                    {
+                        deviceInfo.ModelName = firmwareModelInfo.Substring(2, firmwareModelInfo.IndexOf(" ", StringComparison.Ordinal) - 2);
+                        deviceInfo.Port = "USB HID";
+                    }
                     // MAGSTRIP DEVICE EMBBEDS THE TYPE AS: "USB HID KB Reader"
-                    if(firmwareModelInfo.Contains("USB HID KB Reader"))
+                    if (firmwareModelInfo.Contains("USB HID KB Reader"))
                     {
                         deviceInfo.Port = "USB KB";
                     }
@@ -535,8 +553,8 @@ namespace IPA.DAL.RBADAL.Services
         private IDTSetStatus DeviceReset()
         {
             var configStatus = new IDTSetStatus { Success = true };
-            if(deviceMode == IDTECH_DEVICE_PID.AUGUSTA_KYB   ||
-               deviceMode == IDTECH_DEVICE_PID.AUGUSTAS_KYB  ||
+            if (deviceMode == IDTECH_DEVICE_PID.AUGUSTA_KYB ||
+               deviceMode == IDTECH_DEVICE_PID.AUGUSTAS_KYB ||
                deviceMode == IDTECH_DEVICE_PID.MAGSTRIPE_KYB ||
                deviceMode == IDTECH_DEVICE_PID.SECUREKEY_KYB ||
                deviceMode == IDTECH_DEVICE_PID.SECUREMAG_KYB)
@@ -556,26 +574,33 @@ namespace IPA.DAL.RBADAL.Services
             {
 
                 case DeviceModelNumber.SecureMag:
+                { 
                     resetConfigCommand = ResetConfigCommand.DTSecureMag;
                     mustRunCommand = MustRunCommandTokens.DTSecureMag;
                     //configCommand = _config.DeviceSettingsIDTSecureMag;
-
                     break;
+                }
                 case DeviceModelNumber.SRedKey:
                 case DeviceModelNumber.SecuRED:
+                {
                     resetConfigCommand = ResetConfigCommand.DTSRedKey;
                     mustRunCommand = MustRunCommandTokens.DTSRedKey;
                     //configCommand = _config.DeviceSettingsIDTSRedKey;
                     break;
+                }
                 default:
+                { 
                     resetConfigCommand = ResetConfigCommand.DTSecureKey;
                     mustRunCommand = MustRunCommandTokens.DTSecureKey;
                     //configCommand = _config.DeviceSettingsIDTSecureKey;
                     break;
+                }
             }
 
             if (!string.IsNullOrEmpty(mustRunCommand))
+            { 
                 configStatus = SetConfig(mustRunCommand, resetConfigCommand);
+            }
 
             if (configStatus.Success && !string.IsNullOrEmpty(configCommand))
             {
@@ -790,7 +815,7 @@ namespace IPA.DAL.RBADAL.Services
                     if (result[index] == (byte)Token.ETK)
                         endIndex = index;
                 }
-       
+
                 serialNumber = new ASCIIEncoding().GetString(result, 5, endIndex - 5);
             }
 
@@ -828,53 +853,57 @@ namespace IPA.DAL.RBADAL.Services
             // declare variables
             string model = null;
 
-            switch (modelType.Trim())
+            switch (modelType?.Trim())
             {
                 default:
                 case DeviceModelType.SecureKey:
-                    byte configFormat = 0;
+                byte configFormat = 0;
 
-                    var currentConfigDeviceFormatIndex = Array.IndexOf(configValues, (byte)FuncID.DeviceFormat);
-                    if (currentConfigDeviceFormatIndex > -1)
-                        configFormat = configValues[currentConfigDeviceFormatIndex + 2];
-                    else
-                    {
-                        var status = PrepareGetCommand((byte)FuncID.DeviceFormat, out byte[] buffer);
-                        if (status == EntryModeStatus.Success && buffer[0] == (byte)Token.ACK)
-                            configFormat = buffer[4];
-                    }
+                var currentConfigDeviceFormatIndex = Array.IndexOf(configValues, (byte)FuncID.DeviceFormat);
+                if (currentConfigDeviceFormatIndex > -1)
+                    configFormat = configValues[currentConfigDeviceFormatIndex + 2];
+                else
+                {
+                    var status = PrepareGetCommand((byte)FuncID.DeviceFormat, out byte[] buffer);
+                    if (status == EntryModeStatus.Success && buffer[0] == (byte)Token.ACK)
+                        configFormat = buffer[4];
+                }
 
-                    switch (configFormat)
-                    {
-                        case (byte)SecureKeyModelFormat.M100IDT:
-                            model = DeviceModelNumber.SecureKeyM100Enhanced;
-                            break;
-                        case (byte)SecureKeyModelFormat.M100XML:
-                            model = DeviceModelNumber.SecureKeyM100Xml;
-                            break;
-                        case (byte)SecureKeyModelFormat.M130IDT:
-                            model = versionNum >= DeviceVersion.V130 ? DeviceModelNumber.SecureKeyM130NewFormat : DeviceModelNumber.SecureKeyM130Enhanced;
-                            break;
-                        case (byte)SecureKeyModelFormat.M130XML:
-                            model = DeviceModelNumber.SecureKeyM130Xml;
-                            break;
-                        default:
-                            model = DeviceModelNumber.SecureKeyM130Enhanced;
-                            break;
-                    }
+                switch (configFormat)
+                {
+                    case (byte)SecureKeyModelFormat.M100IDT:
+                    model = DeviceModelNumber.SecureKeyM100Enhanced;
                     break;
+                    case (byte)SecureKeyModelFormat.M100XML:
+                    model = DeviceModelNumber.SecureKeyM100Xml;
+                    break;
+                    case (byte)SecureKeyModelFormat.M130IDT:
+                    model = versionNum >= DeviceVersion.V130 ? DeviceModelNumber.SecureKeyM130NewFormat : DeviceModelNumber.SecureKeyM130Enhanced;
+                    break;
+                    case (byte)SecureKeyModelFormat.M130XML:
+                    model = DeviceModelNumber.SecureKeyM130Xml;
+                    break;
+                    default:
+                    model = DeviceModelNumber.SecureKeyM130Enhanced;
+                    break;
+                }
+                break;
                 case DeviceModelType.SecureMag:
-                    model = DeviceModelNumber.SecureMag;
-                    break;
+                model = DeviceModelNumber.SecureMag;
+                break;
                 case DeviceModelType.SRedKey:
-                    model = DeviceModelNumber.SRedKey;
-                    break;
+                model = DeviceModelNumber.SRedKey;
+                break;
                 case DeviceModelType.SecuRED:
-                    model = DeviceModelNumber.SecuRED;
-                    break;
+                model = DeviceModelNumber.SecuRED;
+                break;
                 case DeviceModelType.Augusta:
-                    model = DeviceModelNumber.AugustKYB;
-                    break;
+                model = DeviceModelNumber.AugustKYB;
+                break;
+
+                case DeviceModelType.SRedKey2:
+                model = DeviceModelNumber.SRedKey2;
+                break;
             }
 
             return model;
@@ -907,26 +936,26 @@ namespace IPA.DAL.RBADAL.Services
             switch (securityID)
             {
                 case (byte)SecurityLevelID.AuthenticationRequired:
-                    securityLevelNumber = SecurityLevelNumber.AuthenticationRequired;
-                    break;
+                securityLevelNumber = SecurityLevelNumber.AuthenticationRequired;
+                break;
                 case (byte)SecurityLevelID.DUKPTExhausted:
-                    securityLevelNumber = SecurityLevelNumber.DUKPTExhausted;
-                    break;
+                securityLevelNumber = SecurityLevelNumber.DUKPTExhausted;
+                break;
                 case (byte)SecurityLevelID.EncryptedReader:
-                    securityLevelNumber = SecurityLevelNumber.EncryptedReader;
-                    break;
+                securityLevelNumber = SecurityLevelNumber.EncryptedReader;
+                break;
                 case (byte)SecurityLevelID.KeyLoaded:
-                    securityLevelNumber = SecurityLevelNumber.KeyLoaded;
-                    break;
+                securityLevelNumber = SecurityLevelNumber.KeyLoaded;
+                break;
                 case (byte)SecurityLevelID.NoEncryption:
                 default:
-                    securityLevelNumber = SecurityLevelNumber.NoEncryption;
-                    break;
+                securityLevelNumber = SecurityLevelNumber.NoEncryption;
+                break;
             }
 
             return securityLevelNumber;
         }
-        
+
         public IDTSetStatus SetConfig(string configCommands, string resetConfigCommands)
         {
             EntryModeStatus status = EntryModeStatus.Unsupported;
@@ -940,86 +969,90 @@ namespace IPA.DAL.RBADAL.Services
                     setStatus.ErrorMsg = "Config command is an empty string";
                     return setStatus;
                 }
-                
+
                 string[] commandTypes = configCommands.Split('|');
                 for (int indx = 0; indx < commandTypes.Length; indx++)
                 {
                     string[] commands = commandTypes[indx].Split(',');
+                    if (commands.Length == 0 || commands[0].Length == 0)
+                    {
+                        continue;
+                    }
                     switch (indx)
                     {
                         case 0:
                         case 2:
-                            // First part of the commands are required - unrecoverable error, i.e. stop the process if any error returned
+                        // First part of the commands are required - unrecoverable error, i.e. stop the process if any error returned
 
-                            foreach (string comm in commands)
+                        foreach (string comm in commands)
+                        {
+                            setStatus = new IDTSetStatus();
+                            var config = ByteArrayToHexString(deviceInfo.ConfigValues);
+                            if (!config.Contains(comm) && !String.IsNullOrEmpty(comm))//the device need to set this config after this command ran.
                             {
-                                setStatus = new IDTSetStatus();                               
-                               var config = ByteArrayToHexString(deviceInfo.ConfigValues);
-                                if (!config.Contains(comm) && !String.IsNullOrEmpty(comm))//the device need to set this config after this command ran.
-                                {
 
-                                    byte result = PrepareSetCommand(comm);
-                                    if (status == EntryModeStatus.Success && result == (byte)Token.ACK)
-                                    {
-                                        setStatus.Success = true;
-                                        if (resetConfigCommands.Contains(comm))//This command reset other configs. so, we need to get the config from the device after this command
-                                        {
-                                            //TODO: Refresh Config Values from the device? it is already loaded
-                                            setStatus.CurrentConfig = deviceInfo.ConfigValues;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        setStatus.Success = result == (byte)Token.ACK ? true : false;
-                                        setStatus.ErrorMsg = $"Return code on Command {comm} is " + (result > 0 ? result.ToString("X") : "null");
-                                        setStatus.CurrentConfig = deviceInfo.ConfigValues;
-                                        setStatus.RequestedConfig = configCommands;
-                                        break;
-                                    }
-                                    if (indx == 2)
-                                    {
-                                        //TODO: CVarry over comment from 4.2.x : Create method to detect if the device ready after reboot, instead of sleep 10 seconds.
-                                        Thread.Sleep(10000);//we need to wait for device to reboot.
-
-                                        //TODO: what case gets the code here? What should happen? re-init device?
-                                        //Init();
-                                        Thread.Sleep(5000);//we need to wait for device to reboot.
-                                    }
-                                }
-                                else
+                                byte result = PrepareSetCommand(comm);
+                                if (status == EntryModeStatus.Success && result == (byte)Token.ACK)
                                 {
                                     setStatus.Success = true;
-                                }
-                            }
-                            if (!setStatus.Success)
-                                return setStatus;
-                            break;
-                        case 1:
-                            // Second part of the commands are not required so errors returned will be ignored
-                            setStatus = new IDTSetStatus();
-
-                            foreach (string comm in commands)
-                            {
-                                var config = ByteArrayToHexString(deviceInfo.ConfigValues);
-                                if (!config.Contains(comm) && !String.IsNullOrEmpty(comm))//the device need to set this config
-                                {
-                                    byte result = PrepareSetCommand(comm);
                                     if (resetConfigCommands.Contains(comm))//This command reset other configs. so, we need to get the config from the device after this command
                                     {
-                                        status = GetCurrentConfig();
+                                        //TODO: Refresh Config Values from the device? it is already loaded
+                                        setStatus.CurrentConfig = deviceInfo.ConfigValues;
                                     }
                                 }
                                 else
                                 {
-                                    setStatus = new IDTSetStatus
-                                    {
-                                        Success = true
-                                    };
+                                    setStatus.Success = result == (byte)Token.ACK ? true : false;
+                                    setStatus.ErrorMsg = $"Return code on Command {comm} is " + (result > 0 ? result.ToString("X") : "null");
+                                    setStatus.CurrentConfig = deviceInfo.ConfigValues;
+                                    setStatus.RequestedConfig = configCommands;
+                                    break;
+                                }
+                                if (indx == 2)
+                                {
+                                    //TODO: CVarry over comment from 4.2.x : Create method to detect if the device ready after reboot, instead of sleep 10 seconds.
+                                    Thread.Sleep(10000);//we need to wait for device to reboot.
+
+                                    //TODO: what case gets the code here? What should happen? re-init device?
+                                    //Init();
+                                    Thread.Sleep(5000);//we need to wait for device to reboot.
                                 }
                             }
-                            status = EntryModeStatus.Success;
-                            setStatus.Success = status == EntryModeStatus.Success ? true : false;
-                            break;
+                            else
+                            {
+                                setStatus.Success = true;
+                            }
+                        }
+                        if (!setStatus.Success)
+                            return setStatus;
+                        break;
+                        case 1:
+                        // Second part of the commands are not required so errors returned will be ignored
+                        setStatus = new IDTSetStatus();
+
+                        foreach (string comm in commands)
+                        {
+                            var config = ByteArrayToHexString(deviceInfo.ConfigValues);
+                            if (!config.Contains(comm) && !String.IsNullOrEmpty(comm))//the device need to set this config
+                            {
+                                byte result = PrepareSetCommand(comm);
+                                if (resetConfigCommands.Contains(comm))//This command reset other configs. so, we need to get the config from the device after this command
+                                {
+                                    status = GetCurrentConfig();
+                                }
+                            }
+                            else
+                            {
+                                setStatus = new IDTSetStatus
+                                {
+                                    Success = true
+                                };
+                            }
+                        }
+                        status = EntryModeStatus.Success;
+                        setStatus.Success = status == EntryModeStatus.Success ? true : false;
+                        break;
 
                     }
                 }
@@ -1615,27 +1648,27 @@ namespace IPA.DAL.RBADAL.Services
         #region -- device event procedures --
         public void OnReport(HidReport report)
         {
-///            Transaction.PaymentXO.Request.CustomFields = Transaction.PaymentXO.Request?.CustomFields ?? string.Empty;
+            ///            Transaction.PaymentXO.Request.CustomFields = Transaction.PaymentXO.Request?.CustomFields ?? string.Empty;
             if (!device.IsConnected)
             {
-///                Transaction.PaymentXO.Request.CreditCard = new Core.Data.Entity.Other.CreditCard
-///                {
-///                    AbortType = DeviceAbortType.BadRead,
-///                };                
+                ///                Transaction.PaymentXO.Request.CreditCard = new Core.Data.Entity.Other.CreditCard
+                ///                {
+                ///                    AbortType = DeviceAbortType.BadRead,
+                ///                };                
                 ((IDevice)this).BadRead();
             }
 
             TrackData trackData = null;
 
             //HACK - setting this to make sure the Payment is incorporated into the idiotic PaymentInfo object
-///            Transaction.PaymentXO.Request.PaymentRequest.Payment = Transaction.PaymentXO.Request.Payment;
-///            Transaction.PaymentXO.Request.Payment.IsEMV = false;
+            ///            Transaction.PaymentXO.Request.PaymentRequest.Payment = Transaction.PaymentXO.Request.Payment;
+            ///            Transaction.PaymentXO.Request.Payment.IsEMV = false;
 
             try
             {
                 //if the content empty, it means it is timed out.
                 bool empty = true;
-                foreach(var dataByte in report.Data )
+                foreach (var dataByte in report.Data)
                 {
                     if (dataByte != '\0')
                     {
@@ -1643,17 +1676,17 @@ namespace IPA.DAL.RBADAL.Services
                         break;
                     }
                 }
-///                if (empty && !Transaction.MSRTimer.Enabled )//the transaction timed out.
-///                {
-///                    return;
-///                }
-///                else if(empty)
-if(empty)                
+                ///                if (empty && !Transaction.MSRTimer.Enabled )//the transaction timed out.
+                ///                {
+                ///                    return;
+                ///                }
+                ///                else if(empty)
+                if (empty)
                 {
-///                    Transaction.PaymentXO.Request.CreditCard = new Core.Data.Entity.Other.CreditCard
-///                    {
-///                        AbortType = DeviceAbortType.BadRead,
-///                    };                    
+                    ///                    Transaction.PaymentXO.Request.CreditCard = new Core.Data.Entity.Other.CreditCard
+                    ///                    {
+                    ///                        AbortType = DeviceAbortType.BadRead,
+                    ///                    };                    
                     ((IDevice)this).BadRead();
                 }
                 var isXmlFormat = Encoding.ASCII.GetString(SubArray<byte>(report.Data, 0, 7)) == "<DvcMsg";
@@ -1677,44 +1710,44 @@ if(empty)
                         Transaction.PaymentXO.Request.CreditCard.EMVCardEntryMode =
                             trackData.IsSwipe ? Core.Shared.Enums.EntryModeType.Swiped.ToString() : Core.Shared.Enums.EntryModeType.Keyed.ToString();
                     };
-///                        AbortType = DeviceAbortType.NoAbort,
-///                        CardHolderName = trackData.Name,
-///                        CreditCardNumber = trackData.PAN,
+                    ///                        AbortType = DeviceAbortType.NoAbort,
+                    ///                        CardHolderName = trackData.Name,
+                    ///                        CreditCardNumber = trackData.PAN,
 
-///                        EncryptedTracks = trackData.EncryptedTracks,
-///                        CardExpirationMonth = trackData.ExpDate.Substring(2, 2),
-///                        CardExpirationYear = trackData.ExpDate.Substring(0, 2),
-///                        Track1 = trackData.Track1,
-///                        Track2 = trackData.Track2,
-///                        Track3 = trackData.Track3,
-///                        EMVCardEntryMode = trackData.IsSwipe ? Core.Shared.Enums.EntryModeType.Swiped.ToString() : Core.Shared.Enums.EntryModeType.Keyed.ToString(),
+                    ///                        EncryptedTracks = trackData.EncryptedTracks,
+                    ///                        CardExpirationMonth = trackData.ExpDate.Substring(2, 2),
+                    ///                        CardExpirationYear = trackData.ExpDate.Substring(0, 2),
+                    ///                        Track1 = trackData.Track1,
+                    ///                        Track2 = trackData.Track2,
+                    ///                        Track3 = trackData.Track3,
+                    ///                        EMVCardEntryMode = trackData.IsSwipe ? Core.Shared.Enums.EntryModeType.Swiped.ToString() : Core.Shared.Enums.EntryModeType.Keyed.ToString(),
 
-                        //TODO: where does the PIN come from on DebitCards?
-                        //EncryptedPIN = IsDebit ? trackData. : null,
+                    //TODO: where does the PIN come from on DebitCards?
+                    //EncryptedPIN = IsDebit ? trackData. : null,
 
-///                    Transaction.IsManual = !trackData.IsSwipe;
-///                    Transaction.PaymentXO.Request.PaymentTender.EntryModeTypeID = trackData.IsSwipe? (int)Core.Shared.Enums.EntryModeType.Swiped : (int)Core.Shared.Enums.EntryModeType.Keyed;                  
+                    ///                    Transaction.IsManual = !trackData.IsSwipe;
+                    ///                    Transaction.PaymentXO.Request.PaymentTender.EntryModeTypeID = trackData.IsSwipe? (int)Core.Shared.Enums.EntryModeType.Swiped : (int)Core.Shared.Enums.EntryModeType.Keyed;                  
                     NotificationRaise(new NotificationEventArgs { NotificationType = NotificationType.DeviceEvent, DeviceEvent = DeviceEvent.CardReadComplete });
                 }
                 else
                 {
-///                    Transaction.PaymentXO.Request.CreditCard = new Core.Data.Entity.Other.CreditCard
-///                    {
-///                        AbortType = DeviceAbortType.BadRead,
-///                    };                    
+                    ///                    Transaction.PaymentXO.Request.CreditCard = new Core.Data.Entity.Other.CreditCard
+                    ///                    {
+                    ///                        AbortType = DeviceAbortType.BadRead,
+                    ///                    };                    
                     ((IDevice)this).BadRead();
                 }
             }
             catch (Exception)
             {
-///                Transaction.PaymentXO.Request.CreditCard = new Core.Data.Entity.Other.CreditCard
-///                {
-///                    AbortType = DeviceAbortType.BadRead,
-///
-///                };                
+                ///                Transaction.PaymentXO.Request.CreditCard = new Core.Data.Entity.Other.CreditCard
+                ///                {
+                ///                    AbortType = DeviceAbortType.BadRead,
+                ///
+                ///                };                
                 ((IDevice)this).BadRead();
             }
-            
+
             //Release the wait handle
             //waitForReply.Set();
         }
@@ -1732,12 +1765,12 @@ if(empty)
             // Create the command to get config values
             var readConfig = new byte[CommandTokens.DeviceReset.Length + 1];
             Array.Copy(CommandTokens.DeviceReset, readConfig, CommandTokens.DeviceReset.Length);
-           readConfig[CommandTokens.DeviceReset.Length] = 0x00;
-           readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
+            readConfig[CommandTokens.DeviceReset.Length] = 0x00;
+            readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
 
-           // execute the command, get the result
-           var status = SetupCommand(readConfig, out byte[] result);
-           return (status == EntryModeStatus.Success) ? true : false;
+            // execute the command, get the result
+            var status = SetupCommand(readConfig, out byte[] result);
+            return (status == EntryModeStatus.Success) ? true : false;
         }
 
         public bool SetQuickChipMode(bool mode)
@@ -1745,19 +1778,19 @@ if(empty)
             // Create the command to get config values
             var readConfig = new byte[CommandTokens.QuickChipModeOn.Length + 1];
             if (mode)
-           {
-              Array.Copy(CommandTokens.QuickChipModeOn, readConfig, CommandTokens.QuickChipModeOn.Length);
-           }
-           else
-           {
-              Array.Copy(CommandTokens.QuickChipModeOff, readConfig, CommandTokens.QuickChipModeOff.Length);
-           }
-           readConfig[CommandTokens.QuickChipModeOn.Length] = 0x00;
-           readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
+            {
+                Array.Copy(CommandTokens.QuickChipModeOn, readConfig, CommandTokens.QuickChipModeOn.Length);
+            }
+            else
+            {
+                Array.Copy(CommandTokens.QuickChipModeOff, readConfig, CommandTokens.QuickChipModeOff.Length);
+            }
+            readConfig[CommandTokens.QuickChipModeOn.Length] = 0x00;
+            readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
 
-           // execute the command, get the result
-           var status = SetupCommand(readConfig, out byte[] result);
-           return (status == EntryModeStatus.Success) ? true : false;
+            // execute the command, get the result
+            var status = SetupCommand(readConfig, out byte[] result);
+            return (status == EntryModeStatus.Success) ? true : false;
         }
 
         public bool SetUSBHIDMode()
@@ -1765,12 +1798,12 @@ if(empty)
             // Create the command to get config values
             var readConfig = new byte[CommandTokens.SetUSBHIDMode.Length + 1];
             Array.Copy(CommandTokens.SetUSBHIDMode, readConfig, CommandTokens.SetUSBHIDMode.Length);
-           readConfig[CommandTokens.SetUSBHIDMode.Length] = 0x00;
-           readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
+            readConfig[CommandTokens.SetUSBHIDMode.Length] = 0x00;
+            readConfig[readConfig.Length - 1] = GetCheckSumValue(readConfig);
 
-           // execute the command, get the result
-           var status = SetupCommand(readConfig, out byte[] result);
-           return (status == EntryModeStatus.Success) ? true : false;
+            // execute the command, get the result
+            var status = SetupCommand(readConfig, out byte[] result);
+            return (status == EntryModeStatus.Success) ? true : false;
         }
 
         public bool SetUSBKeyboardMode()
@@ -1819,22 +1852,22 @@ if(empty)
 
         #region --- IDTECH SERIALIZER ---
 
-        public virtual string [] GetTerminalData(ref ConfigIDTechSerializer serializer, ref int exponent)
+        public virtual string[] GetTerminalData(ref ConfigIDTechSerializer serializer, ref int exponent)
         {
             return null;
         }
-        public virtual string [] ValidateTerminalData(ConfigIDTechSerializer serializer)
+        public virtual string[] ValidateTerminalData(ConfigIDTechSerializer serializer)
         {
             return null;
         }
-        public virtual string [] GetAidList(ref ConfigIDTechSerializer serializer)
+        public virtual string[] GetAidList(ref ConfigIDTechSerializer serializer)
         {
             return null;
         }
         public virtual void ValidateAidList(ConfigIDTechSerializer serializer)
         {
         }
-        public virtual string [] GetCapKList(ref ConfigIDTechSerializer serializer)
+        public virtual string[] GetCapKList(ref ConfigIDTechSerializer serializer)
         {
             return null;
         }
@@ -1844,29 +1877,29 @@ if(empty)
         #endregion
 
         #region --- SPHERE SERIALIZER ---
-        public virtual string [] GetTerminalData(int majorcfgint, bool compressedSerialNumber)
+        public virtual string[] GetTerminalData(int majorcfgint, bool compressedSerialNumber)
         {
             return null;
         }
-        public virtual Task<string []> ValidateTerminalData(ConfigSphereSerializer serializer)
+        public virtual Task<string[]> ValidateTerminalData(ConfigSphereSerializer serializer)
         {
             return null;
         }
-        public virtual string [] GetAidList()
+        public virtual string[] GetAidList()
         {
             return null;
         }
         public virtual Task<int> ValidateAidList(ConfigSphereSerializer serializer)
         {
-             return Task.FromResult(0);
+            return Task.FromResult(0);
         }
-        public virtual string [] GetCapKList()
+        public virtual string[] GetCapKList()
         {
             return null;
         }
         public virtual Task<int> ValidateCapKList(ConfigSphereSerializer serializer)
         {
-             return Task.FromResult(0);
+            return Task.FromResult(0);
         }
         public virtual void ValidateConfigGroup(ConfigSphereSerializer serializer, int group)
         {
@@ -1892,11 +1925,11 @@ if(empty)
         public virtual void FactoryReset(int majorcfg)
         {
         }
-        public virtual int DataCommand(string command, ref byte [] response, bool calcCRC)
+        public virtual int DataCommand(string command, ref byte[] response, bool calcCRC)
         {
             return 0;
         }
-        public virtual int DataCommandExt(string command, ref byte [] response, bool calcCRC)
+        public virtual int DataCommandExt(string command, ref byte[] response, bool calcCRC)
         {
             return 0;
         }

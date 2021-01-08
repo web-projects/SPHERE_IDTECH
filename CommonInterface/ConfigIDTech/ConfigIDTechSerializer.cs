@@ -66,45 +66,46 @@ namespace IPA.CommonInterface.ConfigIDTech
                 if(terminalCfg != null)
                 {
                     // config_meta
-                    Debug.WriteLine("config_meta: type --------------  =[{0}]", (object) terminalCfg.config_meta.Type);
-                    Debug.WriteLine("config_meta: production --------- =[{0}]", terminalCfg.config_meta.Production);
-                    Debug.WriteLine("config_meta: Customer->Company -- =[{0}]", (object) terminalCfg.config_meta.Customer.Company);
-                    Debug.WriteLine("config_meta: Customer->Contact -- =[{0}]", (object) terminalCfg.config_meta.Customer.Contact);
-                    Debug.WriteLine("config_meta: Customer->Id ------- =[{0}]", terminalCfg.config_meta.Customer.Id);
-                    Debug.WriteLine("config_meta: Id ----------------- =[{0}]", terminalCfg.config_meta.Id);
-                    Debug.WriteLine("config_meta: Notes -------------- =[{0}]", (object) terminalCfg.config_meta.Notes);
-                    Debug.WriteLine("config_meta: Version ------------ =[{0}]", (object) terminalCfg.config_meta.Version);
-                    Debug.WriteLine("config_meta: terminal_type ------ =[{0}]", (object) terminalCfg.config_meta.Terminal_type);
+                    //               0123456789|0123456789|0123456789|0123456789|012
+                    Debug.WriteLine("config_meta: type ---------------------------: [{0}]", (object) terminalCfg.config_meta.Type);
+                    Debug.WriteLine("config_meta: production ---------------------: [{0}]", terminalCfg.config_meta.Production);
+                    Debug.WriteLine("config_meta: Customer->Company --------------: [{0}]", (object) terminalCfg.config_meta.Customer.Company);
+                    Debug.WriteLine("config_meta: Customer->Contact --------------: [{0}]", (object) terminalCfg.config_meta.Customer.Contact);
+                    Debug.WriteLine("config_meta: Customer->Id -------------------: [{0}]", terminalCfg.config_meta.Customer.Id);
+                    Debug.WriteLine("config_meta: Id -----------------------------: [{0}]", terminalCfg.config_meta.Id);
+                    Debug.WriteLine("config_meta: Notes --------------------------: [{0}]", (object) terminalCfg.config_meta.Notes);
+                    Debug.WriteLine("config_meta: Version ------------------------: [{0}]", (object) terminalCfg.config_meta.Version);
+                    Debug.WriteLine("config_meta: terminal_type ------------------: [{0}]", (object) terminalCfg.config_meta.Terminal_type);
                     // hardware
-                    Debug.WriteLine("hardware   : serial_num --------- =[{0}]", (object) terminalCfg.hardware.Serial_num);
-                    Debug.WriteLine("hardware   : contactless_available=[{0}]", (object) terminalCfg.hardware.Contactless_available);
+                    Debug.WriteLine("hardware   : serial_num ---------------------: [{0}]", (object) terminalCfg.hardware.Serial_num);
+                    Debug.WriteLine("hardware   : contactless_available ----------: [{0}]", (object) terminalCfg.hardware.Contactless_available);
                     // general_configuration
                     //Contact
                     //Msr_settings
                     //Terminal_info
-                    Debug.WriteLine("general_configuration: TI->FWVR ------------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.firmware_ver);
-                    Debug.WriteLine("general_configuration: TI->KVER ------------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_ver);
-                    Debug.WriteLine("general_configuration: TI->KCHK ------------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_checksum);
-                    Debug.WriteLine("general_configuration: TI->KCFG ------------- =[{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_configuration_checksum);
+                    Debug.WriteLine("general_configuration: TI->FWVR -------------: [{0}]", (object) terminalCfg.general_configuration.Terminal_info.firmware_ver);
+                    Debug.WriteLine("general_configuration: TI->KVER -------------: [{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_ver);
+                    Debug.WriteLine("general_configuration: TI->KCHK -------------: [{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_checksum);
+                    Debug.WriteLine("general_configuration: TI->KCFG -------------: [{0}]", (object) terminalCfg.general_configuration.Terminal_info.contact_emv_kernel_configuration_checksum);
                     //Encryption
-                    Debug.WriteLine("general_configuration: EN->TYPE ------------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.data_encryption_type);
-                    Debug.WriteLine("general_configuration: EN->MSRE ------------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.msr_encryption_enabled);
-                    Debug.WriteLine("general_configuration: EN->ICCE ------------- =[{0}]", (object) terminalCfg.general_configuration.Encryption.icc_encryption_enabled);
+                    Debug.WriteLine("general_configuration: EN->TYPE -------------: [{0}]", (object) terminalCfg.general_configuration.Encryption.data_encryption_type);
+                    Debug.WriteLine("general_configuration: EN->MSRE -------------: [{0}]", (object) terminalCfg.general_configuration.Encryption.msr_encryption_enabled);
+                    Debug.WriteLine("general_configuration: EN->ICCE -------------: [{0}]", (object) terminalCfg.general_configuration.Encryption.icc_encryption_enabled);
                     // user_configuration
-                    Debug.WriteLine("user_configuration: firmware_beep_control -- =[{0}]", (object) terminalCfg.user_configuration.firmware_beep_control);
-                    Debug.WriteLine("user_configuration: firmware_LED_control_msr =[{0}]", (object) terminalCfg.user_configuration.firmware_LED_control_msr);
-                    Debug.WriteLine("user_configuration: firmware_LED_control_icc =[{0}]", (object) terminalCfg.user_configuration.firmware_LED_control_icc);
-                    Debug.WriteLine("user_configuration: encryption_msr --------- =[{0}]", (object) terminalCfg.user_configuration.encryption_msr);
-                    Debug.WriteLine("user_configuration: encryption_icc --------- =[{0}]", (object) terminalCfg.user_configuration.encryption_icc);
-                    Debug.WriteLine("user_configuration: expiration_masking ----- =[{0}]", (object) terminalCfg.user_configuration.expiration_masking);
-                    Debug.WriteLine("user_configuration: pan_clear_digits ------- =[{0}]", (object) terminalCfg.user_configuration.pan_clear_digits);
-                    Debug.WriteLine("user_configuration: swipe_force_mask:TK1 --- =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track1);
-                    Debug.WriteLine("user_configuration: swipe_force_mask:TK2 --- =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track2);
-                    Debug.WriteLine("user_configuration: swipe_force_mask:TK3 --- =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track3);
-                    Debug.WriteLine("user_configuration: swipe_force_mask:TK0 --- =[{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track3card0);
-                    Debug.WriteLine("user_configuration: swipe_mask:TK1 --------- =[{0}]", (object) terminalCfg.user_configuration.swipe_mask.track1);
-                    Debug.WriteLine("user_configuration: swipe_mask:TK2 --------- =[{0}]", (object) terminalCfg.user_configuration.swipe_mask.track2);
-                    Debug.WriteLine("user_configuration: swipe_mask:TK3 --------- =[{0}]", (object) terminalCfg.user_configuration.swipe_mask.track3);
+                    Debug.WriteLine("user_configuration: firmware_beep_control ---: [{0}]", (object) terminalCfg.user_configuration.firmware_beep_control);
+                    Debug.WriteLine("user_configuration: firmware_LED_control_msr : [{0}]", (object) terminalCfg.user_configuration.firmware_LED_control_msr);
+                    Debug.WriteLine("user_configuration: firmware_LED_control_icc : [{0}]", (object) terminalCfg.user_configuration.firmware_LED_control_icc);
+                    Debug.WriteLine("user_configuration: encryption_msr ----------: [{0}]", (object) terminalCfg.user_configuration.encryption_msr);
+                    Debug.WriteLine("user_configuration: encryption_icc ----------: [{0}]", (object) terminalCfg.user_configuration.encryption_icc);
+                    Debug.WriteLine("user_configuration: expiration_masking ------: [{0}]", (object) terminalCfg.user_configuration.expiration_masking);
+                    Debug.WriteLine("user_configuration: pan_clear_digits --------: [{0}]", (object) terminalCfg.user_configuration.pan_clear_digits);
+                    Debug.WriteLine("user_configuration: swipe_force_mask:TK1 ----: [{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track1);
+                    Debug.WriteLine("user_configuration: swipe_force_mask:TK2 ----: [{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track2);
+                    Debug.WriteLine("user_configuration: swipe_force_mask:TK3 ----: [{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track3);
+                    Debug.WriteLine("user_configuration: swipe_force_mask:TK0 ----: [{0}]", (object) terminalCfg.user_configuration.swipe_force_mask.track3card0);
+                    Debug.WriteLine("user_configuration: swipe_mask:TK1 ----------: [{0}]", (object) terminalCfg.user_configuration.swipe_mask.track1);
+                    Debug.WriteLine("user_configuration: swipe_mask:TK2 ----------: [{0}]", (object) terminalCfg.user_configuration.swipe_mask.track2);
+                    Debug.WriteLine("user_configuration: swipe_mask:TK3 ----------: [{0}]", (object) terminalCfg.user_configuration.swipe_mask.track3);
                 }
             }
             catch(Exception ex)

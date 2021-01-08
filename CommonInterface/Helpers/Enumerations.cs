@@ -27,6 +27,8 @@ namespace IPA.Core.Shared.Enums
         AUGUSTAS_KYB  = 3910,
         VP5300_HID    = 4450,
         VP5300_KYB    = 4650,
+        SREDKEY2_KYB  = 4521,
+        SREDKEY2_HID  = 4520,
         // ^^^ ADDITIONAL PID's HERE ^^^
         UNKNOWN       = 9999
     }

@@ -76,6 +76,8 @@ namespace IPA.DAL.RBADAL.Services
                             case (int) IDTECH_DEVICE_PID.AUGUSTAS_HID:
                             case (int) IDTECH_DEVICE_PID.VP5300_HID:
                             case (int) IDTECH_DEVICE_PID.VP5300_KYB:
+                            case (int) IDTECH_DEVICE_PID.SREDKEY2_HID:
+                            case (int) IDTECH_DEVICE_PID.SREDKEY2_KYB:
                             {
                               mode = (IDTECH_DEVICE_PID)pidId;
                               break;
@@ -107,7 +109,9 @@ namespace IPA.DAL.RBADAL.Services
                         else if (mode == IDTECH_DEVICE_PID.SECUREKEY_HID ||
                                  mode == IDTECH_DEVICE_PID.SECUREKEY_KYB ||
                                  mode == IDTECH_DEVICE_PID.MAGSTRIPE_KYB ||
-                                 mode == IDTECH_DEVICE_PID.MAGSTRIPE_HID)
+                                 mode == IDTECH_DEVICE_PID.MAGSTRIPE_HID ||
+                                 mode == IDTECH_DEVICE_PID.SREDKEY2_HID  ||
+                                 mode == IDTECH_DEVICE_PID.SREDKEY2_KYB)
                         {
                             deviceInterface = new Device_IDTech(deviceMode);
                         }

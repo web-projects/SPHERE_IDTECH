@@ -1104,13 +1104,21 @@ namespace IPA.MainApp
                         this.ApplicationtxtCardData.ForeColor = TEXTBOX_FORE_COLOR;
 
                         // Set TAGS to display
-                        if(bool.TryParse((string) data[3], out bool isHIDMode))
+                        if (data[0].ToString().Contains("EMV"))
                         {
-                            SetTagData((string) data[1], isHIDMode);
+                            if(bool.TryParse((string) data[3], out bool isHIDMode))
+                            {
+                                SetTagData((string) data[1], isHIDMode);
+                            }
+                            else
+                            {
+                                SetTagData((string) data[1], isHIDMode);
+                            }
                         }
                         else
                         {
-                            SetTagData((string) data[1], isHIDMode);
+                            this.ApplicationtxtCardData.Text += "\r\n";
+                            this.ApplicationtxtCardData.Text += (string)data[1];
                         }
 
                         // Enable Tab(s)

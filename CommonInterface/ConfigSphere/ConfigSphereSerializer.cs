@@ -380,7 +380,7 @@ namespace IPA.CommonInterface.ConfigSphere
                     // ConfigurationID
                     configurationID = DeviceConfig.ConfigurationID;
                     // Manufacturer
-                    Debug.WriteLine("device configuration: manufacturer ----------------: [{0}]", (object) configurationID.Manufacturer);
+                    Debug.WriteLine("device configuration: manufacturer ----------: [{0}]", (object) configurationID.Manufacturer);
                     // Models
                     md = configurationID.Models;
                     //DisplayCollection(mf.modelFirmware, "modelFirmware");
